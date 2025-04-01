@@ -1,0 +1,23 @@
+# compiled output, node modules
+/frontend/node_modules
+/backend/node_modules
+/frontend/dist
+/backend/dist
+/frontend/build
+/backend/build
+
+# OS
+.DS_Store
+
+# dotenv environment variable files
+/backend/.env
+/frontend/.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
