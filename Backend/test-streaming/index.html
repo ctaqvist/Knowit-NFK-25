@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Stream Viewer</title>
+  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
+</head>
+<body>
+  <video id="video" controls autoplay muted style="width: 100%; max-width: 800px;"></video>
+
+  <script>
+    if (mpegts.getFeatureList().mseLivePlayback) {
+      const video = document.getElementById('video');
+      const player = mpegts.createPlayer({
+        type: 'mpegts',
+        isLive: true,
+        url: 'ws://localhost:9000' // connect to your WebSocket server
+      });
+
+      player.attachMediaElement(video);
+      player.load();
+      player.play();
+    } else {
+      alert("Your browser doesn't support MSE live playback.");
+    }
+  </script>
+</body>
+</html>
