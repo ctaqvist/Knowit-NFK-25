@@ -13,7 +13,7 @@
       const player = mpegts.createPlayer({
         type: 'mpegts',
         isLive: true,
-        url: 'ws://localhost:9000' // connect to your WebSocket server
+        url: 'ws://test.lazyloops.se:9000' // connect to your WebSocket server
       });
 
       player.attachMediaElement(video);
@@ -23,13 +23,16 @@
       alert("Your browser doesn't support MSE live playback.");
     }
 
-    const timestampSocket = new WebSocket("ws://localhost:9100");
+    const timestampSocket = new WebSocket("ws://test.lazyloops.se:9100");
 
 timestampSocket.onmessage = (event) => {
   const now = Date.now();
   const data = JSON.parse(event.data);
   const sentTime = data.timestamp;
   const latency = now - sentTime;
+
+  console.log(timestamp)
+  console.log(sentTime)
 
   console.log(`Latency: ${latency} ms (Sent: ${sentTime}, Now: ${now})`);
   // Optionally display it on screen
