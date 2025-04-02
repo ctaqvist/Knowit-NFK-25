@@ -4,6 +4,8 @@ import Bookings from '../pages/Bookings';
 import Product from '../pages/Product';
 import Contact from '../pages/Contact';
 import Login from '../pages/Editor/Login';
+import Editor from '../pages/Editor/Editor';
+import { AuthRedirect } from '../components/Auth/AuthRedirect';
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +26,13 @@ export const router = createBrowserRouter([
   },
   {
     path: '/login',
-    element: <Login />
+    element: <>
+      <AuthRedirect />
+      <Login />
+    </>
+  },
+  {
+    path: '/editor',
+    element: <Editor />
   }
 ])
