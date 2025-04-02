@@ -10,9 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.4.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
