@@ -6,7 +6,7 @@
 </head>
 <body>
   <video id="video" controls autoplay muted style="width: 100%; max-width: 800px;"></video>
-
+  <div id="latency" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div>
   <script>
     if (mpegts.getFeatureList().mseLivePlayback) {
       const video = document.getElementById('video');
@@ -22,6 +22,19 @@
     } else {
       alert("Your browser doesn't support MSE live playback.");
     }
+
+    const timestampSocket = new WebSocket("ws://localhost:9100");
+
+timestampSocket.onmessage = (event) => {
+  const now = Date.now();
+  const data = JSON.parse(event.data);
+  const sentTime = data.timestamp;
+  const latency = now - sentTime;
+
+  console.log(`Latency: ${latency} ms (Sent: ${sentTime}, Now: ${now})`);
+  // Optionally display it on screen
+  document.getElementById("latency").textContent = `Latency: ${latency} ms`;
+};
   </script>
 </body>
 </html>

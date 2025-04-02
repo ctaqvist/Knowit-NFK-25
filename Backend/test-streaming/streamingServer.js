@@ -7,6 +7,19 @@ const { spawn } = require('child_process');
 const wss = new WebSocket.Server({ port: 9000 });
 const clients = new Set();
 
+const wsTimestampServer = new WebSocket.Server({ port: 9100 });
+const timestampClients = new Set();
+
+wsTimestampServer.on('connection', (socket) => {
+  timestampClients.add(socket);
+  console.log('Client connected to timestamp WS');
+
+  socket.on('close', () => {
+    timestampClients.delete(socket);
+  });
+});
+
+
 wss.on('connection', (ws) => {
   console.log('WebSocket client connected');
   clients.add(ws);
