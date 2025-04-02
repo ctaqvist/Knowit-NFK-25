@@ -1,6 +1,45 @@
 # Knowit-NFK-25
 Welcome to Knoit NFK 2025 where we create a moonrover!
 
+
+___  
+## Workflow standard
+
+Here are the decided general GitHub standards for the entire project.
+
+### Tickets
+
+- Each ticket should have a short and clear name. **Max 4 words**.  
+    - If more information is needed, it should be put in the description.
+
+- Each ticket should have one branch where only that ticket's scope is worked on, named according to the following template:  
+	- `id/name-of-ticket`
+- Id must be the same as the ticket id and name must be the same as the ticket name.
+
+### Commits
+
+- Commit name should be short and clear.  
+- If more information is needed, put it in the commit description.
+
+### Pull request
+
+- Squash all commits before opening PR.  
+- Before creating a pull request, check these points:  
+	- Is my code tested enough so that all cases are checked?  
+	- Does my code affect any other part of the project? If so, make sure that code changes don't break any other part of the project.  
+	- Am I following the guidelines that we set for the code?  
+	- Is my commit message descriptive enough for what the changes involve?
+
+### Merging
+
+- One teammate must review code before merging.  
+- Squash all commits again (if new commits have been done).  
+A pull request should not be merged if any of these are not fulfilled:  
+	- No one from my team has reviewed my pull request.  
+	- If definition of done is not met.
+
+___
+
 ## Code
 For each part of the project there is folder created (Embedded, Backend, Application and UX). Depending on what part of the project you will be working on you will only be pushing code to one of these, or maybe you will be able to work in multiple of them.
 
