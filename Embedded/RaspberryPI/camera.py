@@ -1,12 +1,10 @@
 
 import subprocess
-def function():
+def take_picture():
     command = "rpicam-still -t 2000 --width 1920 --height 1080 -o image-$(date +%Y-%m-%d).jpg"
 
     subprocess.run(command, shell=True)
 
-if __name__ == "__main__":
-    function()
 
 
 
