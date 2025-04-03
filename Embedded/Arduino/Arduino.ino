@@ -1,4 +1,4 @@
-#include "battery.h"
+#include "battery_health_function.h"
 //Constants
 const float Vref = 5.0;
 const float  battery_limit = 8.0; //Innna man får en varning
@@ -19,10 +19,9 @@ void loop() {
 
   //Funktion
   float batteryHeath = BatteryHealth(A0, Vref);
-  //kan tas  bort
+  //kan tas  bort, används för att testa och läsa av från Serial Monitor
   int rawADC = analogRead(A0);
   float voltage= (rawADC * Vref) / 1023.0; 
-
   Serial.print("ADC: ");
   Serial.print(rawADC);
   Serial.print(" | Delningsspänning: ");
@@ -30,12 +29,5 @@ void loop() {
   Serial.print(" V | Batterispänning: ");
   Serial.print(batteryHeath, 2);
   Serial.println(" V");
-
-  if(batteryHeath < battery_limit) {
-    digitalWrite(ledPin, HIGH); //Tänder RÖD LED
-  } else {
-    digitalWrite(ledPin, LOW); //Släcker RÖD LED
-  }
-
   delay(1000);
 }
