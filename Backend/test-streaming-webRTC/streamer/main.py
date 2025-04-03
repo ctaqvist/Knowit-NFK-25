@@ -24,7 +24,8 @@ async def main():
     pc = RTCPeerConnection()
     pc.addTrack(CameraStream())
 
-    uri = "ws://YOUR_SERVER_IP:8080"
+    uri = "ws://localhost:8080"
+
     async with websockets.connect(uri) as ws:
         await ws.send(json.dumps({"type": "streamer"}))
 
