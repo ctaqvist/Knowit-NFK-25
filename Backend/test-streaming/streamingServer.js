@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 const wss = new WebSocket.Server({ port: 9000 });
 const clients = new Set();
 
-const wsTimestampServer = new WebSocket.Server({ port: 9100 });
+/*const wsTimestampServer = new WebSocket.Server({ port: 9100 });
 const timestampClients = new Set();
 
 wsTimestampServer.on('connection', (socket) => {
@@ -18,7 +18,7 @@ wsTimestampServer.on('connection', (socket) => {
     timestampClients.delete(socket);
   });
 });
-
+*/
 
 wss.on('connection', (ws) => {
   console.log('WebSocket client connected');
@@ -54,3 +54,11 @@ ffmpeg.stderr.on('data', (data) => {
 ffmpeg.on('close', (code) => {
   console.log(`FFmpeg exited with code ${code}`);
 });
+
+
+/*
+ffmpeg command line for webcam
+ffmpeg -f avfoundation -framerate 30 -video_size 1280x720 -i "0" \
+-c:v libx264 -preset veryfast -tune zerolatency -f mpegts \
+"srt://test.lazyloops.se:1234"
+*/ 
