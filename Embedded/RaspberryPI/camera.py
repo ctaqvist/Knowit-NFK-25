@@ -1,12 +1,8 @@
 
 import subprocess
-def take_picture(time = 2000,width=1920, height=1080):
-    
+def take_picture():
+    command = "rpicam-still -t 2000 --width 1920 --height 1080 -o image-$(date +%Y-%m-%d).jpg"
 
-    command = (
-        f'rpicam-still -t {time} --width {width} --height {height} '
-        f'-o image-$(date +%Y-%m-%d_%H).jpg'
-    )
     subprocess.run(command, shell=True)
 
 
