@@ -23,7 +23,7 @@
       alert("Your browser doesn't support MSE live playback.");
     }
 
-    const timestampSocket = new WebSocket("ws://test.lazyloops.se:9100");
+ /*   const timestampSocket = new WebSocket("ws://test.lazyloops.se:9100");
 
 timestampSocket.onmessage = (event) => {
   const now = Date.now();
@@ -37,7 +37,7 @@ timestampSocket.onmessage = (event) => {
   console.log(`Latency: ${latency} ms (Sent: ${sentTime}, Now: ${now})`);
   // Optionally display it on screen
   document.getElementById("latency").textContent = `Latency: ${latency} ms`;
-};
+};*/
   </script>
 </body>
 </html>
