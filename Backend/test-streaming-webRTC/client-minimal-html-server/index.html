@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head><title>WebRTC Stream Viewer</title></head>
+<body>
+  <video id="video" autoplay playsinline></video>
+  <script>
+    const pc = new RTCPeerConnection();
+    const ws = new WebSocket('ws://YOUR_SERVER_IP:8080');
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: "viewer" }));
+    };
+
+    ws.onmessage = async (event) => {
+      const data = JSON.parse(event.data);
+      if (data.sdp) {
+        await pc.setRemoteDescription(data.sdp);
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        ws.send(JSON.stringify({ sdp: pc.localDescription }));
+      } else if (data.candidate) {
+        pc.addIceCandidate(data.candidate);
+      }
+    };
+
+    pc.ontrack = (event) => {
+      document.getElementById("video").srcObject = event.streams[0];
+    };
+  </script>
+</body>
+</html>
