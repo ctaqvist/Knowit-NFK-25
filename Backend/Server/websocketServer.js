@@ -1,7 +1,7 @@
-const WebSocket = require('ws');
+import WebSocket from 'ws'
 
-function startWebSocketServer(PORT){
-    const wss = new WebSocket.Server({ port: PORT});
+function startWebSocketServer(PORT) {
+    const wss = new WebSocket.Server({ port: PORT });
     let clients = new Set();
 
     wss.on('connection', (ws) => {
@@ -10,7 +10,7 @@ function startWebSocketServer(PORT){
 
         ws.on('message', (msg) => { //Get message from a client
 
-            if(respondPong(msg, ws)) return
+            if (respondPong(msg, ws)) return
 
             const parsed = parseMessage(msg);
 
@@ -25,33 +25,34 @@ function startWebSocketServer(PORT){
         })
     })
 
-    function respondPong(message, ws){ //special case, response pong
-        if(message.toLowerCase() === "ping"){
-            ws.send(JSON.stringify({response : "pong"}));
+    function respondPong(message, ws) { //special case, response pong
+        if (message.toLowerCase() === "ping") {
+            ws.send(JSON.stringify({ response: "pong" }));
             return true
         }
         return false
     }
 
-    function sendMessage(parsed, client, ws){ //Send message to all clients, if client is sender, recieves server:obj else client : obj
-        if(client.readyStatus === WebSocket.OPEN){
+    function sendMessage(parsed, client, ws) { //Send message to all clients, if client is sender, recieves server:obj else client : obj
+        if (client.readyStatus === WebSocket.OPEN) {
             client.send(JSON.stringify({
-                sender : client === ws ? '[SERVER]' : '[CLIENT]', ...parsed }))
+                sender: client === ws ? '[SERVER]' : '[CLIENT]', ...parsed
+            }))
         }
     }
 
-    function parseMessage(message){ //parse json
-        try{
+    function parseMessage(message) { //parse json
+        try {
             const parsed = JSON.parse(message);
             return parsed
         }
         catch (err) {
             console.log("the message cannot be parsed ", err)
-            const parsed = {raw : message}
+            const parsed = { raw: message }
             return parsed
         }
     }
     return wss
 }
 
-module.exports = startWebSocketServer
+export default startWebSocketServer
