@@ -149,12 +149,13 @@ void lastSignal() {
   //om inte signalen är aktiv ska inget hända
   if(!islastSignalActive) return; 
   //Om det har gått 6 sekunder, då ska det inte pipa längre
-  if(millis() - lastSignalWarn_time >= 6000) {
+  if(lastSignalWarn_time >= 6000) {
     analogWrite(Buzzer_Pin, 0);
     islastSignalActive= false; //klar med funktionen 
     //shutdown; 
   } else {
     analogWrite(Buzzer_Pin, 255);
+    Serial.println(lastSignalWarn_time);
   }
 
 }
