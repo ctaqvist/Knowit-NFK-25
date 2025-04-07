@@ -1,0 +1,3 @@
+{"sender":"[SERVER]","raw":"test"}
+{"sender":"[SERVER]","rover_id":"rover-001","command":"PIC"}
+{"sender":"[CLIENT]","rover_id":"rover-001","command":"PIC"}

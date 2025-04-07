@@ -2,6 +2,7 @@ import asyncio
 import websockets
 
 URI = "ws://test.lazyloops.se"
+LOG_FILE = "received_messages.txt"
 
 # Used to get messages from terminal
 async def send_messages(websocket):
@@ -14,6 +15,8 @@ async def receive_messages(websocket):
     try:
         async for message in websocket:
             print(f"\n       RECEIVED: {message}")
+            with open(LOG_FILE, "a", encoding="utf-8") as f:
+                f.write(message + "\n")
     except websockets.exceptions.ConnectionClosed:
         print("Connection closed")
 
