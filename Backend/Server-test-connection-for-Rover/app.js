@@ -10,6 +10,12 @@ wss.on('connection', (ws) => {
   ws.on('message', (msg) => {
     console.log(`Received: ${msg}`);
 
+    // Special case: Ping/Pong
+    if (msg == "ping") {
+        ws.send("pong");
+        return;
+    }
+
     // Forward to all other clients
     clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
