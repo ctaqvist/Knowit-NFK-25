@@ -11,7 +11,10 @@ function startWebSocketServer(PORT){
 
         ws.on('message', (msg) => { //Get message from a client
 
-            if(respondPong(msg, ws)){ return }
+            if(msg == "ping"){
+                sendPong(ws)
+                return
+            }
 
             const parsed = parseMessage(msg);
 
@@ -26,16 +29,12 @@ function startWebSocketServer(PORT){
         })
     })
 
-    function respondPong(message, ws){ //special case, response pong
-        if(message === "ping"){
-            ws.send(JSON.stringify({response : "pong"}));
-            return true
-        }
-        return false
+    function sendPong(ws){
+        ws.send(JSON.stringify({response : "pong"}));
     }
 
     function sendMessage(parsed, client, ws){ //Send message to all clients, if client is sender, recieves server:obj else client : obj
-        if(client.readyStatus === WebSocket.OPEN){
+        if(client.readyState === WebSocket.OPEN){
             console.log(parsed)
             client.send(JSON.stringify({
                 sender : client === ws ? '[SERVER]' : '[CLIENT]', ...parsed }))
