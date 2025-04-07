@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 8080 });
+const PORT = 8080;
+const wss = new WebSocket.Server({ port: PORT });
 let clients = new Set();
 
 wss.on('connection', (ws) => {
@@ -12,28 +13,27 @@ wss.on('connection', (ws) => {
 
         // Special case: Ping/Pong
         if (msg == "ping") {
-            ws.send(`{"response": "pong"}`);
+            ws.send(JSON.stringify({ response: "pong" }));
             return;
         }
 
-        // Forward to all other clients
+        // Try to parse the message as JSON
+        let parsed;
+        try {
+            parsed = JSON.parse(msg);
+        } catch (e) {
+            parsed = { raw: msg }; // fallback if message is not valid JSON
+        }
+
+        // Forward to all connected clients
         clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
-                if (client === ws) {
-                    client.send(
-                        JSON.stringify({
-                                "sender": "[SERVER]",
-                                "response": msg
-                            })
-                    )
-                } else {
-                    client.send(
-                        JSON.stringify({
-                            "sender": "[CLIENT]",
-                            "response": msg
-                        })
-                    );
-                }
+                client.send(
+                    JSON.stringify({
+                        sender: client === ws ? "[SERVER]" : "[CLIENT]",
+                        ...parsed
+                    })
+                );
             }
         });
     });
