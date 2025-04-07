@@ -31,29 +31,38 @@ void loop() {
   Serial.println(" V");
   delay(1000);
 
-  //Första varningen: 
-  analogWrite(Buzzer_Pin, 200);
-  delay(500);
-  analogWrite(Buzzer_Pin, 0);
-  delay(500);
-  analogWrite(Buzzer_Pin, 200);
-  delay(500);
-  analogWrite(Buzzer_Pin, 0);
-  delay(500);
-  analogWrite(Buzzer_Pin, 200);
-  delay(500);
-  analogWrite(Buzzer_Pin, 0);
-  delay(500);
-  analogWrite(Buzzer_Pin, 200);
-  delay(500);
-  analogWrite(Buzzer_Pin, 0);
-  delay(5000);
-  //Andra och sista varningen nu död 
-  analogWrite(Buzzer_Pin, 255);
-  delay(5000);
-  analogWrite(Buzzer_Pin, 0);
-  delay(500);
+  warningSignal(true);
+
+  warningSignal(false);
+
   
  
   
+}
+
+void warningSignal (bool level) {
+  //True = last signal
+  //false = First signal 
+  if(level) {
+    lastSignal();
+  } else {
+    firstSignal (); 
+  }
+}
+
+//Piper en kort stund 4 gånger
+void firstSignal () {
+  for(int i= 0; i<4;i++) {
+      analogWrite(Buzzer_Pin, 200);
+      delay(500);
+      analogWrite(Buzzer_Pin, 0);
+      delay(500);
+    }
+}
+//Lång Ljud signal, nu därefter ska systemet stängas av
+void lastSignal () {
+  analogWrite(Buzzer_Pin, 255);
+  delay(6000);
+  analogWrite(Buzzer_Pin, 0);
+  //Här ska man kalla på Shutdown funktionen
 }
