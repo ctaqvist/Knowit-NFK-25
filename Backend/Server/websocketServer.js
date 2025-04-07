@@ -1,5 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
+import saveImage from './saveImageFromRawData.js';
+
 
 function startWebSocketServer(server){
     const wss = new WebSocketServer({ server });
@@ -12,11 +14,16 @@ function startWebSocketServer(server){
         ws.on('message', (msg) => { //Get message from a client
 
             if(msg == "ping"){
-                sendPong(ws)
-                return
+                sendPong(ws);
+                return;
             }
 
             const parsed = parseMessage(msg);
+
+
+            if (parsed.image && typeof parsed.image === 'string') {
+                saveImage(parsed.image);
+            }
 
             clients.forEach((client) => {
                 sendMessage(parsed, client, ws)
