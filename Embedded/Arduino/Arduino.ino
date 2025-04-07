@@ -17,23 +17,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  /*
-  float batteryHeath = BatteryHealth(A0, Vref);
-  //kan tas  bort, används för att testa och läsa av från Serial Monitor
-  int rawADC = analogRead(A0);
-  float voltage= (rawADC * Vref) / 1023.0; 
-  Serial.print("ADC: ");
-  Serial.print(rawADC);
-  Serial.print(" | Delningsspänning: ");
-  Serial.print(voltage, 2);  //för antal värdesiffror
-  Serial.print(" V | Batterispänning: ");
-  Serial.print(batteryHeath, 2);
-  Serial.println(" V");
-  delay(1000);
-
-  warningSignal(true);
-
-  warningSignal(false); */
+  
   checkBatteryAndWarn ();
   delay(1000);
   
@@ -45,8 +29,8 @@ void loop() {
 //Om 2 => Last signal 
 int checkBatteryLevel(float current_level) {
   //Fösta gränsen, dags att ladda
-  const float Warning = 7.5; //ska vara 7.0
-  const float Shutdown_Level= 6.4;
+  const float Warning = 7.0; //ska vara 7.0
+  const float Shutdown_Level= 8.0;
   if(current_level <= Warning && current_level > Shutdown_Level) {
     return 1;
   } else if(current_level <= Shutdown_Level) {
@@ -93,25 +77,85 @@ void warningSignal (bool level) {
   //True = last signal
   //false = First signal 
   if(level) {
+    lastSignalStart();
     lastSignal();
   } else {
+
+    firstSignalStart();
     firstSignal(); 
   }
 }
 
+/*Variabler för firstSignal funktionen*/
+unsigned long startTime_FirstSignal = 0;
+bool isFirstSignalActive = false;
+int signal_S = 0; // 0 = off & 1 = on 
+int signal_C = 0; //antal gånger det ska pipa.
+
+//Funktion för att flagga igång firstSignal funktionen och ha rätta värden där 
+void firstSignalStart () {
+  isFirstSignalActive= true;
+  signal_S = 0; 
+  signal_C = 0;
+}
 //Piper en kort stund 4 gånger
 void firstSignal() {
+
+  static unsigned long lastToggleTime = 0; 
+  unsigned long current_T = millis();
+
+  if(!isFirstSignalActive) return; 
+
+  if(current_T - lastToggleTime >= 500) {
+    lastToggleTime = current_T;
+
+    if(signal_S == 0) {
+      analogWrite(Buzzer_Pin, 200);
+      signal_S= 1;
+    } else {
+      analogWrite(Buzzer_Pin, 0);
+      signal_S = 0;
+      signal_C ++;
+      //Efter 4 st pipa ljud
+      if(signal_C >= 4) {
+        isFirstSignalActive= false;
+        signal_C= 0;  
+      }
+    }
+  }
+
   for(int i= 0; i<4;i++) {
       analogWrite(Buzzer_Pin, 200);
       delay(500);
       analogWrite(Buzzer_Pin, 0);
-      delay(500);
+      delay(500); 
     }
 }
-//Lång Ljud signal, nu därefter ska systemet stängas av
-void lastSignal() {
-  analogWrite(Buzzer_Pin, 255);
-  delay(6000);
-  analogWrite(Buzzer_Pin, 0);
-  //Här ska man kalla på Shutdown funktionen
+
+/*Variabler för LastSignal funktionen*/
+bool islastSignalActive = false; //ska vara false från början
+unsigned long lastSignalWarn_time = 0; 
+
+//Funktionen för att sätta på timer och säga att last signal är aktiv
+void lastSignalStart(){
+  islastSignalActive = true; 
+  lastSignalWarn_time= millis(); //Börjar räkna sekunder.
+
 }
+
+//Lång Ljud signal systemet ska stängas av
+void lastSignal() {
+
+  //om inte signalen är aktiv ska inget hända
+  if(!islastSignalActive) return; 
+  //Om det har gått 6 sekunder, då ska det inte pipa längre
+  if(millis() - lastSignalWarn_time >= 6000) {
+    analogWrite(Buzzer_Pin, 0);
+    islastSignalActive= false; //klar med funktionen 
+    //shutdown; 
+  } else {
+    analogWrite(Buzzer_Pin, 255);
+  }
+
+}
+ 
