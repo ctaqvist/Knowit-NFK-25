@@ -12,7 +12,7 @@ wss.on('connection', (ws) => {
 
     // Special case: Ping/Pong
     if (msg == "ping") {
-        ws.send("pong");
+        ws.send(`{"response": "pong"}`);
         return;
     }
 
@@ -20,9 +20,9 @@ wss.on('connection', (ws) => {
     clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         if (client === ws) {
-          client.send(`[Server echoes back]: ${msg}`)
+          client.send(`{"response": "[Server echoes back]: ${msg}"}`)
         } else {
-          client.send(msg);
+          client.send(`{"response": "[From a client]: ${msg}"}`);
         }
       }
     });
