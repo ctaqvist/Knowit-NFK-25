@@ -2,14 +2,14 @@
 //Constants
 const float Vref = 5.0;
 const float  battery_limit = 8.0; //Innna man får en varning
-const int ledPin = 13; //D13 är för att sätta på och stänga av LED
+const int Buzzer_Pin = 13; //D13 är för att sätta på och stänga av LED
 
 
 
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(ledPin, OUTPUT);
+  pinMode(Buzzer_Pin, OUTPUT);
   Serial.begin(115200);
   delay(1000);
 }
@@ -30,4 +30,39 @@ void loop() {
   Serial.print(batteryHeath, 2);
   Serial.println(" V");
   delay(1000);
+
+  warningSignal(true);
+
+  warningSignal(false);
+
+  
+ 
+  
+}
+
+void warningSignal (bool level) {
+  //True = last signal
+  //false = First signal 
+  if(level) {
+    lastSignal();
+  } else {
+    firstSignal (); 
+  }
+}
+
+//Piper en kort stund 4 gånger
+void firstSignal () {
+  for(int i= 0; i<4;i++) {
+      analogWrite(Buzzer_Pin, 200);
+      delay(500);
+      analogWrite(Buzzer_Pin, 0);
+      delay(500);
+    }
+}
+//Lång Ljud signal, nu därefter ska systemet stängas av
+void lastSignal () {
+  analogWrite(Buzzer_Pin, 255);
+  delay(6000);
+  analogWrite(Buzzer_Pin, 0);
+  //Här ska man kalla på Shutdown funktionen
 }
