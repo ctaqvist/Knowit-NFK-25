@@ -29,8 +29,8 @@ void loop() {
 //Om 2 => Last signal 
 int checkBatteryLevel(float current_level) {
   //Fösta gränsen, dags att ladda
-  const float Warning = 7.0; //ska vara 7.0
-  const float Shutdown_Level= 8.0;
+  const float Warning = 7.0; 
+  const float Shutdown_Level= 6.4; //Nu ska allting stängas av 
   if(current_level <= Warning && current_level > Shutdown_Level) {
     return 1;
   } else if(current_level <= Shutdown_Level) {
