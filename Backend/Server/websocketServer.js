@@ -1,8 +1,8 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
 
-function startWebSocketServer(PORT){
-    const wss = new WebSocketServer({ port: PORT});
+function startWebSocketServer(server){
+    const wss = new WebSocketServer({ server });
     let clients = new Set();
 
     wss.on('connection', (ws) => {

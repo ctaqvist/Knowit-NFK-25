@@ -1,7 +1,14 @@
-import SetUpRestAPI from "./router.js";
+import app from "./router.js";
 import startWebSocketServer from "./websocketServer.js";
+import http from "http";
 
 // This is the root file
 const PORT = 8080;
-SetUpRestAPI(PORT);
-startWebSocketServer(9000);
+
+const server = http.createServer(app);
+
+server.listen(PORT, () => {
+    console.log(`HTTP server is running on port ${PORT}`);
+});
+
+startWebSocketServer(server);
