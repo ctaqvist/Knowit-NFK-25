@@ -152,7 +152,7 @@ void lastSignal() {
   if(lastSignalWarn_time >= 6000) {
     analogWrite(Buzzer_Pin, 0);
     islastSignalActive= false; //klar med funktionen 
-    //shutdown; 
+    //shutdown; SENARE NU BEHÖVS DET INTE
   } else {
     analogWrite(Buzzer_Pin, 255);
     Serial.println(lastSignalWarn_time);
