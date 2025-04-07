@@ -2,14 +2,14 @@
 //Constants
 const float Vref = 5.0;
 const float  battery_limit = 8.0; //Innna man får en varning
-const int ledPin = 13; //D13 är för att sätta på och stänga av LED
+const int Buzzer_Pin = 13; //D13 är för att sätta på och stänga av LED
 
 
 
 
 void setup() {
   // put your setup code here, to run once:
-  pinMode(ledPin, OUTPUT);
+  pinMode(Buzzer_Pin, OUTPUT);
   Serial.begin(115200);
   delay(1000);
 }
@@ -30,4 +30,30 @@ void loop() {
   Serial.print(batteryHeath, 2);
   Serial.println(" V");
   delay(1000);
+
+  //Första varningen: 
+  analogWrite(Buzzer_Pin, 200);
+  delay(500);
+  analogWrite(Buzzer_Pin, 0);
+  delay(500);
+  analogWrite(Buzzer_Pin, 200);
+  delay(500);
+  analogWrite(Buzzer_Pin, 0);
+  delay(500);
+  analogWrite(Buzzer_Pin, 200);
+  delay(500);
+  analogWrite(Buzzer_Pin, 0);
+  delay(500);
+  analogWrite(Buzzer_Pin, 200);
+  delay(500);
+  analogWrite(Buzzer_Pin, 0);
+  delay(5000);
+  //Andra och sista varningen nu död 
+  analogWrite(Buzzer_Pin, 255);
+  delay(5000);
+  analogWrite(Buzzer_Pin, 0);
+  delay(500);
+  
+ 
+  
 }
