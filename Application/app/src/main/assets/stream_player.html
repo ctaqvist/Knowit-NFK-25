@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Live Stream Viewer</title>
+    <title>Live Stream</title>
     <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
+    <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+          background: black;
+          overflow: hidden;
+        }
+    </style>
 </head>
-
 <body>
-<video id="video" controls autoplay muted style="width: 100%; max-width: 800px;"></video>
-<div id="latency" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div>
+<video id="video" autoplay muted playsinline></video>
 <script>
     if (mpegts.getFeatureList().mseLivePlayback) {
       const video = document.getElementById('video');
       const player = mpegts.createPlayer({
         type: 'mpegts',
         isLive: true,
-        url: 'ws://test.lazyloops.se:9000' // connect to your WebSocket server
+        url: 'ws://test.lazyloops.se:9000'
       });
 
       player.attachMediaElement(video);
@@ -26,5 +31,4 @@
     }
 </script>
 </body>
-
 </html>
