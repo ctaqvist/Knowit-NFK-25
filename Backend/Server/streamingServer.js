@@ -1,9 +1,9 @@
-import { spawn } from ('child_process');
+import { spawn } from 'child_process';
 
-function startStreamingServer(clients){
+function startStreamingServer(clients, port = 9000){
     const stream = spawn('ffmpeg' , [
         '-fflags', 'nobuffer', // reduce buffering for lower latency
-        '-i', 'srt://0.0.0.0:9000?mode=listener', // listen for incoming SRT connections on port 9000
+        '-i', `srt://0.0.0.0:${port}?mode=listener`, // listen for incoming SRT connections on port 9000
         '-c:v', 'copy', // copy the video stream without re-encoding
         '-an', // disable audio processing
         '-f', 'mpegts', // output format is MPEG-TS
