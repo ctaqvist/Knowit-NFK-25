@@ -21,8 +21,8 @@ function startWebSocketServer(server){
             const parsed = parseMessage(msg);
 
 
-            if (parsed.image && typeof parsed.image === 'string') {
-                saveImage(parsed.image);
+            if (isImage(parsed)) {
+                saveImage(parsed.image_base64);
             }
 
             clients.forEach((client) => {
@@ -59,6 +59,22 @@ function startWebSocketServer(server){
             return parsed
         }
     }
+
+    function isImage(parsed){
+        const rover_id = "rover_001" 
+        const sender = "[CLIENT]" 
+        const data_type = "picture_data"
+
+        if(parsed.sender === sender && 
+            parsed.rover_id === rover_id &&
+            parsed.response === data_type && 
+            parsed.image_base64
+        ){
+            return true;
+        }
+        return false;
+    }
+
     return wss
 }
 
