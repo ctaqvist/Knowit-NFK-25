@@ -1,5 +1,6 @@
-#include "MotorControl.h"
+#include <Arduino.h>
 #include "CommandHandler.h"
+#include "MotorControl.h"
 
 void setup() {
   Serial.begin(115200);
