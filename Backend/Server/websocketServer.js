@@ -24,11 +24,13 @@ function initializeWebSocketServer(server) {
 
             // Check if the message is containing image-data
             if (containsImageData(message)) {
-                saveImage(parsed.image_base64);
+                console.log("DJASfiiosdfiosdfj")
+                saveImage(message.image_base64);
+                return;
             }
 
             // Forward message to all clients
-            forwardMessageToAllClients(parsed, clients, ws)
+            forwardMessageToAllClients(message, clients, ws)
         })
 
         ws.on('close', () => {
@@ -71,7 +73,7 @@ function initializeWebSocketServer(server) {
 
     function containsImageData(parsed) {
         const expectedValues = {
-            rover_id: "rover_001",
+            rover_id: "rover-001",
             sender: "[CLIENT]",
             response: "picture_data"
         };

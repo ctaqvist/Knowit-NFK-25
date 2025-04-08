@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { WebSocket } from 'ws';
 
 function startStreamingServer(clients, port = 9000){
     const stream = spawn('ffmpeg' , [
@@ -10,12 +11,12 @@ function startStreamingServer(clients, port = 9000){
         'pipe:1' // send the output to stdout
     ])
 
-    stream.stdout.on('data', (data) => {
-        clients.array.forEach(client => {
-            if(client.readyState === WebSocket.OPEN){
-                    client.send(data)
-            }
-        });
+    stream.stdout.on('data', (chunk) => {
+        for (const client of clients) {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(chunk);
+    }
+  }
     })
 
     stream.stderr.on('data', (data) => {
