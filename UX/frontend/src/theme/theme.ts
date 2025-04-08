@@ -9,7 +9,8 @@ const themePalette = {
   },
   text: {
     primary: '#FFF',
-    secondary: '#05030C'
+    secondary: '#05030C',
+    light: '#BCC5FF'
   },
 }
 
@@ -19,7 +20,7 @@ createTheme({
     ...themePalette
   },
   typography: {
-    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    fontFamily: "'Lexend Exa', 'Instrument Sans', sans-serif",
     h1: { fontSize: '2rem', fontWeight: 500, fontFamily: 'Lexend Exa, sans-serif' },
     h2: { fontSize: '1.75rem', fontWeight: 500, fontFamily: 'Lexend Exa, sans-serif' },
     h3: { fontSize: '1.5rem', fontWeight: 500, fontFamily: 'Lexend Exa, sans-serif' },
@@ -28,7 +29,8 @@ createTheme({
     h6: { fontSize: '0.875rem', fontWeight: 500, fontFamily: 'Lexend Exa, sans-serif' },
     body1: { fontSize: '1rem', fontWeight: 400, fontFamily: 'Instrument Sans, sans-serif'},
     body2: { fontSize: '0.875rem', fontWeight: 400, fontFamily: 'Instrument Sans, sans-serif' },
-    headerlink: { fontSize: '0.8rem', fontWeight: 500, fontFamily: 'Instrument Sans, sans-serif', color: 'text.primary'}
+    headerlink: { fontSize: '0.8rem', fontWeight: 500, fontFamily: 'Instrument Sans, sans-serif', color: 'text.primary'},
+    footerlabel: { fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase' }
   },
   shadows: [
     'none',
@@ -55,6 +57,6 @@ createTheme({
     '0px 2px 32px rgba(0,0,0,0.2)',
     '0px 2px 34px rgba(0,0,0,0.2)',
     '0px 2px 36px rgba(0,0,0,0.2)',
-    '0px 2px 38px rgba(0,0,0,0.2)',
+    '0px 27px 47.4px #5526FF', // Custom shadow
   ],
 })

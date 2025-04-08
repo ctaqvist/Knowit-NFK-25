@@ -1,14 +1,19 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import { Box } from '@mui/material';
+import Footer from './Footer';
 
 function Root() {
   return (
     <Box
       bgcolor='primary.background'
-      sx={{ height: '100vh', m: 0 }}>
+      sx={{ m: 0 }}>
       <Header />
-      <Outlet />
+      <main
+        style={{ minHeight: 'calc(100vh - 74.88px - 200px)' }}>
+        <Outlet />
+      </main>
+      <Footer />
     </Box>
   )
 }
