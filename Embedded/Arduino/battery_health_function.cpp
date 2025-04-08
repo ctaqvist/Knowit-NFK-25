@@ -42,16 +42,21 @@ float BatteryHealth(int analogPin, float Vref) {
 //Om 0 => allting är ok
 //Om 1 => First signal
 //Om 2 => Last signal 
+enum BatteryStatus {
+  Battery_OK = 0,
+  Battery_Warning = 1,
+  Battery_Shutdown= 2
+};
 int checkBatteryLevel(float current_level) {
   //Fösta gränsen, dags att ladda
   const float Warning = 7.0; 
   const float Shutdown_Level= 6.4; //Nu ska allting stängas av 
   if(current_level <= Warning && current_level > Shutdown_Level) {
-    return 1;
+    return Battery_Warning;
   } else if(current_level <= Shutdown_Level) {
-    return 2;
+    return Battery_Shutdown;
   } else {
-    return 0; 
+    return Battery_OK; 
   }
 }
 
@@ -67,12 +72,12 @@ void checkBatteryAndWarn () {
   //Battery Level
   int level =  checkBatteryLevel(voltage);
 
-  if(level == 2) {
+  if(level == Battery_Shutdown) {
     //last signal
     warningSignal(true);
 
     //shutdown()
-  } else if(level == 1) {
+  } else if(level == Battery_Warning) {
     //First signal
     unsigned long c_time = millis(); //Millis gör att den tiden inte pausar allt annat utan kör i bakgrunden
     unsigned long diff = c_time - lastWarning_Time; 
