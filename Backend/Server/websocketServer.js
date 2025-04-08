@@ -60,19 +60,17 @@ function startWebSocketServer(server){
         }
     }
 
-    function isImage(parsed){
-        const rover_id = "rover_001" 
-        const sender = "[CLIENT]" 
-        const data_type = "picture_data"
+    function isImage(parsed) {
+        const expectedValues = {
+            rover_id: "rover_001",
+            sender: "[CLIENT]",
+            response: "picture_data"
+        };
 
-        if(parsed.sender === sender && 
-            parsed.rover_id === rover_id &&
-            parsed.response === data_type && 
-            parsed.image_base64
-        ){
-            return true;
-        }
-        return false;
+        return parsed.sender === expectedValues.sender &&
+               parsed.rover_id === expectedValues.rover_id &&
+               parsed.response === expectedValues.response &&
+               Boolean(parsed.image_base64);
     }
 
     return wss
