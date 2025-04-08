@@ -48,4 +48,3 @@ String MotorControl::getStatus() {
   status += "(" + String(motorRight.getSpeed()) + ")";
   return status;
 }
-//hej
