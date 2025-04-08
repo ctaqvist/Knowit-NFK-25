@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
@@ -22,6 +24,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -61,7 +67,7 @@ fun App() {
     val message by appViewModel.recentMessage.collectAsState()
     println("recomp")
     if (message != null) {
-        val toast = Toast.makeText(LocalContext.current, message , Toast.LENGTH_SHORT)
+        val toast = Toast.makeText(LocalContext.current, message, Toast.LENGTH_SHORT)
         toast.show()
     }
 
@@ -70,7 +76,11 @@ fun App() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("TerraX9", style = MaterialTheme.typography.displayMedium, color = AppColors.SecondaryLight)
+        Text(
+            "TerraX9",
+            style = MaterialTheme.typography.displayMedium,
+            color = AppColors.SecondaryLight
+        )
         Text(
             "Welcome to TerraX9 app version 1!",
             style = MaterialTheme.typography.headlineSmall,
@@ -100,12 +110,25 @@ fun App() {
             )
         }
 
-        VideoStream()
+        var videoKey by remember { mutableStateOf(0) }
+        Button(onClick = {
+            videoKey++
+        }) {
+            Text(
+                "Reload video",
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+        
+        key(videoKey) {
+            VideoStream(modifier = Modifier.fillMaxWidth())
+        }
     }
 }
 
 @Composable
-fun VideoStream() {
+fun VideoStream(modifier: Modifier = Modifier) {
     AndroidView(factory = { context ->
         WebView(context).apply {
             settings.javaScriptEnabled = true
@@ -113,5 +136,5 @@ fun VideoStream() {
             webChromeClient = WebChromeClient()
             loadUrl("file:///android_asset/stream_player.html")
         }
-    }, modifier = Modifier.fillMaxSize())
+    }, modifier = modifier)
 }
