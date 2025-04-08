@@ -1,4 +1,9 @@
-.DS_Store
+.gradle
+.idea
+local.properties
 node_modules
 Embedded/RaspberryPI/pictures/
+build
+.vscode/
+.DS_Store
 
