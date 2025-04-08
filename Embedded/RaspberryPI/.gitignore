@@ -1,0 +1,10 @@
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.vscode/
