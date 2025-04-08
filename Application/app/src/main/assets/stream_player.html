@@ -2,14 +2,14 @@
 <html>
 
 <head>
-  <title>Live Stream Viewer</title>
-  <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
+    <title>Live Stream Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
 </head>
 
 <body>
-  <video id="video" controls autoplay muted style="width: 100%; max-width: 800px;"></video>
-  <div id="latency" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div>
-  <script>
+<video id="video" controls autoplay muted style="width: 100%; max-width: 800px;"></video>
+<div id="latency" style="margin-top: 1rem; font-size: 1.2rem; font-weight: bold;"></div>
+<script>
     if (mpegts.getFeatureList().mseLivePlayback) {
       const video = document.getElementById('video');
       const player = mpegts.createPlayer({
@@ -24,7 +24,7 @@
     } else {
       alert("Your browser doesn't support MSE live playback.");
     }
-  </script>
+</script>
 </body>
 
 </html>
