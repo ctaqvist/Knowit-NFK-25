@@ -2,13 +2,13 @@ import express from 'express'
 import path from 'path'
 
 
-const app = express()
+const expressApp = express()
 
-app.use('/img', express.static(path.join(__dirname, "img"))) // access the images 
+expressApp.use('/img', express.static(path.join(__dirname, "img"))) // access the images 
 
-app.get('/', (req, res) => {
+expressApp.get('/', (req, res) => {
     res.status(200).json({ message: "Hello, world!" })
 })
 
 
-export default app
+export default expressApp

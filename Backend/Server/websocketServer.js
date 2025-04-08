@@ -3,31 +3,32 @@ import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
 import startStreamingServer from './streamingServer.js';
 
-function startWebSocketServer(server){
+function initializeWebSocketServer(server) {
     const wss = new WebSocketServer({ server });
     let clients = new Set();
 
     wss.on('connection', (ws) => {
-        console.log('client is connected!');
+        console.log('A new client just connected.');
         clients.add(ws);
 
-        ws.on('message', (msg) => { //Get message from a client
+        ws.on('message', (msg) => {
 
-            if(msg == "ping"){
+            // Special ping/pong case
+            if (msg == "ping") {
                 sendPong(ws);
                 return;
             }
 
-            const parsed = parseMessage(msg);
+            // Message will be an object
+            const message = parseJsonMessage(msg);
 
-
-            if (isImage(parsed)) {
+            // Check if the message is containing image-data
+            if (containsImageData(message)) {
                 saveImage(parsed.image_base64);
             }
 
-            clients.forEach((client) => {
-                sendMessage(parsed, client, ws)
-            })
+            // Forward message to all clients
+            forwardMessageToAllClients(parsed, clients, ws)
         })
 
         ws.on('close', () => {
@@ -38,31 +39,37 @@ function startWebSocketServer(server){
 
     startStreamingServer(clients) // start streaming
 
-    function sendPong(ws){
-        ws.send(JSON.stringify({response : "pong"}));
+    // Client is passed as paramter
+    function sendPong(ws) {
+        ws.send(JSON.stringify({ response: "pong" }));
     }
 
-    function sendMessage(parsed, client, ws){ //Send message to all clients, if client is sender, recieves server:obj else client : obj
-        if(client.readyState === WebSocket.OPEN){
-            console.log(parsed)
-            client.send(JSON.stringify({
-                sender : client === ws ? '[SERVER]' : '[CLIENT]', ...parsed }))
-        }
+    //Send message to all clients, if client is sender, recieves server:obj else client : obj
+    function forwardMessageToAllClients(parsed, clients, ws) {
+        clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                console.log(parsed)
+                client.send(JSON.stringify({
+                    sender: client === ws ? '[SERVER]' : '[CLIENT]', ...parsed
+                }))
+            }
+        })
     }
 
-    function parseMessage(message){ //parse json
-        try{
+    //Parse json
+    function parseJsonMessage(message) {
+        try {
             const parsed = JSON.parse(message);
             return parsed
         }
         catch (err) {
-            console.log("the message cannot be parsed ", err)
-            const parsed = {raw : message}
+            console.log("The message couldn't be parsed. ", err)
+            const parsed = { raw: message }
             return parsed
         }
     }
 
-    function isImage(parsed) {
+    function containsImageData(parsed) {
         const expectedValues = {
             rover_id: "rover_001",
             sender: "[CLIENT]",
@@ -70,12 +77,12 @@ function startWebSocketServer(server){
         };
 
         return parsed.sender === expectedValues.sender &&
-               parsed.rover_id === expectedValues.rover_id &&
-               parsed.response === expectedValues.response &&
-               Boolean(parsed.image_base64);
+            parsed.rover_id === expectedValues.rover_id &&
+            parsed.response === expectedValues.response &&
+            Boolean(parsed.image_base64);
     }
 
     return wss
 }
 
-export default startWebSocketServer
+export default initializeWebSocketServer
