@@ -1,7 +1,7 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
-
+import startStreamingServer from './streamingServer.js';
 
 function startWebSocketServer(server){
     const wss = new WebSocketServer({ server });
@@ -35,6 +35,8 @@ function startWebSocketServer(server){
             console.log('client disconnected')
         })
     })
+
+    startStreamingServer(clients) // start streaming
 
     function sendPong(ws){
         ws.send(JSON.stringify({response : "pong"}));
