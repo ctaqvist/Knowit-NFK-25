@@ -1,6 +1,7 @@
 .gradle
 .idea
 local.properties
+img
 node_modules
 Embedded/RaspberryPI/pictures/
 build
