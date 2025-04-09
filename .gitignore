@@ -3,7 +3,8 @@
 local.properties
 img
 node_modules
+Embedded/RaspberryPI/pictures/
 build
 .vscode/
 .DS_Store
-Embedded/RaspberryPI/pictures/
+
