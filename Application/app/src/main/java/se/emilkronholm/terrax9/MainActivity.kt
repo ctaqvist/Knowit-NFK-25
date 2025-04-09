@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +39,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
 import se.emilkronholm.terrax9.ui.theme.Terrax9Theme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import se.emilkronholm.terrax9.ui.screens.test.TestScreen
 import se.emilkronholm.terrax9.ui.theme.AppColors
 
 class MainActivity : ComponentActivity() {
@@ -48,93 +50,10 @@ class MainActivity : ComponentActivity() {
             Terrax9Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        App()
+                        TestScreen()
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-fun App() {
-    val appViewModel: AppViewModel = viewModel()
-
-    LaunchedEffect(Unit) {
-        appViewModel.connect()
-    }
-
-    val message by appViewModel.recentMessage.collectAsState()
-    println("recomp")
-    if (message != null) {
-        val toast = Toast.makeText(LocalContext.current, message, Toast.LENGTH_SHORT)
-        toast.show()
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            "TerraX9",
-            style = MaterialTheme.typography.displayMedium,
-            color = AppColors.SecondaryLight
-        )
-        Text(
-            "Welcome to TerraX9 app version 1!",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(36.dp)
-        )
-        Button(onClick = {
-            println("Take picture")
-            appViewModel.sendPictureCommand()
-        }) {
-            Text(
-                "Take picture!",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Button(onClick = {
-            println("Sent ping click")
-            appViewModel.sendMessage("Ping")
-        }) {
-            Text(
-                "Send ping",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-
-        var videoKey by remember { mutableStateOf(0) }
-        Button(onClick = {
-            videoKey++
-        }) {
-            Text(
-                "Reload video",
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-        
-        key(videoKey) {
-            VideoStream(modifier = Modifier.fillMaxWidth())
-        }
-    }
-}
-
-@Composable
-fun VideoStream(modifier: Modifier = Modifier) {
-    AndroidView(factory = { context ->
-        WebView(context).apply {
-            settings.javaScriptEnabled = true
-            settings.mediaPlaybackRequiresUserGesture = false
-            webChromeClient = WebChromeClient()
-            loadUrl("file:///android_asset/stream_player.html")
-        }
-    }, modifier = modifier)
 }
