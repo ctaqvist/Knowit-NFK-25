@@ -57,7 +57,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
-
+    implementation("com.google.accompanist:accompanist-flowlayout:0.36.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
