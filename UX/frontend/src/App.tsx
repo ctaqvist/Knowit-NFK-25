@@ -1,14 +1,18 @@
-import './App.css'
 import { RouterProvider } from 'react-router-dom'
 import { router } from './router/router'
 import { AuthProvider } from './context/AuthProvider'
+import { CssBaseline } from '@mui/material'
+import { ThemeProvider } from './theme/ThemeProvider'
 
 function App() {
 
   return (
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <ThemeProvider>
+      <CssBaseline />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
