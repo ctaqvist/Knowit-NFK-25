@@ -1,10 +1,32 @@
-
 # Python bytecode
 __pycache__/
 *.py[cod]
 
-# Python
-__pycache__/
-*.py[cod]
+# Virtual environments
 .venv/
+
+# VSCode settings
 .vscode/
+
+# Log files
+*.log
+logs/
+
+# Raspberry Pi camera pictures
+pictures/
+*.jpg
+*.jpeg
+*.png
+
+# ffmpeg output
+*.h264
+*.ts
+*.mp4
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets (if used)
+.env
+*.env
