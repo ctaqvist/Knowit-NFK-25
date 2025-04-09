@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
 
-function astartStreamingServer(ports) {
+function startStreamingServer(ports) {
   const wss = new WebSocketServer({ port: ports.ouputPort });
   const clients = new Set();
 
