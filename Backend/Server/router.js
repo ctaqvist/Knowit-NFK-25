@@ -14,13 +14,13 @@ const baseURL = 'http://test.lazyloops.se/images/'
 
 expressApp.get('/images', (req, res) => {
     // Fetch a list of images
-    fs.readdir(imagesStaticPath, (err, files) => { 
-        if(err){
+    fs.readdir(imagesStaticPath, (err, files) => {
+        if (err) {
             console.error(err);
             res.status(500).send("error while getting images")
         }
         // Create url of each image
-        const urls = files.map(imgName => { 
+        const urls = files.map(imgName => {
             return new URL(imgName, baseURL);
         })
         res.send(urls);
