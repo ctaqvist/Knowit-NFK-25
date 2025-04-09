@@ -1,7 +1,7 @@
 import asyncio
 import websockets
 
-URI = "ws://test.lazyloops.se"
+URI = "ws://13.60.235.253:9000"
 
 # Used to get messages from terminal
 async def send_messages(websocket):

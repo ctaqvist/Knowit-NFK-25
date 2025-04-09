@@ -39,8 +39,6 @@ function initializeWebSocketServer(server) {
         })
     })
 
-    startStreamingServer(clients) // start streaming
-
     // Client is passed as paramter
     function sendPong(ws) {
         ws.send(JSON.stringify({ response: "pong" }));
