@@ -23,7 +23,6 @@ function initializeWebSocketServer(server) {
 
             // Check if the message is containing image-data
             if (containsImageData(message)) {
-                console.log("DJASfiiosdfiosdfj")
                 saveImage(message.image_base64);
                 return;
             }
@@ -63,7 +62,7 @@ function initializeWebSocketServer(server) {
         }
         catch (err) {
             console.log("The message couldn't be parsed. ", err)
-            const parsed = { raw: message }
+            const parsed = { raw: message.toString() }
             return parsed
         }
     }
