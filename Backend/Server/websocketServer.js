@@ -1,7 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
-import startStreamingServer from './streamingServer.js';
 
 function initializeWebSocketServer(server) {
     const wss = new WebSocketServer({ server });
