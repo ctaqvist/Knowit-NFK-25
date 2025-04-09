@@ -17,13 +17,23 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  digitalWrite(SpotLights_Pin, HIGH);
+  Spotlight_On();
+  delay(1000);
+  Spotlight_Off();
   checkBatteryAndWarn ();
   delay(1000);
   
  
   
 }
+//Funktion som sätter på SpotLights
+void Spotlight_On ()
+{
+  digitalWrite(SpotLights_Pin, HIGH);
+}
 
-
- 
+//Funktion som stänger av SpotLights
+void Spotlight_Off ()
+{
+  digitalWrite(SpotLights_Pin, LOW);
+}
