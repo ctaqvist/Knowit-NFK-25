@@ -2,6 +2,9 @@ package se.emilkronholm.terrax9.ui.screens.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.http.HttpMethod
 import io.ktor.websocket.Frame
@@ -14,7 +17,10 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import se.emilkronholm.terrax9.client
+
+val client = HttpClient(CIO) {
+    install(WebSockets)
+}
 
 class ViewModel(private val uri: String = "") : ViewModel() {
     private var socket: WebSocketSession? = null
