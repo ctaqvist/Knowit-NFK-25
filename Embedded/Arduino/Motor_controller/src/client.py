@@ -1,5 +1,5 @@
 import asyncio
-import websockets # type: ignore
+import websockets
 
 async def main():
     uri = "ws://test.lazyloops.se"
