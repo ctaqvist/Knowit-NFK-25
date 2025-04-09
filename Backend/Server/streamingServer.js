@@ -3,7 +3,7 @@ import { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
 
 function startStreamingServer(ports) {
-  const wss = new WebSocketServer({ port: ports.ouputPort });
+  const wss = new WebSocketServer({ port: ports.outputPort });
   const clients = new Set();
 
   // Output
