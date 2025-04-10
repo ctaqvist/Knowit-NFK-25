@@ -27,6 +27,7 @@ async def listen_to_server():
             command = data.get("command")
             params = data 
             
+
             if command is None:
                 print("No command found – skipping message.")
                 continue

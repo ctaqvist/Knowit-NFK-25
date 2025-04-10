@@ -1,3 +1,4 @@
+
 import json
 from communication.serial_helper import send_to_arduino
 from config.settings import ROVER_ID
@@ -6,6 +7,7 @@ async def handle_movement(command, params, websocket, arduino):
     if command == "set_speed":
         try:
             value = int(params.get("value", 0))
+
             serial_command = json.dumps({
                 "command": "set_speed",
                 "value": value
@@ -40,6 +42,7 @@ async def handle_movement(command, params, websocket, arduino):
                 "rover_id": ROVER_ID,
                 "response": f"Navigating with angle={angle}, speed={speed}, forward={forward}"
             }))
+            
         except (ValueError, TypeError) as e:
             await websocket.send(json.dumps({
                 "rover_id": ROVER_ID,
@@ -56,9 +59,10 @@ async def handle_movement(command, params, websocket, arduino):
             "response": "Sent command: tankturn"
         }))
 
+
     else:
         send_to_arduino(arduino, command)
         await websocket.send(json.dumps({
             "rover_id": ROVER_ID,
             "response": f"Command sent: {command}"
-        }))
+

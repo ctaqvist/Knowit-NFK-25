@@ -3,48 +3,30 @@
 MotorControl motorControl;
 
 void MotorControl::init() {
-  // Initialization handled in Motor constructors
+  // Initfunktion om du behöver något i framtiden
 }
 
-void MotorControl::setState(DriveState newState) {
-  currentState = newState;
+void MotorControl::setState(DriveState state) {
+  currentState = state;
+}
+
+void MotorControl::setMotors(int leftSpeed, int rightSpeed) {
+  motorLeft.setSpeed(leftSpeed);
+  motorRight.setSpeed(rightSpeed);
 }
 
 void MotorControl::update() {
   switch (currentState) {
-    case stopped:
-      motorLeft.setSpeed(0);
-      motorRight.setSpeed(0);
-      break;
-    case forward:
-      motorLeft.setSpeed(200);
-      motorRight.setSpeed(200);
-      break;
-    case backward:
-      motorLeft.setSpeed(-200);
-      motorRight.setSpeed(-200);
-      break;
-    case left:
-      motorLeft.setSpeed(-150);
-      motorRight.setSpeed(150);
-      break;
-    case right:
-      motorLeft.setSpeed(150);
-      motorRight.setSpeed(-150);
-      break;
-    case spin:
-      motorLeft.setSpeed(255);
-      motorRight.setSpeed(-255);
-      break;
+    case stopped:  setMotors(0, 0); break;
+    case forward:  setMotors(200, 200); break;
+    case backward: setMotors(-200, -200); break;
+    case left:     setMotors(-150, 150); break;
+    case right:    setMotors(150, -150); break;
+    case spin:     setMotors(255, -255); break;
   }
 }
 
 String MotorControl::getStatus() {
-  String status = "STATUS: Left=";
-  status += motorLeft.getDirection();
-  status += "(" + String(motorLeft.getSpeed()) + ")";
-  status += ", Right=";
-  status += motorRight.getDirection();
-  status += "(" + String(motorRight.getSpeed()) + ")";
-  return status;
+  return "Left: " + motorLeft.getDirection() + "(" + motorLeft.getSpeed() + "), " +
+         "Right: " + motorRight.getDirection() + "(" + motorRight.getSpeed() + ")";
 }

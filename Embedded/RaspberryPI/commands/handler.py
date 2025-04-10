@@ -12,3 +12,4 @@ async def process_command(websocket, command, params, arduino):
    
     else:
         await handle_movement(command, params, websocket, arduino)
+
