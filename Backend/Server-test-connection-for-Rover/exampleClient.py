@@ -5,6 +5,10 @@ import json
 import base64
 from datetime import datetime
 
+URI = "ws://13.60.235.253:9000"
+
+# Used to get messages from terminal
+
 async def send_messages(websocket):
     while True:
         message = await asyncio.get_event_loop().run_in_executor(None, input, "> ")
