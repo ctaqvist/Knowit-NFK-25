@@ -11,4 +11,4 @@ async def process_command(websocket, command, params, arduino):
         await handle_stop_stream_command(websocket)
    
     else:
-        await handle_default_command(websocket, command, params, arduino)
+        await handle_movement(command, params, websocket, arduino)
