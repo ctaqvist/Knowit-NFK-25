@@ -25,10 +25,12 @@ async def listen_to_server():
                 continue
 
             command = data.get("command")
-            params = data.get("params", {})
+            params = data 
+            
 
             if command is None:
                 print("No command found – skipping message.")
                 continue
 
             await process_command(websocket, command, params, arduino)
+#hej
