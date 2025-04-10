@@ -2,22 +2,21 @@ import express from 'express'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import fs from 'fs'
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const expressApp = express()
 
 const imagesStaticPath = path.join(__dirname, "img")
 const baseURL = 'http://test.lazyloops.se/images/'
-//expressApp.use('/img', express.static(imagesStaticPath)) // access the images 
 
 expressApp.get('/images', (req, res) => {
     // Fetch a list of images
     fs.readdir(imagesStaticPath, (err, files) => {
         if (err) {
             console.error(err);
-            res.status(500).send("error while getting images")
+            res.status(500).send("Error while getting images")
         }
         // Create url of each image
         const urls = files.map(imgName => {
