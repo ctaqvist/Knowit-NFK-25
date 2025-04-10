@@ -5,14 +5,17 @@ function Footer() {
   return (
 
     <Box
+      component='footer'
       sx={{
         width: '100%', minHeight: 200, p: 2, pb: 1, display: 'flex', flexDirection: 'row', flexWrap: 'wrap',
         '& a': { color: 'text.primary', textDecoration: 'none', fontSize: '0.8rem' },
+        '& a:hover': { textDecoration: 'underline', textUnderlineOffset: '2px' },
         '& .footerColumn': { flexDirection: 'column', display: 'flex', width: 'fit-content', gap: 0.2 }
       }}>
       <Box sx={{ flex: '100%', textAlign: 'center' }}>
         <img src='/logo_full.svg' alt='Logo' style={{ width: '70px', justifySelf: 'center' }} />
-        <Typography variant='h6'>Seamless Pickup, Beyond Planets</Typography>
+        <Typography variant='h6'
+          sx={{ fontWeight: 200, fontSize: '0.8rem', mt: 0.5 }}>Seamless Pickup, Beyond Planets</Typography>
       </Box>
       <Box
         sx={{ display: 'flex', justifyContent: 'center', p: 4, width: '100%', gap: 8 }}>
