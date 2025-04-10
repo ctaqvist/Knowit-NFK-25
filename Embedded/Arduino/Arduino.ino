@@ -17,8 +17,8 @@ void forward () {
   digitalWrite(Motor_D, LOW);
 
   // Sätt PWM till motorerna (valfritt värde, ex. 200 av max 255)
-  analogWrite(PWM_AB, 200);
-  analogWrite(PWM_CD, 200);
+  analogWrite(PWM_AB, 150);
+  analogWrite(PWM_CD, 150);
 
 }
 
@@ -44,17 +44,21 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  if(Serial.available()) {
+    String command = Serial.readStringUntil('\n');
+    command.trim(); //för att ta bort alla mellanslag 
 
+    if(command == "fwd") {
+      forward();
+    } else if (command == "stop") {
+      stopMotors();
+    }
+  }
   
-  checkBatteryAndWarn ();
-  forward();
-  delay(5000);
-  stopMotors();
-  while(true); //för att göra att allting endast körs en gång 
+  //checkBatteryAndWarn ();
+  delay(3000);
   
-  
- 
-  
+  //while(true); //för att göra att allting endast körs en gång   
 }
 
  
