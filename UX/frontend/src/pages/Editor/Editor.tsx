@@ -13,7 +13,6 @@ function Editor() {
     <>
       <button onClick={signOut}>Logout</button>
       <p>Currently logged in as admin: {user.email}</p>
-
     </>
   )
 
