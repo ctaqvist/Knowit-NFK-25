@@ -23,7 +23,6 @@ def send_to_arduino(arduino, message):
         arduino.write((message + '\n').encode())  
         print(f"Sent to Arduino: {message}")
 
-        # Om Arduino skickar ett snabbt svar, visa det (t.ex. ACK eller fel)
         time.sleep(0.05)  # liten fördröjning så Arduino hinner svara
         if arduino.in_waiting:
             response = arduino.readline().decode('utf-8').strip()
