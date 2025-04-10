@@ -21,7 +21,18 @@ void forward () {
   analogWrite(PWM_CD, 150);
 
 }
+void tankTurn () {
+  // Sätt riktning framåt för båda sidor
+  digitalWrite(Motor_A, HIGH);
+  digitalWrite(Motor_B, LOW);
+  digitalWrite(Motor_C, LOW);
+  digitalWrite(Motor_D, HIGH);
 
+  // Sätt PWM till motorerna (valfritt värde, ex. 200 av max 255)
+  analogWrite(PWM_AB, 255);
+  analogWrite(PWM_CD, 255);
+
+}
 
 void stopMotors() {
   analogWrite(PWM_AB, 0);
@@ -52,6 +63,9 @@ void loop() {
       forward();
     } else if (command == "stop") {
       stopMotors();
+    } else if (command == "tt") {
+      //tank turn 
+      tankTurn();
     }
   }
   
