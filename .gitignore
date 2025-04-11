@@ -1,0 +1,31 @@
+.gradle
+.idea
+local.properties
+img
+node_modules
+Embedded/RaspberryPI/pictures/
+build
+.vscode/
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtuella miljöer
+.venv/
+env/
+venv/
+
+# VS Code
+.vscode/
+
+# Operativsystemfiler
+
+Thumbs.db
+
+# Distributionsfiler
+*.egg-info/
+build/
+dist/
+
