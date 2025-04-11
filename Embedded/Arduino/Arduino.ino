@@ -21,6 +21,18 @@ void forward () {
   analogWrite(PWM_CD, 150);
 
 }
+void backward () {
+  // Sätt riktning framåt för båda sidor
+  digitalWrite(Motor_A, LOW);
+  digitalWrite(Motor_B, HIGH);
+  digitalWrite(Motor_C, LOW);
+  digitalWrite(Motor_D, HIGH);
+
+  // Sätt PWM till motorerna (valfritt värde, ex. 200 av max 255)
+  analogWrite(PWM_AB, 150);
+  analogWrite(PWM_CD, 150);
+
+}
 void tankTurn () {
   // Sätt riktning framåt för båda sidor
   digitalWrite(Motor_A, HIGH);
@@ -55,7 +67,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  if(Serial.available()) {
+  /*if(Serial.available()) {
     String command = Serial.readStringUntil('\n');
     command.trim(); //för att ta bort alla mellanslag 
 
@@ -67,12 +79,22 @@ void loop() {
       //tank turn 
       tankTurn();
     }
-  }
-  
+  }*/
+  forward();
   //checkBatteryAndWarn ();
   delay(3000);
-  
-  //while(true); //för att göra att allting endast körs en gång   
+  stopMotors();
+  delay(2000);
+
+  backward();
+  delay(3000);
+  stopMotors();
+  delay(2000);
+
+  tankTurn();
+  delay(1500);
+  stopMotors();
+  while(true); //för att göra att allting endast körs en gång   
 }
 
  
