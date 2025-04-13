@@ -7,9 +7,9 @@
 IP: 13.60.235.253
 Domain: terrax9.se
 
-Data port default (right now 80)
-Streaming inbound port 1234
-Streaming outbound port 9000
+Data: default (right now 80) (with websocket, ws)
+Streaming inbound port 1234 (with srt)
+Streaming outbound port 9000 (with websocket)
 
 ## How rover connects to the server
 
