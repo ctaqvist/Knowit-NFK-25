@@ -4,6 +4,10 @@ from time import sleep
 
 GPIO.setmode(GPIO.BCM)
 
+neutral = 0
+left = -90
+right = 90
+
 # Bestämmer GPIO Pins för servomotorerna
 servo_pins = [13, 12, 17]
 for pin in servo_pins:
@@ -26,9 +30,6 @@ servo3.start(0)
 servos = [servo1, servo2, servo3]
 
 try:
-    neutral = 0
-    left = -90
-    right = 90
     # Start at 0° (neutral) for all servos.
     print(f"Starting at {neutral}°")
     move_servos(servos, 0, 0)
