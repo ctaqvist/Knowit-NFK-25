@@ -1,18 +1,23 @@
 #ifndef COMMAND_HANDLER_H
 #define COMMAND_HANDLER_H
-
 #include <Arduino.h>
 
-class CommandHandler {
-  public:
-    void init();
-    void listen();
+/**
+ * @class CommandHandler
+ * @brief Handles command initialization and listening for incoming commands.
+ *
+ * The CommandHandler class provides methods to initialize the command handling
+ * system and to listen for and process incoming commands.
+ */
+class CommandHandler
+{
+public:
+  void init();
+  void listen();
 };
 
-// Skapar en global instans så du kan använda `commandHandler.init()` och `commandHandler.listen()` i din sketch
 extern CommandHandler commandHandler;
 
-// Dessa deklareras i .cpp men används bara internt
 void handleCommand(String cmd);
 void executePlainCommand(String cmd);
 
