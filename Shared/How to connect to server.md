@@ -1,6 +1,7 @@
 # How to connect to server
 
 (From ticket 43)
+Last changed: 2025-04-14 
 
 ## General
 
