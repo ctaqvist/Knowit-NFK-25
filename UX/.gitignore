@@ -5,6 +5,7 @@
 /backend/dist
 /frontend/build
 /backend/build
+/backend/supabase
 
 # OS
 .DS_Store
