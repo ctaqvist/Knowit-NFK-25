@@ -39,6 +39,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.ViewModel
 import se.emilkronholm.terrax9.ui.theme.Terrax9Theme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import se.emilkronholm.terrax9.ui.screens.controller.ControllerScreen
+import se.emilkronholm.terrax9.ui.screens.controller.JoyCon
 import se.emilkronholm.terrax9.ui.screens.test.TestScreen
 import se.emilkronholm.terrax9.ui.theme.AppColors
 
