@@ -11,6 +11,8 @@ build
 # Python
 __pycache__/
 *.py[cod]
+*.swp
+lgd-nfy0*
 
 # Virtuella miljöer
 .venv/
