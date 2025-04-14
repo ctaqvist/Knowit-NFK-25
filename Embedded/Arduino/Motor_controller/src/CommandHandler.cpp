@@ -2,45 +2,38 @@
 #include "MotorControl.h"
 #include <ArduinoJson.h>
 
-// Global variables to store incoming serial data
+// Buffer for incoming serial data
 String inputString = "";
 bool stringComplete = false;
 
-// CommandHandler instance to manage incoming commands
+// CommandHandler instance
 CommandHandler commandHandler;
 
 /**
- * Initializes the command handler.
- * Reserves memory for the input string and prints a ready message.
+ * @brief Initializes the command handler.
  */
-void CommandHandler::init()
-{
+void CommandHandler::init() {
   inputString.reserve(200);
   Serial.println("READY");
 }
 
 /**
- * Listens to serial input and checks for completed messages (ending with newline).
- * When a message is complete, it triggers command handling.
+ * @brief Listens for complete serial lines and triggers command handling.
  */
-void CommandHandler::listen()
-{
-  while (Serial.available())
-  {
+void CommandHandler::listen() {
+  while (Serial.available()) {
     char inChar = (char)Serial.read();
     inputString += inChar;
-    if (inChar == '\n')
-    {
+
+    if (inChar == '\n') {
       stringComplete = true;
     }
   }
 
-  if (stringComplete)
-  {
+  if (stringComplete) {
     inputString.trim();
 
-    if (inputString.length() > 0)
-    {
+    if (inputString.length() > 0) {
       handleCommand(inputString);
     }
 
@@ -50,72 +43,111 @@ void CommandHandler::listen()
 }
 
 /**
- * Attempts to parse the command as JSON. If it contains a "command" field,
- * that value is extracted and executed. Otherwise, treats the entire string
- * as a plain command.
+ * @brief Sends a standard acknowledgment with the command name.
+ * @param cmd Command string that was acknowledged.
  */
-void handleCommand(String cmd)
-{
+void sendAck(const String& cmd) {
+  Serial.println("{\"ack\":\"" + cmd + "\"}");
+}
+
+/**
+ * @brief Sends a standard error message.
+ * @param msg Error message string.
+ */
+void sendError(const String& msg) {
+  Serial.println("{\"error\":\"" + msg + "\"}");
+}
+
+/**
+ * @brief Sends full motor status including direction and speed.
+ */
+void sendStatus(const String& leftDir, int leftSpeed, const String& rightDir, int rightSpeed) {
+  StaticJsonDocument<200> doc;
+  JsonObject status = doc.createNestedObject("status");
+  status["left"]["dir"] = leftDir;
+  status["left"]["speed"] = leftSpeed;
+  status["right"]["dir"] = rightDir;
+  status["right"]["speed"] = rightSpeed;
+  serializeJson(doc, Serial);
+  Serial.println();
+}
+
+/**
+ * @brief Handles speed commands with floating-point values.
+ * @param speed A float between 0.0 and 1.0.
+ */
+void handleSpeedCommand(float speed) {
+  speed = constrain(speed, 0.0, 1.0);
+  int pwm = int(speed * 255.0);
+  motorControl.setMotors(pwm, pwm);
+}
+
+/**
+ * @brief Parses and executes a JSON or plain-text command.
+ * @param cmd The full command string.
+ */
+void handleCommand(String cmd) {
   StaticJsonDocument<200> doc;
   DeserializationError error = deserializeJson(doc, cmd);
 
-  if (!error && doc.containsKey("command"))
-  {
+  if (!error && doc.containsKey("command")) {
     String jsonCmd = doc["command"];
+
+    if (jsonCmd == "set_speed" && doc.containsKey("value")) {
+      float speed = doc["value"];
+      handleSpeedCommand(speed);
+      sendAck("set_speed");
+      return;
+    }
+
     executePlainCommand(jsonCmd);
     return;
   }
 
-  /* Fallback to plain-text command if not valid JSON or no "command" key */
+  // Fallback to plain-text command
   executePlainCommand(cmd);
 }
 
 /**
- * Executes a plain command string by mapping known commands to motor states.
- * Sends an acknowledgment or error back over Serial.
+ * @brief Executes basic plain-text commands (non-JSON).
+ * @param cmd Command string (e.g. "fwd", "status", etc.)
  */
-
-void executePlainCommand(String cmd)
-{
-  if (cmd == "fwd")
-  {
+void executePlainCommand(String cmd) {
+  if (cmd == "fwd") {
     motorControl.setState(forward);
-    Serial.println("{\"ack\":\"fwd\"}");
+    sendAck("fwd");
   }
-  else if (cmd == "bwd")
-  {
+  else if (cmd == "bwd") {
     motorControl.setState(backward);
-    Serial.println("{\"ack\":\"bwd\"}");
+    sendAck("bwd");
   }
-  else if (cmd == "left")
-  {
+  else if (cmd == "left") {
     motorControl.setState(left);
-    Serial.println("{\"ack\":\"left\"}");
+    sendAck("left");
   }
-  else if (cmd == "right")
-  {
+  else if (cmd == "right") {
     motorControl.setState(right);
-    Serial.println("{\"ack\":\"right\"}");
+    sendAck("right");
   }
-  else if (cmd == "spin")
-  {
+  else if (cmd == "spin") {
     motorControl.setState(spin);
-    Serial.println("{\"ack\":\"spin\"}");
+    sendAck("spin");
   }
-  else if (cmd == "stop")
-  {
+  else if (cmd == "stop") {
     motorControl.setState(stopped);
-    Serial.println("{\"ack\":\"stop\"}");
+    sendAck("stop");
   }
-  else if (cmd == "status")
-  {
-    String status = motorControl.getStatus();
-    Serial.print("{\"status\":\"");
-    Serial.print(status);
-    Serial.println("\"}");
+  else if (cmd == "status") {
+    sendStatus(
+      motorControl.getLeftMotor().getDirection(),
+      motorControl.getLeftMotor().getSpeed(),
+      motorControl.getRightMotor().getDirection(),
+      motorControl.getRightMotor().getSpeed()
+    );
   }
-  else
-  {
-    Serial.println("{\"error\":\"unknown_command\"}");
+  else {
+    sendError("unknown_command");
   }
 }
+
+

@@ -1,7 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
-import startStreamingServer from './streamingServer.js';
 
 function initializeWebSocketServer(server) {
     const wss = new WebSocketServer({ server });
@@ -24,7 +23,6 @@ function initializeWebSocketServer(server) {
 
             // Check if the message is containing image-data
             if (containsImageData(message)) {
-                console.log("DJASfiiosdfiosdfj")
                 saveImage(message.image_base64);
                 return;
             }
@@ -38,8 +36,6 @@ function initializeWebSocketServer(server) {
             console.log('client disconnected')
         })
     })
-
-    startStreamingServer(clients) // start streaming
 
     // Client is passed as paramter
     function sendPong(ws) {
@@ -66,7 +62,7 @@ function initializeWebSocketServer(server) {
         }
         catch (err) {
             console.log("The message couldn't be parsed. ", err)
-            const parsed = { raw: message }
+            const parsed = { raw: message.toString() }
             return parsed
         }
     }
