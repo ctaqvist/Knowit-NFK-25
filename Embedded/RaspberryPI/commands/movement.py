@@ -64,7 +64,29 @@ async def handle_movement(command, params, websocket, arduino):
             "response": "Sent command: tankturn"
         }))
 
+# "light_on" — turns on the rover's light.
+    elif command == "light_on":
+        serial_command = json.dumps({
+            "command": "light",
+            "value": "on"
+        })
+        send_to_arduino(arduino, serial_command)
+        await websocket.send(json.dumps({
+            "rover_id": ROVER_ID,
+            "response": "Light turned ON"
+        }))
 
+# "light_off" — turns off the rover's light.
+    elif command == "light_off":
+        serial_command = json.dumps({
+            "command": "light",
+            "value": "off"
+        })
+        send_to_arduino(arduino, serial_command)
+        await websocket.send(json.dumps({
+            "rover_id": ROVER_ID,
+            "response": "Light turned OFF"
+        }))
     else:
         send_to_arduino(arduino, command)
         await websocket.send(json.dumps({
