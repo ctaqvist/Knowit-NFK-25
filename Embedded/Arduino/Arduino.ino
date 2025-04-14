@@ -33,10 +33,15 @@ void backward () {
   analogWrite(PWM_CD, 150);
 
 }
+/* 
+ * Funktionen för tankturn, allting ska vara hårdkodat här då det inte behövs något hastighet
+*/
 void tankTurn () {
   // Sätt riktning framåt för båda sidor
+  // Grupp 1
   digitalWrite(Motor_A, HIGH);
   digitalWrite(Motor_B, LOW);
+  // Grunpp 2
   digitalWrite(Motor_C, LOW);
   digitalWrite(Motor_D, HIGH);
 
@@ -45,7 +50,7 @@ void tankTurn () {
   analogWrite(PWM_CD, 255);
 
 }
-
+// Funktion för att stoppa alla motorerna 
 void stopMotors() {
   analogWrite(PWM_AB, 0);
   analogWrite(PWM_CD, 0);
@@ -67,6 +72,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  // Koden som används för att testa kommunikationen med Servern
   /*if(Serial.available()) {
     String command = Serial.readStringUntil('\n');
     command.trim(); //för att ta bort alla mellanslag 
@@ -80,6 +86,8 @@ void loop() {
       tankTurn();
     }
   }*/
+
+  // Koden nedan används för att hårdkoda allting 
   forward();
   //checkBatteryAndWarn ();
   delay(3000);
