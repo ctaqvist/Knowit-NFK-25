@@ -37,11 +37,11 @@ void CommandHandler::listen()
 
   if (stringComplete)
   {
-    inputString.trim(); // Remove leading/trailing whitespace
+    inputString.trim();
 
     if (inputString.length() > 0)
     {
-      handleCommand(inputString); // Process the received command
+      handleCommand(inputString);
     }
 
     inputString = "";
@@ -66,7 +66,7 @@ void handleCommand(String cmd)
     return;
   }
 
-  // Fallback to plain-text command if not valid JSON or no "command" key
+  /* Fallback to plain-text command if not valid JSON or no "command" key */
   executePlainCommand(cmd);
 }
 
@@ -74,6 +74,7 @@ void handleCommand(String cmd)
  * Executes a plain command string by mapping known commands to motor states.
  * Sends an acknowledgment or error back over Serial.
  */
+
 void executePlainCommand(String cmd)
 {
   if (cmd == "fwd")
