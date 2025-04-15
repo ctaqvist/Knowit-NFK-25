@@ -52,7 +52,8 @@ class MainActivity : ComponentActivity() {
             Terrax9Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
-                        TestScreen()
+                        // TestScreen()
+                        ControllerScreen()
                     }
                 }
             }
