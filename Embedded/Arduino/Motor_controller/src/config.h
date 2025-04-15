@@ -2,6 +2,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define SIMULATION_MODE true  // change to false with non simulation
+/*Här kan man definerar buffer, pin mods och allt som används över hela Embedded koden */
 
 #endif
