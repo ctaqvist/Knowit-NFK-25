@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import se.emilkronholm.terrax9.ui.theme.AppColors
 import kotlin.math.PI
+import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -29,8 +30,8 @@ import kotlin.math.sin
 
 @Composable
 fun JoyCon(
-    onMove: (x: Float, y: Float) -> Unit = { _, _ -> },
-    isFixed: Boolean = false
+    isFixed: Boolean = false,
+    onMove: (x: Float, y: Float) -> Unit = { _, _ -> }
 ) {
     val baseSize = 300.dp
     val knobSize = 120.dp
@@ -51,9 +52,26 @@ fun JoyCon(
                     },
                     onDrag = { change, dragAmount ->
                         val newOffset = offset + dragAmount
+//                        println("drag: $change")
 
-                        val limitedOffset = if (newOffset.getDistance() > maxOffset) {
-                            val angle = atan2(newOffset.y, newOffset.x) * -2
+                        val limitedOffset =
+                            if (isFixed) {
+                                if (newOffset.y.absoluteValue > newOffset.x.absoluteValue) {
+                                    val sign = newOffset.y/newOffset.y.absoluteValue
+                                    Offset(
+                                        x = 0f,
+                                        y = if (maxOffset < newOffset.y.absoluteValue) maxOffset * sign else newOffset.y
+                                    )
+                                } else {
+                                    val sign = newOffset.x/newOffset.x.absoluteValue
+                                    Offset(
+                                        x = if (maxOffset < newOffset.x.absoluteValue) maxOffset * sign else newOffset.x,
+                                        y = 0f
+                                    )
+                                }
+                            }
+                            else if (newOffset.getDistance() > maxOffset) {
+                            val angle = atan2(newOffset.y, newOffset.x)
 
                             Offset(
                                 x = cos(angle) * maxOffset,
@@ -65,13 +83,15 @@ fun JoyCon(
 
                         offset = limitedOffset
 
+
                         val normalizedX = (offset.x / maxOffset).coerceIn(-1f, 1f)
                         val normalizedY = (offset.y / maxOffset).coerceIn(-1f, 1f)
                         val angleInDegrees =
                             Math
                                 .toDegrees(atan2(newOffset.y, newOffset.x).toDouble())
                                 .toFloat() * -1
-                        println(angleInDegrees)
+//                        println(angleInDegrees)
+                        onMove(normalizedX, -normalizedY)
 
                     }
                 )
