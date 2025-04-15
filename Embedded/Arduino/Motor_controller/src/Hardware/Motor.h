@@ -2,7 +2,7 @@
 #define MOTOR_H
 
 #include <Arduino.h>
-
+//George
 class Motor {
   private:
     int in1Pin;
