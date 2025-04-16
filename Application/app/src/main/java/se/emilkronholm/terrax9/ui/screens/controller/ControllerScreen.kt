@@ -60,6 +60,27 @@ fun ControllerScreen() {
 
 }
 
+@Composable
+fun IconButton(
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .background(color = AppColors.Primary)
+            .size(60.dp)
+            .clickable {
+                onClick()
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            icon,
+            contentDescription = null
+        )
+    }
+}
+
 // Since we are semi-sure there are no risk of XSS and we need JS, we will suppress warning
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
