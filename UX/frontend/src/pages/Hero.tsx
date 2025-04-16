@@ -35,7 +35,7 @@ function Hero() {
             height: '100%',
             textAlign: 'end'
           }}>
-          <Typography variant='h1' color='text.light'>{pages?.hero?.content?.h1}</Typography>
+          <Typography variant='h1' color='text.light'>{pages?.hero.banner.heading.value}</Typography>
           <Typography variant='body1' color='text.light'
             sx={{
               mt: 2,
