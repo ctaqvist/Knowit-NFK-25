@@ -4,13 +4,7 @@ import { Link } from 'react-router-dom';
 function Header() {
   return (
 
-    <AppBar position="fixed" sx={{
-      justifyContent: 'center', flexDirection: 'row', alignItems: 'center', gap: 2, p: 1, bgcolor: 'transparent',
-      boxShadow: 'none', filter: 'drop-shadow(0px 11px 10px black)',
-      '& a': { color: 'text.primary', textDecoration: 'none' },
-      '& a:not(#logo)::after': { content: '""', width: '0%', backgroundColor: '#FFF', height: '1px', display: 'block', transition: 'width 100ms' },
-      '& a:not(#logo):hover::after': { width: '100%' }
-    }}>
+    <AppBar position="fixed">
       <Link to={'/support'}>
         <Typography variant="headerlink" component="div">
           Tech Support
@@ -21,9 +15,9 @@ function Header() {
           About
         </Typography>
       </Link>
-      <Link to='/' id='logo'>
+      <Link to='/' id='logo' style={{ flexShrink: 0 }}>
         <img src="/logo_full.svg" alt="Home"
-          style={{ width: '120px' }} />
+          style={{ width: '176.301px', height: '75.891px' }} />
       </Link>
       <Link to={'/#reviews'}>
         <Typography variant="headerlink" component="div">
