@@ -1,4 +1,4 @@
-#include "MotorControl.h"
+#include "motor_control.h"
 //George
 /* 
 MotorControl motorControl;
