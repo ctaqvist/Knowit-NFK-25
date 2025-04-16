@@ -52,7 +52,29 @@ fun ControllerScreen() {
                 println("Moving")
                 viewModel.onMovement(x, y)
             }
-            Spacer(modifier = Modifier.width(300.dp))
+            Spacer(modifier = Modifier.width(100.dp))
+            Column {
+                IconButton(
+                    icon = Icons.Filled.MailOutline,
+                    onClick = {
+                        viewModel.sendCommand(command = Command.PIC)
+                    }
+                )
+
+                IconButton(
+                    icon = Icons.Filled.KeyboardArrowUp,
+                    onClick = {
+                        viewModel.sendCommand(command = Command.HEADLIGHT_ON)
+                    }
+                )
+
+                IconButton(
+                    icon = Icons.Filled.KeyboardArrowDown,
+                    onClick = {
+                        viewModel.sendCommand(command = Command.HEADLIGHT_OFF)
+                    }
+                )
+            }
             JoyCon(isFixed = true)
             JoyCon(isFixed = true)
         }
