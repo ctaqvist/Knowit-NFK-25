@@ -14,7 +14,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '14px',
-        transition: 'background-color 150ms',
+        transition: 'background-color 100ms',
         flexDirection: 'column',
         height: 185,
         backdropFilter: 'blur(7.5px)',

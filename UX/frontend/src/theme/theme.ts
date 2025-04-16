@@ -122,8 +122,8 @@ export const theme = createTheme({
           boxShadow: 'none',
           filter: 'drop-shadow(0px 11px 10px black)',
           '& a :hover': { textShadow: '0px 9px 8px #5526FF' },
-          '& a': { color: 'text.primary', textDecoration: 'none', transition: 'text-shadow 200ms' },
-          '& a:is(#logo) img': { transition: 'filter 200ms',  transitionDelay: 0},
+          '& a': { color: 'text.primary', textDecoration: 'none', transition: 'text-shadow 60ms' },
+          '& a:is(#logo) img': { transition: 'filter 60ms',  transitionDelay: 0 },
           '& a:is(#logo):hover img': {
             filter: 'drop-shadow(0px 10px 10px #5526FF)'
           }, //
@@ -147,7 +147,7 @@ export const theme = createTheme({
               props: { variant: 'contained' },
               style: {
                 width: 'fit-content',
-                display: 'flex',
+                display: 'inline-flex',
                 padding: '20px 28px',
                 alignItems: 'center',
                 gap: '20px',
@@ -156,11 +156,12 @@ export const theme = createTheme({
                 fontWeight: 500,
                 textTransform: 'uppercase',
                 color: 'text.primary',
-                transition: 'box-shadow 200ms',
+                boxSizing: 'border-box',
+                transition: 'box-shadow 30ms',
                 fontSize: 'clamp(18px, 3vw, 20px)',
                 '&:hover': {
                   boxShadow: '8px 8px 14px 0px rgba(255, 255, 255, 0.24)',
-                  border: 'border: 1px solid rgba(255, 255, 255, 0.50)',
+                  border: '1px solid rgba(255, 255, 255, 0.50)',
                   backgroundColor: '#5526FF'
                 }
               }

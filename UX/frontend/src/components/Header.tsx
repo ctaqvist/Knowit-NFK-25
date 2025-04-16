@@ -17,7 +17,7 @@ function Header() {
       </Link>
       <Link to='/' id='logo' style={{ flexShrink: 0 }}>
         <img src="/logo_full.svg" alt="Home"
-          style={{ width: '176.301px', height: '75.891px' }} />
+          style={{ width: 'fit-content', height: 60.891 }} />
       </Link>
       <Link to={'/#reviews'}>
         <Typography variant="headerlink" component="div">

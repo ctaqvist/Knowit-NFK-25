@@ -27,51 +27,43 @@ function Hero() {
           backgroundSize: 'cover',
           backgroundPosition: 'bottom',
           height: 1000,
+          position: 'relative'
         }}
       >
+
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'end',
-            height: '100%',
-            textAlign: 'end',
+            alignItems: { xs: 'center', sm: 'center', md: 'end' },
+            margin: '0 auto',
+            width: 'clamp(200px, 80vw, 1276px)',
+            textAlign: { xs: 'center', sm: 'center', md: 'end' },
+            position: 'absolute', top: 479, right: 'clamp(5vw, 10vw, 321px)'
           }}
         >
-          <Box
+          <Typography
+            variant='h1'
+            color='text.primary'
+          >
+            {pages?.hero?.banner?.heading?.value ?? 'Seamless Pickup, Beyond Planets'}
+          </Typography>
+          <Typography
+            variant='body1'
+            color='text.primary'
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: { xs: 'center', sm: 'center', md: 'end' },
-              margin: '0 auto',
-              width: 'clamp(200px, 80vw, 1276px)',
-              textAlign: { xs: 'center', sm: 'center', md: 'end' },
+              mt: '16px',
+              maxWidth: 629,
+              fontSize: 20,
+              lineHeight: '30px',
+              mb: '32px',
             }}
           >
-            <Typography
-              variant='h1'
-              color='text.primary'
-            >
-              {pages?.hero?.banner?.heading?.value ?? 'Seamless Pickup, Beyond Planets'}
-            </Typography>
-            <Typography
-              variant='body1'
-              color='text.primary'
-              sx={{
-                mt: '16px',
-                maxWidth: 629,
-                fontSize: 20,
-                lineHeight: '30px',
-                mb: '32px',
-              }}
-            >
-              TERRA-X9 produce all-terrain, real-time controlled interplanetary
-              rovers with 360° vision, smart object collection, and seamless
-              wireless control—right from your device.
-            </Typography>
-            <Button variant='contained'>Discover more</Button>
-          </Box>
+            TERRA-X9 produce all-terrain, real-time controlled interplanetary
+            rovers with 360° vision, smart object collection, and seamless
+            wireless control—right from your device.
+          </Typography>
+          <Button variant='contained'>Discover more</Button>
         </Box>
       </Box>
       <Box
@@ -176,7 +168,7 @@ function Hero() {
         }}
       >
         <Box
-          // Decorative element
+          // Decorative element top
           role='presentation'
           sx={{
             height: 151,
@@ -184,6 +176,7 @@ function Hero() {
               'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.51) 25.48%, rgba(5, 3, 12, 0.83) 59.13%, #05030C 98.08%)',
           }}
         />
+
         <Box>
           <Typography
             variant='h2'
@@ -191,7 +184,21 @@ function Hero() {
           >
             Our clients reviews
           </Typography>
-          <Box sx={{ gap: '30px', display: 'flex', flexDirection: 'column' }}>
+          <Box sx={{ gap: '30px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+            <Box
+              // Decorative element left
+              aria-hidden='true'
+              sx={{
+                width: '20vw',
+                height: '100%',
+                background:
+                  'linear-gradient(-90deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.53) 24.04%, rgba(5, 3, 12, 0.83) 43.75%, #05030C 76.92%)',
+                position: 'absolute',
+                left: 0,
+                zIndex: 3
+              }}
+            />
+
             <Marquee
               pauseOnHover={true}
               className='w-full p-0 pt-1'
@@ -215,11 +222,25 @@ function Hero() {
                 />
               ))}
             </Marquee>
+            <Box
+              // Decorative element right
+              role='presentation'
+              sx={{
+                width: '20vw',
+                maxWidth: 428,
+                height: '100%',
+                background:
+                  'linear-gradient(90deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.53) 24.04%, rgba(5, 3, 12, 0.83) 43.75%, #05030C 76.92%)',
+                position: 'absolute',
+                right: 0,
+                zIndex: 3
+              }}
+            />
           </Box>
         </Box>
         <Box
           // Decorative element
-          role='presentation'
+          aria-hidden='true'
           sx={{
             height: 151,
             background:
