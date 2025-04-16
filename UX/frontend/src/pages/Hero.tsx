@@ -143,13 +143,13 @@ function Hero() {
           >
             <Typography
               variant='h2'
-              color='text.primary'
+              color='text.main'
             >
               Interested in purchasing?
             </Typography>
             <Typography
               variant='body1'
-              color='text.primary'
+              color='text.main'
               sx={{ maxWidth: 724 }}
             >
               Book a consultation through our contact form, and we’ll help you

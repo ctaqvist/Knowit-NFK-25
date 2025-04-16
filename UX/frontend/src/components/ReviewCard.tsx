@@ -10,7 +10,7 @@ export const ReviewCard = ({ review }: { review: Review }) => {
         display: 'flex',
         textAlign: 'center',
         p: '30px 28px 36px 28px',
-        backgroundColor: 'rgb(66 54 153 / 10%)',
+        backgroundColor: 'rgb(255 255 255/ 10%)',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '14px',
@@ -18,11 +18,8 @@ export const ReviewCard = ({ review }: { review: Review }) => {
         flexDirection: 'column',
         height: 185,
         backdropFilter: 'blur(7.5px)',
-        borderBottom: '1px solid rgb(18 19 23 / 58%)',
-        borderRight: '1px solid rgb(18 19 23 / 58%)',
-        borderTop: '1px solid rgba(188, 197, 255, 0.2)',
-        borderLeft: '1px solid rgba(188, 197, 255, 0.2)',
-        '&:hover': { backgroundColor: 'rgb(59 43 135 / 24%)' }, // Hover state
+        border: '1px solid rgba(188, 197, 255, 0.8)',
+        '&:hover': { backgroundColor: 'rgba(188, 197, 255, 0.24)' }, // Hover state
       }}
     >
       <Typography // Client Name
