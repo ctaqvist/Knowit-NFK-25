@@ -29,9 +29,9 @@ import kotlin.math.*
 @Composable
 fun ControllerScreen() {
     val viewModel: ViewModel = ViewModel()
-
-    Column() {
-
+    Column(
+        modifier = Modifier.padding(bottom = 15.dp, start = 80.dp, end = 80.dp)
+    ) {
         // Upper half
         Row(
             modifier = Modifier.fillMaxHeight(0.4f),
