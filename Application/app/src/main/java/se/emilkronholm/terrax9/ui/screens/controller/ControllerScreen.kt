@@ -13,6 +13,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.MailOutline
@@ -48,11 +51,11 @@ fun ControllerScreen() {
     ) {
         // Upper half
         Row(
-            modifier = Modifier.fillMaxHeight(0.4f).aspectRatio(ratio = 16f/9f),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.Center
         ) {
-            VideoStream()
+            VideoStream(modifier = Modifier.fillMaxHeight(0.6f).aspectRatio(ratio = 16f/9f),)
         }
 
         Text("hej")
@@ -66,10 +69,10 @@ fun ControllerScreen() {
                 println("Moving")
                 viewModel.onMovement(x, y)
             }
-            Spacer(modifier = Modifier.width(100.dp))
+            Spacer(modifier = Modifier.width(50.dp))
             Column {
                 IconButton(
-                    icon = Icons.Filled.MailOutline,
+                    icon = Icons.Filled.Face,
                     onClick = {
                         viewModel.sendCommand(command = Command.PIC)
                     }
@@ -89,11 +92,27 @@ fun ControllerScreen() {
                     }
                 )
             }
+
+            Column {
+                IconButton(
+                    icon = Icons.Filled.Call,
+                    onClick = {
+                        viewModel.sendCommand(command = Command.START_STREAM)
+                    }
+                )
+
+                IconButton(
+                    icon = Icons.Filled.Close,
+                    onClick = {
+                        viewModel.sendCommand(command = Command.STOP_STREAM)
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.width(50.dp))
             JoyCon(isFixed = true)
             JoyCon(isFixed = true)
         }
     }
-
 }
 
 @Composable
@@ -117,7 +136,7 @@ fun IconButton(
     }
 }
 
-// Since we are semi-sure there are no risk of XSS and we need JS, we will suppress warning
+// Since we are semi-sure there is no risk of XSS and we need JS, we will suppress warning
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun VideoStream(
@@ -126,6 +145,15 @@ fun VideoStream(
 ) {
     AndroidView(factory = { context ->
         WebView(context).apply {
+            settings.apply {
+                javaScriptEnabled = true
+                mediaPlaybackRequiresUserGesture = false
+                setSupportZoom(true)
+                builtInZoomControls = true
+                displayZoomControls = false
+                loadWithOverviewMode = true
+                useWideViewPort = true
+            }
             settings.javaScriptEnabled = true
             settings.mediaPlaybackRequiresUserGesture = false
             webChromeClient = WebChromeClient()
