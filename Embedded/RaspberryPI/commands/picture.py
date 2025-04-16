@@ -2,6 +2,8 @@ from hardware.camera import take_picture, get_picture_base64
 from config.settings import ROVER_ID
 import json
 
+# This function handles the "take picture" command from the WebSocket.
+
 async def handle_pic_command(websocket):
     filepath = take_picture()
     image_b64 = get_picture_base64(filepath)
