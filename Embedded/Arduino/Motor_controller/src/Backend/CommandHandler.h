@@ -7,13 +7,16 @@ class CommandHandler {
   public:
     void init();
     void listen();
+
+  private:
+    void handleCommand(String cmd);
+    void executePlainCommand(String cmd);
+    void handleSpeedCommand(float speed);
+    void sendAck(const String& cmd);
+    void sendError(const String& msg);
 };
 
-// Skapar en global instans så du kan använda `commandHandler.init()` och `commandHandler.listen()` i din sketch
+// Global instans som du använder i main.cpp
 extern CommandHandler commandHandler;
-
-// Dessa deklareras i .cpp men används bara internt
-void handleCommand(String cmd);
-void executePlainCommand(String cmd);
 
 #endif

@@ -19,6 +19,7 @@ class MotorControl {
     void setState(DriveState newState);
     void update();
     String getStatus();
+    void setMotors(int leftSpeed, int rightSpeed); 
 
   private:
     DriveState currentState = stopped;

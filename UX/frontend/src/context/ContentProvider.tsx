@@ -1,7 +1,6 @@
 import { useEffect, useState, ReactNode } from 'react';
 import { ContentContext, ContentContextType } from './ContentContext';
 import { contentApi } from '../api/contentApi';
-import { FormattedPageData } from '../types/types';
 
 export function ContentProvider({ children }: { children: ReactNode }) {
   const [pages, setPages] = useState<ContentContextType['pages']>(null);
@@ -10,15 +9,8 @@ export function ContentProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     contentApi.getPages()
-      .then((result) => {
-        const formattedData: FormattedPageData = result.data.reduce((acc, page) => {
-          acc[page.name] = {
-            content: page.content
-          };
-          return acc;
-        }, {} as FormattedPageData);
-        setPages(formattedData)
-      });
+      .then((result) => setPages(result.data))
+      .finally(() => setLoading(false))
 
     contentApi.getReviews()
       .then(result => setReviews(result.data))
