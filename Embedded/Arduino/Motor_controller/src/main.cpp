@@ -1,7 +1,7 @@
 //#include "MotorControl.h"
 //#include "CommandHandler.h"
 #include "Arduino.h"
-#include "Hardware/Battery/Battery_health.h"
+#include "Hardware/Battery/battery_health.h"
 const int SpotLights_Pin = 12; // Pin for spotlights
 const int Buzzer_Pin = 13; //Styr Buzzern som tillhör Battery Protection system
 const int Motor_A = 2; //D2
