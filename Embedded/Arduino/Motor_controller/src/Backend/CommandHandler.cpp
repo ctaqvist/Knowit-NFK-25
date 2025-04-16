@@ -50,13 +50,6 @@ void CommandHandler::handleCommand(String cmd) {
     if (doc.containsKey("command")) {
       String jsonCmd = doc["command"];
 
-      if (jsonCmd == "set_speed" && doc.containsKey("value")) {
-        float speed = doc["value"];
-        handleSpeedCommand(speed);
-        sendAck("set_speed");
-        return;
-      }
-
       if (jsonCmd == "steer" && doc.containsKey("x") && doc.containsKey("y")) {
         float x = doc["x"];
         float y = doc["y"];
@@ -88,7 +81,6 @@ void CommandHandler::executePlainCommand(String cmd) {
   else if (cmd == "bwd") motorControl.setState(backward), sendAck("bwd");
   else if (cmd == "left") motorControl.setState(left), sendAck("left");
   else if (cmd == "right") motorControl.setState(right), sendAck("right");
-  else if (cmd == "spin") motorControl.setState(spin), sendAck("spin");
   else if (cmd == "stop") motorControl.setState(stopped), sendAck("stop");
   else if (cmd == "status") Serial.println("{\"status\":\"running\"}");
   else sendError("unknown_command");
