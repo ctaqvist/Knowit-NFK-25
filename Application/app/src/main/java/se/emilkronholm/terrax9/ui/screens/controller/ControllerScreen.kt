@@ -34,11 +34,11 @@ fun ControllerScreen() {
     ) {
         // Upper half
         Row(
-            modifier = Modifier.fillMaxHeight(0.4f),
+            modifier = Modifier.fillMaxHeight(0.4f).aspectRatio(ratio = 16f/9f),
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.End
         ) {
-//            VideoStream(viewModel = viewModel)
+            VideoStream()
         }
 
         Text("hej")
@@ -60,3 +60,19 @@ fun ControllerScreen() {
 
 }
 
+// Since we are semi-sure there are no risk of XSS and we need JS, we will suppress warning
+@SuppressLint("SetJavaScriptEnabled")
+@Composable
+fun VideoStream(
+//    viewModel: se.emilkronholm.terrax9.ui.screens.test.ViewModel,
+    modifier: Modifier = Modifier
+) {
+    AndroidView(factory = { context ->
+        WebView(context).apply {
+            settings.javaScriptEnabled = true
+            settings.mediaPlaybackRequiresUserGesture = false
+            webChromeClient = WebChromeClient()
+            loadUrl("file:///android_asset/stream_player.html")
+        }
+    }, modifier = modifier)
+}
