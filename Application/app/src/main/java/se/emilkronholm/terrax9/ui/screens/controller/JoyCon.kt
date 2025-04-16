@@ -54,7 +54,7 @@ fun JoyCon(
                         val newOffset = offset + dragAmount
 //                        println("drag: $change")
 
-                        val limitedOffset =
+                        var limitedOffset =
                             if (isFixed) {
                                 if (newOffset.y.absoluteValue > newOffset.x.absoluteValue) {
                                     val sign = newOffset.y/newOffset.y.absoluteValue
@@ -82,7 +82,6 @@ fun JoyCon(
                         }
 
                         offset = limitedOffset
-
 
                         val normalizedX = (offset.x / maxOffset).coerceIn(-1f, 1f)
                         val normalizedY = (offset.y / maxOffset).coerceIn(-1f, 1f)
