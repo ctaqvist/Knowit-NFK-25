@@ -13,6 +13,57 @@ std::string stateToString(DriveState state) {
     }
 }
 
+// New tests after review
+// Here I assume that speed can be negative which I don't know if it is correct.
+
+TEST(DriveTest, FullForward) {
+    Drive drive(0.0f, 1.0f);
+    float leftWheelSpeed = drive.left_speed_func();
+    float rightWheelSpeed = drive.right_speed_func();
+    EXPECT_NEAR(leftWheelSpeed, 1.0f, 0.02);
+    EXPECT_NEAR(rightWheelSpeed, 1.0f, 0.02);
+    
+    float speed = drive.calculateHypotenuse();
+    EXPECT_NEAR(speed, 1.0f, 0.02);
+
+    // Skriv ut värden oavsett testresultat:
+    std::cout << "Expected output: (1, 1) " << "  Real output: (" << rightWheelSpeed << ", " << leftWheelSpeed << ")" << std::endl;
+
+}
+// These tests are valid if using negative speed (which might be simpler, cleaner, easier to test and more expressive at this step)
+// // Full speed backwards. Both wheels should go max speed backwards (e.g. (-1, -1))
+// TEST(DriveTest, FullBackwards) {
+//     Drive drive(0.0f, -1.0f);
+//     float leftWheelSpeed = drive.left_speed_func();
+//     float rightWheelSpeed = drive.right_speed_func();
+//     EXPECT_NEAR(leftWheelSpeed, -1.0f, 0.02);
+//     EXPECT_NEAR(rightWheelSpeed, -1.0f, 0.02);
+//     float speed = drive.calculateHypotenuse();
+//     EXPECT_NEAR(speed, 1.0f, 0.02);
+// }
+
+// // Full tank turn right. Both wheels should go max speed in opposite direction (e.g. (1, -1))
+// TEST(DriveTest, TankTurnLeft) {
+//     Drive drive(1.0f, 0.0f);
+//     float leftWheelSpeed = drive.left_speed_func();
+//     float rightWheelSpeed = drive.right_speed_func();
+//     EXPECT_NEAR(leftWheelSpeed, 1.0f, 0.02);
+//     EXPECT_NEAR(rightWheelSpeed, -1.0f, 0.02);
+//     float speed = drive.calculateHypotenuse();
+//     EXPECT_NEAR(speed, 1.0f, 0.02);
+// }
+
+// // Full tank turn left. Both wheels should go max speed in opposite direction (e.g. (-1, 1))
+// TEST(DriveTest, TankTurnRight) {
+//     Drive drive(-1.0f, 0.0f);
+//     float leftWheelSpeed = drive.left_speed_func();
+//     float rightWheelSpeed = drive.right_speed_func();
+//     EXPECT_NEAR(leftWheelSpeed, -1.0f, 0.02);
+//     EXPECT_NEAR(rightWheelSpeed, 1.0f, 0.02);
+//     float speed = drive.calculateHypotenuse();
+//     EXPECT_NEAR(speed, 1.0f, 0.02);
+// }
+
 TEST(DriveTest, CalculateHypotenuse) {
     Drive drive(1.0f, 1.0f);
     float expected = 1.4f;
