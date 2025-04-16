@@ -1,58 +1,115 @@
+// General structure of backend API response
 export interface ApiResponse<T> {
-  data: T,
-  error: null | string
+  data: T;
+  error: null | string;
+  message?: string;
 }
 
-export interface PageData {
-  name: string,
-  content: PageContent,
-  id: string
+export interface Review {
+  content: string;
+  client: string;
 }
 
-export type FormattedPageData = {
-  [key: string]: {
-    content: PageContent
+// Pages is the type definition for an object containing all pages
+export interface Pages {
+  hero: HeroPage,
+  product: ProductPage,
+  support: SupportPage
+}
+// Page is the type definition of one of the pages
+export type Page = HeroPage | ProductPage | SupportPage
+
+// Type for Hero Page data
+export interface HeroPage {
+  banner: {
+    heading: {
+      label: 'Page Title';
+      type: 'input:text';
+      value: string;
+      minLength: 15,
+      maxLength: 100
+    };
+    subheading: {
+      label: 'Subheading';
+      type: 'input:textarea';
+      value: string;
+      minLength: 15,
+      maxLength: 500
+    };
+    banner: {
+      // Media referrs to image or video format
+      type: 'upload:media',
+      filePath: string
+    }
   };
-};
-
-export interface PageContent {
-  h1?: string
-  h2?: string
-  h3?: string
-  h4?: string
-  h5?: string
-  h6?: string
-  p?: string
 }
 
-export interface OriginalReview {
-  content: any;
-  clients: {
-    company_name: any;
+// Type for Product Page data
+export interface ProductPage {
+  features: {
+    type: 'input:text';
+    value: string;
+    minLength: number;
+    maxLength: number;
+  }[];
+  statistics: {
+    sun: {
+      label: 'Statistic 1';
+      value: string;
+      type: 'input:text';
+    };
+    planet1: {
+      label: 'Statistic 2';
+      value: string;
+      type: 'input:text';
+    };
+    planet2: {
+      label: 'Statistic 3';
+      value: string;
+      type: 'input:text';
+    };
+    planet3: {
+      label: 'Statistic 4';
+      value: string;
+      type: 'input:text';
+    };
+    planet4: {
+      label: 'Statistic 5';
+      value: string;
+      type: 'input:text';
+    };
   };
-};
-
-export interface FormattedReview {
-  content: string
-  client: string
+  gallery: {
+    type: 'img' | 'video',
+    width: number,
+    height: number,
+    filePath: string
+  }[];
+  manual: {
+    label: '"TERRA-X9 Instruction Manual"';
+    filepath: string;
+  };
 }
 
-
-export interface Page {
-  pageTitle: string,
-  sections: {
-    sectionHeader: Section[]
-  }
-}
-
-export interface Section {
-  editableFields: EditableField[]
-}
-
-export interface EditableField {
-  [key: string]: {
-    label: string,
-    type: string,
-    filePath?: string
-  }
+// Type for Support Page Data
+export interface SupportPage {
+  manuals: {
+    instructionManual: {
+      label: 'Instruction Manual';
+      filePath: string;
+      input: 'upload:document'
+    },
+    GPSR: {
+      label: 'General Product Safety Regulation';
+      filePath: string;
+      input: 'upload:document'
+    }
+  },
+  FAQ: {
+    categoryName: string;
+    data: {
+      question: string;
+      answer: string;
+    }[];
+  }[],
 }

@@ -1,58 +1,96 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Param } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
-import { Tables } from 'src/types/supabase.types';
-import { ApiResponse, FormattedReview } from 'src/types/types';
+import { ApiResponse, Page, Review, Pages } from 'src/types/types';
 
-
-@Injectable() 
+@Injectable()
 export class PageService {
   constructor(private readonly supabaseService: SupabaseService) {}
 
-  async getPages(): Promise<ApiResponse<Tables<'pages'>[]>> {
+  async getPages(): Promise<ApiResponse<Pages>> {
     try {
-      const supabase = this.supabaseService.supabase
-      const {error, data} = await supabase.from('pages')
-      .select('*')
+      const PAGES = ['hero', 'product', 'support'];
 
-      if (error) {
-        throw new Error('Error when fetching pages: ', error)
-      }
+      // Get all pages, assign them to ALLPAGES object
+      const getAllPages = async () => {
+        const ALLPAGES = {};
+
+        const pageDataArray = await Promise.all(
+          PAGES.map(async (page) => {
+            const data = (await this.getPage(page)).data;
+            return { page, data };
+          }),
+        );
+
+        pageDataArray.forEach(({ page, data }) => {
+          ALLPAGES[page] = data;
+        });
+
+        return ALLPAGES;
+      };
+
+      const ALLPAGES = await getAllPages();
 
       return {
-        data: data,
-        error: null
-      }
+        data: ALLPAGES as Pages,
+        error: null,
+      };
     } catch (error) {
-      console.error('Error in pageService or supabaseService')
-      throw new Error('Error in pageService or supabaseService')
+      console.error('Error when fetching pages: ', error);
+      throw new Error('Error when fetching pages: ', error);
     }
   }
 
-  async getReviews(): Promise<ApiResponse<FormattedReview[]>> {
+  async getPage(@Param('page') page: string): Promise<ApiResponse<Page>> {
     try {
-      const supabase = this.supabaseService.supabase
-      const {error, data} = await supabase.from('reviews')
-      .select(`
-        content,
-        clients(company_name)`)
+      // Retrieve from DB bucket
+      const CLIENT = this.supabaseService.supabase;
+      const PAGEFILE = `${page}.json`;
+      const { data, error } = await CLIENT.storage
+        .from('pages')
+        .download(PAGEFILE);
 
       if (error) {
-        throw new Error('Error when fetching reviews', error)
+        console.error('Error when fetching page: ', error);
+        throw new Error('Error when fetching page: ', error);
       }
 
-      const formattedReview = data?.map(review => ({
+      //Convert the blob to JSON
+      const parsedBlob = JSON.parse(await data.text());
+
+      return {
+        data: parsedBlob as Page,
+        error: null,
+      };
+    } catch (error) {
+      console.error('Error when fetching page: ', error);
+      throw new Error('Error when fetching page: ', error);
+    }
+  }
+
+  async getReviews(): Promise<ApiResponse<Review[]>> {
+    try {
+      const CLIENT = this.supabaseService.supabase;
+      const { data, error } = await CLIENT.from('reviews').select(`
+        content,
+        clients(company_name)`);
+
+      if (error) {
+        console.error('Error when fetching reviews: ', error);
+        throw new Error('Error when fetching reviews', error);
+      }
+
+      const formattedReview = data?.map((review) => ({
         content: review.content,
-        client: review.clients['company_name']
+        client: review.clients['company_name'],
       }));
 
       return {
         data: formattedReview,
-        error: null
+        error: null,
       };
-      
     } catch (error) {
-      console.error('Error in reviews', error)
-      throw new Error('Error in reviews', error)
+      console.error('Error when fetching reviews: ', error);
+      throw new Error('Error when fetching reviews: ', error);
     }
   }
 }
