@@ -1,3 +1,4 @@
+/*
 #include "CommandHandler.h"
 #include "MotorControl.h"
 #include <ArduinoJson.h>
@@ -86,3 +87,5 @@ void executePlainCommand(String cmd) {
   );
   else sendError("unknown_command");
 }
+
+ */
