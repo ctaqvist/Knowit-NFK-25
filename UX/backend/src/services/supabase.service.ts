@@ -16,7 +16,7 @@ export class SupabaseService {
     }
     
     // Create a client with the anonymous key for public operations
-    this._supabase = createClient<Database>(url, key);// Added the Database type
+    this._supabase = createClient<Database>(url, key);
 
   }
 
