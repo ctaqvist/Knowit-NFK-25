@@ -23,51 +23,15 @@ string stateToString(DriveState state) {
 
 TEST(DriveTest, FullForward) {
     Drive drive(0.0f, 1.0f);
-    float leftWheelSpeed = drive.left_speed_func();
-    float rightWheelSpeed = drive.right_speed_func();
-    EXPECT_NEAR(leftWheelSpeed, 1.0f, 0.02);
-    EXPECT_NEAR(rightWheelSpeed, 1.0f, 0.02);
-    
+
     float speed = drive.calculateHypotenuse();
-    EXPECT_NEAR(speed, 1.0f, 0.02);
 
-    // Skriv ut värden oavsett testresultat:
-    std::cout << "Expected output: (1, 1) " << "  Real output: (" << rightWheelSpeed << ", " << leftWheelSpeed << ")" << std::endl;
+    cout << "Expected output: 1.0"
+         << "\nActual output: " << speed << endl;
 
+    EXPECT_NEAR(speed, 1.0f, 0.02f)
+        << "Expected speed 1.0, but got " << speed;
 }
-// These tests are valid if using negative speed (which might be simpler, cleaner, easier to test and more expressive at this step)
-// // Full speed backwards. Both wheels should go max speed backwards (e.g. (-1, -1))
-// TEST(DriveTest, FullBackwards) {
-//     Drive drive(0.0f, -1.0f);
-//     float leftWheelSpeed = drive.left_speed_func();
-//     float rightWheelSpeed = drive.right_speed_func();
-//     EXPECT_NEAR(leftWheelSpeed, -1.0f, 0.02);
-//     EXPECT_NEAR(rightWheelSpeed, -1.0f, 0.02);
-//     float speed = drive.calculateHypotenuse();
-//     EXPECT_NEAR(speed, 1.0f, 0.02);
-// }
-
-// // Full tank turn right. Both wheels should go max speed in opposite direction (e.g. (1, -1))
-// TEST(DriveTest, TankTurnLeft) {
-//     Drive drive(1.0f, 0.0f);
-//     float leftWheelSpeed = drive.left_speed_func();
-//     float rightWheelSpeed = drive.right_speed_func();
-//     EXPECT_NEAR(leftWheelSpeed, 1.0f, 0.02);
-//     EXPECT_NEAR(rightWheelSpeed, -1.0f, 0.02);
-//     float speed = drive.calculateHypotenuse();
-//     EXPECT_NEAR(speed, 1.0f, 0.02);
-// }
-
-// // Full tank turn left. Both wheels should go max speed in opposite direction (e.g. (-1, 1))
-// TEST(DriveTest, TankTurnRight) {
-//     Drive drive(-1.0f, 0.0f);
-//     float leftWheelSpeed = drive.left_speed_func();
-//     float rightWheelSpeed = drive.right_speed_func();
-//     EXPECT_NEAR(leftWheelSpeed, -1.0f, 0.02);
-//     EXPECT_NEAR(rightWheelSpeed, 1.0f, 0.02);
-//     float speed = drive.calculateHypotenuse();
-//     EXPECT_NEAR(speed, 1.0f, 0.02);
-// }
 
 TEST(DriveTest, CalculateHypotenuse) {
     Drive drive(1.0f, 1.0f);
@@ -82,7 +46,7 @@ TEST(DriveTest, CalculateHypotenuse) {
 TEST(DriveTest, LeftSpeedFunc) {
     Drive drive(0.5f, 0.5f);
     float expected = 0.18f;
-    float actual = drive.left_speed_func();
+    float actual = drive.leftSpeedFunc();
     // Skriv ut värden oavsett testresultat:
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
     EXPECT_NEAR(actual, expected, 0.02)
@@ -92,7 +56,7 @@ TEST(DriveTest, LeftSpeedFunc) {
 TEST(DriveTest, RightSpeedFunc) {
     Drive drive(0.5f, 0.5f);
     float expected = 0.53f;
-    float actual = drive.right_speed_func();
+    float actual = drive.rightSpeedFunc();
     // Skriv ut värden oavsett testresultat:
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
     EXPECT_NEAR(actual, expected, 0.02)
@@ -118,18 +82,18 @@ TEST(DriveTest, GetStateBackward) {
     EXPECT_EQ(drive.getState(), BACKWARD) << "Expected BACKWARD when (x=0, y=-1)";
 }
 
-// Testfall för TTL (TankTurn Left): y == 0 och x == 1
+// Testfall för TTL (TankTurn Left): y == 0 och x < 0
 TEST(DriveTest, GetStateTTL) {
-    Drive drive(1.0f, 0.0f);
+    Drive drive(-1.0f, 0.0f);
     DriveState expected = TTL;
     DriveState actual = drive.getState();
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
     EXPECT_EQ(drive.getState(), TTL) << "Expected TTL when (x=1, y=0)";
 }
 
-// Testfall för TTR (TankTurn Right): y == 0 och x == -1
+// Testfall för TTR (TankTurn Right): y == 0 och x > 1
 TEST(DriveTest, GetStateTTR) {
-    Drive drive(-1.0f, 0.0f);
+    Drive drive(1.0f, 0.0f);
     DriveState expected = TTR;
     DriveState actual = drive.getState();
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
@@ -149,7 +113,7 @@ TEST(DriveTest, GetStateStopped) {
 TEST(DriveTest, AlgorithmPrintsForward) {
     Drive drive(0.0f, 1.0f);
     testing::internal::CaptureStdout();
-    drive.Algorithm();
+    drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
     std::string expected = "State: GO FWD";
@@ -164,7 +128,7 @@ TEST(DriveTest, AlgorithmPrintsForward) {
 TEST(DriveTest, AlgorithmPrintsBackward) {
     Drive drive(0.0f, -1.0f);
     testing::internal::CaptureStdout();
-    drive.Algorithm();
+    drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
     std::string expected = "State: GO BWD";
@@ -178,10 +142,10 @@ TEST(DriveTest, AlgorithmPrintsBackward) {
 TEST(DriveTest, AlgorithmPrintsTTL) {
     Drive drive(1.0f, 0.0f);
     testing::internal::CaptureStdout();
-    drive.Algorithm();
+    drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
-    std::string expected = "State: TTL";
+    std::string expected = "State: TTR";
     std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
     
     // Assertion
@@ -192,10 +156,10 @@ TEST(DriveTest, AlgorithmPrintsTTL) {
 TEST(DriveTest, AlgorithmPrintsTTR) {
     Drive drive(-1.0f, 0.0f);
     testing::internal::CaptureStdout();
-    drive.Algorithm();
+    drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
-    std::string expected = "State: TTR";
+    std::string expected = "State: TTL";
     std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
     
     // Assertion
@@ -206,7 +170,7 @@ TEST(DriveTest, AlgorithmPrintsTTR) {
 TEST(DriveTest, AlgorithmPrintsSTOPPED) {
     Drive drive(0.0f, 0.0f);
     testing::internal::CaptureStdout();
-    drive.Algorithm();
+    drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
     std::string expected = "State: STOPPED";

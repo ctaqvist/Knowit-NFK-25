@@ -9,7 +9,7 @@ left = -90
 right = 90
 
 # Bestämmer GPIO Pins för servomotorerna
-servo_pins = [13, 12, 17]
+servo_pins = [13, 12, 17, 27]
 for pin in servo_pins:
     GPIO.setup(pin, GPIO.OUT)
 
@@ -22,12 +22,16 @@ servo2 = GPIO.PWM(servo_pins[1], 50)
 # Tredje motorn
 servo3 = GPIO.PWM(servo_pins[2], 50)
 
+# Claw arm
+servo4 = GPIO.PWM(servo_pins[3], 50)
+
 # Startar PWM med 0% duty cycle
 servo1.start(0)
 servo2.start(0)
 servo3.start(0)
+servo4.start(0)
 
-servos = [servo1, servo2, servo3]
+servos = [servo1, servo2, servo3, servo4]
 
 try:
     # Start at 0° (neutral) for all servos.
@@ -60,4 +64,4 @@ finally:
     for servo in servos:
         servo.ChangeDutyCycle(0)
         servo.stop()
-    GPIO.cleanup()
+    GPIO.cleanup() 

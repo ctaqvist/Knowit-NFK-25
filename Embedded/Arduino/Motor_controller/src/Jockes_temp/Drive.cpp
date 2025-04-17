@@ -19,32 +19,32 @@ float Drive::calculateHypotenuse() {
 }
 
 // Funktion som beräknar hastigheten för vänster däck
-float Drive::left_speed_func() {
+float Drive::leftSpeedFunc() {
     return (( 1 - ( x + 1 ) / 2 ) * calculateHypotenuse() );
 }
 
 // Funktion som beräknar hastigheten för höger däck
-float Drive::right_speed_func() {
+float Drive::rightSpeedFunc() {
     return ((( x + 1 ) / 2 ) * calculateHypotenuse() );
 }
 
 DriveState Drive::getState() {
-    if (y == 1 && x == 0)
+    if (y > 0 && x == 0)
         return FORWARD;
-    else if (y == -1 && x == 0)
+    else if (y < 0 && x == 0)
         return BACKWARD;
-    else if (y == 0 && x == 1)
-        return TTL;
-    else if (y == 0 && x == -1)
+    else if (y == 0 && x > 0)
         return TTR;
+    else if (y == 0 && x < 0)
+        return TTL;
     else
         return STOPPED;
 }
 
-void Drive::Algorithm() {
+void Drive::algorithm() {
     float current_speed = calculateHypotenuse();
-    float left_speed = left_speed_func();
-    float right_speed = right_speed_func();
+    float left_speed = leftSpeedFunc();
+    float right_speed = rightSpeedFunc();
     DriveState dir = getState();
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
