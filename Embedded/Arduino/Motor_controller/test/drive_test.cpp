@@ -3,13 +3,18 @@
 #include <cmath>
 using namespace std;
 
-std::string stateToString(DriveState state) {
+string stateToString(DriveState state) {
     switch(state) {
-        case FORWARD:   return "FORWARD";
-        case BACKWARD:  return "BACKWARD";
-        case TTL:       return "TTL";        // TankTurn Left
-        case TTR:       return "TTR";        // TankTurn Right
-        default:   return "STOPPED";
+        case FORWARD:   
+            return "FORWARD";
+        case BACKWARD:  
+            return "BACKWARD";
+        case TTL:
+            return "TTL";       
+        case TTR:
+            return "TTR";
+        default:   
+            return "STOPPED";
     }
 }
 

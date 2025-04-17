@@ -63,7 +63,7 @@ void Drive::Algorithm() {
         default:
             printf("State: STOPPED");
             break;
-        }   
+        }
     // George (leftspeed, rightspeed, dir)
 }
 
