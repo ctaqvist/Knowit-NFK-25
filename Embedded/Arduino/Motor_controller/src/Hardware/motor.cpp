@@ -1,4 +1,4 @@
-#include "Motor.h"
+#include "motor.h"
 //George
 Motor::Motor(int in1, int in2, int pwm) {
   in1Pin = in1;

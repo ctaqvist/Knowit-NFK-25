@@ -2,7 +2,7 @@
 #define MOTOR_CONTROL_H
 
 #include <Arduino.h>
-#include "Motor.h"
+#include "motor.h"
 //George
 enum DriveState {
   stopped,

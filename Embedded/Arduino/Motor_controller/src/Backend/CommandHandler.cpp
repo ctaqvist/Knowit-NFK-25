@@ -1,11 +1,8 @@
 #include "Backend/CommandHandler.h"
-#include "Hardware/MotorControl.h"
 #include <ArduinoJson.h>
 
 String inputString = "";
 bool stringComplete = false;
-
-CommandHandler commandHandler;
 
 void CommandHandler::init() {
   inputString.reserve(200);
@@ -33,12 +30,6 @@ void CommandHandler::sendAck(const String& cmd) {
 
 void CommandHandler::sendError(const String& msg) {
   Serial.println("{\"error\":\"" + msg + "\"}");
-}
-
-void CommandHandler::handleSpeedCommand(float speed) {
-  speed = constrain(speed, 0.0, 1.0);
-  int pwm = int(speed * 255.0);
-  motorControl.setMotors(pwm, pwm);
 }
 
 void CommandHandler::handleCommand(String cmd) {
@@ -74,14 +65,4 @@ void CommandHandler::handleCommand(String cmd) {
   }
 
   executePlainCommand(cmd); // fallback
-}
-
-void CommandHandler::executePlainCommand(String cmd) {
-  if (cmd == "fwd") motorControl.setState(forward), sendAck("fwd");
-  else if (cmd == "bwd") motorControl.setState(backward), sendAck("bwd");
-  else if (cmd == "left") motorControl.setState(left), sendAck("left");
-  else if (cmd == "right") motorControl.setState(right), sendAck("right");
-  else if (cmd == "stop") motorControl.setState(stopped), sendAck("stop");
-  else if (cmd == "status") Serial.println("{\"status\":\"running\"}");
-  else sendError("unknown_command");
 }
