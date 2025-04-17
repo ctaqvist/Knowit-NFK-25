@@ -1,31 +1,42 @@
-import { FormattedReview } from '@/types/types';
+import { Review } from '@/types/types';
 import { Box, Typography } from '@mui/material';
 
-export const ReviewCard = ({ review }: { review: FormattedReview }) => {
+export const ReviewCard = ({ review }: { review: Review }) => {
   return (
     <Box
-      sx={{ maxWidth: 400, gap: 6, display: 'flex', textAlign: 'center' }}>
-      <Box sx={{
+      sx={{
+        width: 342,
+        gap: '14px',
         display: 'flex',
-        flexDirection: 'column',
+        textAlign: 'center',
+        p: '30px 28px 36px 28px',
+        backgroundColor: 'rgb(255 255 255/ 10%)',
         justifyContent: 'center',
-        height: 200
-      }}>
-        <Typography variant='body1'
-          sx={{
-            fontStyle: 'italic',
-            fontSize: '1.2rem',
-            fontWeight: 100,
-            mb: 1
-          }}
-        >{`“${review.content}”`}</Typography>
-        <Typography variant='caption' sx={{
-          fontSize: '0.9rem',
-          fontWeight: 700
-        }}>
-          {review.client}
-        </Typography>
-      </Box>
+        alignItems: 'center',
+        borderRadius: '14px',
+        transition: 'background-color 100ms',
+        flexDirection: 'column',
+        height: 185,
+        backdropFilter: 'blur(7.5px)',
+        border: '1px solid rgba(188, 197, 255, 0.8)',
+        '&:hover': { backgroundColor: 'rgba(188, 197, 255, 0.24)' }, // Hover state
+      }}
+    >
+      <Typography // Client Name
+        variant='caption'
+        sx={{
+          fontSize: 20,
+          fontWeight: 500,
+          textTransform: 'uppercase',
+          lineHeight: 1.1,
+        }}
+      >
+        {review.client}
+      </Typography>
+      <Typography // Content of review
+        variant='body1'
+        sx={{ fontSize: 16, fontWeight: 400, lineHeight: 1.3 }}
+      >{`“${review.content}”`}</Typography>
     </Box>
   );
 };

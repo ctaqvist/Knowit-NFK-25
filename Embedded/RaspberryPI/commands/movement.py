@@ -3,7 +3,10 @@ import json
 from communication.serial_helper import send_to_arduino
 from config.settings import ROVER_ID
 
+# This function handles different movement-related commands sent to the rover.
+# It receives commands over a WebSocket and sends the appropriate instructions to the Arduino.
 async def handle_movement(command, params, websocket, arduino):
+    #"set_speed" — sets the rover's speed based on the provided value.
     if command == "set_speed":
         try:
             value = int(params.get("value", 0))
@@ -23,6 +26,7 @@ async def handle_movement(command, params, websocket, arduino):
                 "response": "Invalid speed value"
             }))
 
+#"navigate" — controls the rover's direction and movement.
     elif command == "navigate":
         try:
             angle = int(params.get("angle", 0))
@@ -48,7 +52,8 @@ async def handle_movement(command, params, websocket, arduino):
                 "rover_id": ROVER_ID,
                 "response": f"Invalid parameters for navigate: {str(e)}"
             }))
-
+            
+#  "tankturn" — triggers a tank-turn movement.
     elif command == "tankturn":
         serial_command = json.dumps({
             "command": "tt"
@@ -59,11 +64,33 @@ async def handle_movement(command, params, websocket, arduino):
             "response": "Sent command: tankturn"
         }))
 
+# "light_on" — turns on the rover's light.
+    elif command == "light_on":
+        serial_command = json.dumps({
+            "command": "light",
+            "value": "on"
+        })
+        send_to_arduino(arduino, serial_command)
+        await websocket.send(json.dumps({
+            "rover_id": ROVER_ID,
+            "response": "Light turned ON"
+        }))
 
+# "light_off" — turns off the rover's light.
+    elif command == "light_off":
+        serial_command = json.dumps({
+            "command": "light",
+            "value": "off"
+        })
+        send_to_arduino(arduino, serial_command)
+        await websocket.send(json.dumps({
+            "rover_id": ROVER_ID,
+            "response": "Light turned OFF"
+        }))
     else:
         send_to_arduino(arduino, command)
         await websocket.send(json.dumps({
             "rover_id": ROVER_ID,
             "response": f"Command sent: {command}"
 
-    
+        }))
