@@ -1,0 +1,3 @@
+[submodule "Embedded/Arduino/Motor_controller/external/googletest"]
+	path = Embedded/Arduino/Motor_controller/external/googletest
+	url = https://github.com/google/googletest.git
