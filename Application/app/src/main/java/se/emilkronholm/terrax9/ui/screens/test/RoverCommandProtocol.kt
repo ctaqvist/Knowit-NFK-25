@@ -5,6 +5,7 @@ class RoverCommandProtocol(private val roverId: String) {
     private fun createCommand(command: Command): String {
         return """{ "rover_id": "$roverId", "command": "${command.value}" }"""
     }
+
     // Use these functions to create commands
     fun takePicture(): String = createCommand(Command.TAKE_PICTURE)
     fun startStream(): String = createCommand(Command.START_STREAM)
