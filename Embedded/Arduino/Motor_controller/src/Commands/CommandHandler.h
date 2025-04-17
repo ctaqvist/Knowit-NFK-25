@@ -11,7 +11,6 @@ class CommandHandler {
   private:
     void handleCommand(String cmd);
     void executePlainCommand(String cmd);
-    void handleSpeedCommand(float speed);
     void sendAck(const String& cmd);
     void sendError(const String& msg);
 };

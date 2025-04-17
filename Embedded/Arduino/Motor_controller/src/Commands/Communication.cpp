@@ -20,6 +20,7 @@ void handleIncomingSerial() {
     return;
   }
 
+  // TODO: Maybe change to cpp-String
   const char* command = doc["command"];
   if (command == nullptr) {
     Serial.println("{\"error\":\"missing_command\"}");
