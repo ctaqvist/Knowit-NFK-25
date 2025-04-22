@@ -98,21 +98,27 @@ class DataService(private val uri: String = "") {
         sendMessage("""{ "rover_id": "rover-001", "command": "$command" }""")
     }
 
-    var lastX = 0f;
-    var lastY = 0f;
+    private var lastX = 0f
+    private var lastY = 0f
     @SuppressLint("DefaultLocale")
     suspend fun sendSteer(x: Float, y: Float) = withContext(Dispatchers.IO) {
 
-        if (!(x.absoluteValue == 1f && lastX != 1f || y.absoluteValue == 1f && lastY != 1f)) {
-            if ((x != 0f && y != 0f) && ((lastX - x).absoluteValue < 0.02 || (lastY - y).absoluteValue < 0.02)) {
-                println("Cancels steer as values are the same as last time")
-                return@withContext
-            }
-        }
+        // If X or Y has a new extreme value it must always be updated
+        val newMaxValue = (x.absoluteValue == 1f && lastX.absoluteValue != 1f) || (y.absoluteValue == 1f && lastY.absoluteValue != 1f)
+        val newMinValue = (x == 0f && lastX != 0f) || (y == 0f && lastY != 0f)
+        val newExtremeValue = newMinValue || newMaxValue
 
-        lastX = x
-        lastY = y
-        sendMessage("""{ "rover_id": "rover-001", "steer": {"x": "${String.format("%.2f", x)}", "y": "${String.format("%.2f", y)}"} }""")
+        // Only update X and Y if at least one of them has increased 0.02 since last transfer
+        val newValue = (lastX - x).absoluteValue > 0.02 || ((lastY - y).absoluteValue > 0.02)
+
+        if (newExtremeValue || newValue) {
+            // Send new data message
+            sendMessage("""{ "rover_id": "rover-001", "steer": {"x": "${String.format("%.2f", x)}", "y": "${String.format("%.2f", y)}"} }""")
+
+            // Update last X and Y
+            lastX = x
+            lastY = y
+        }
     }
 
     private fun sendMessage(message: String) {
