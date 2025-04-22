@@ -27,8 +27,10 @@ float Drive::leftSpeedFunc() {
     float speed = y;
     float turn = x;
 
-    // Ju mer till höger man styr, desto saktare roterar vänster däck
-    float left_speed = speed * (1.0f - (turn > 0 ? turn : 0));
+    // Ju mer till vänster man styr, desto saktare roterar vänster däck
+    // if turn < 0 (styr vänster)
+    // left_speed = speed * (1.0 - turn)
+    float left_speed = speed * (1.0f + (turn < 0 ? turn : 0));
 
     // Begränsar hastigheten till [-1, 1]
     left_speed = fmaxf(-1.0f, fminf(1.0f, left_speed));
@@ -43,7 +45,12 @@ float Drive::rightSpeedFunc() {
 
     float speed = y;
     float turn = x;
-    float right_speed = speed * (1.0f + (turn < 0 ? turn : 0));
+
+
+    // Ju mer till höger man styr, desto saktare roterar höger däck
+    // if turn < 0 (styr höger)
+    // right_speed = speed * (1.0 - turn)
+    float right_speed = speed * (1.0f - (turn > 0 ? turn : 0));
 
     // Begränsar hastigheten till [-1, 1]
     right_speed = fmaxf(-1.0f, fminf(1.0f, right_speed));
