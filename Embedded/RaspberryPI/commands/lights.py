@@ -31,4 +31,3 @@ async def handle_movement(command, params, websocket, arduino):
     await websocket.send(json.dumps(websocket_response))
 
 
-
