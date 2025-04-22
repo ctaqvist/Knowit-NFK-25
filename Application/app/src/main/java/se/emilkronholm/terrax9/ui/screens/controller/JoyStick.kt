@@ -29,7 +29,7 @@ import kotlin.math.sin
 
 //TODO: Restructure :)
 @Composable
-fun JoyCon(
+fun JoyStick(
     isFixed: Boolean = false,
     onMove: (x: Float, y: Float) -> Unit = { _, _ -> }
 ) {

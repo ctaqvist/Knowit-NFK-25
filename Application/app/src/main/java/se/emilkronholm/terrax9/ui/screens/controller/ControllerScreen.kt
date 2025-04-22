@@ -1,47 +1,26 @@
 package se.emilkronholm.terrax9.ui.screens.controller
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Icon
 import android.webkit.WebChromeClient
 import android.webkit.WebView
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import se.emilkronholm.terrax9.R
-import se.emilkronholm.terrax9.ui.screens.controller.ViewModel
 import se.emilkronholm.terrax9.ui.theme.AppColors
-import kotlin.math.*
 
 // This screen is the entry point for the controller dashboard.
 @Composable
@@ -66,7 +45,7 @@ fun ControllerScreen() {
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.End
         ) {
-            JoyCon() { x, y ->
+            JoyStick() { x, y ->
                 println("Moving")
                 viewModel.onMovement(x, y)
             }
@@ -110,8 +89,8 @@ fun ControllerScreen() {
                 )
             }
             Spacer(modifier = Modifier.width(50.dp))
-            JoyCon(isFixed = true)
-            JoyCon(isFixed = true)
+            JoyStick(isFixed = true)
+            JoyStick(isFixed = true)
         }
     }
 }
