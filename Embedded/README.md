@@ -9,8 +9,7 @@
   Examples: `MAX_SPEED`, `PWM_A`.
 - **Functions** use `CamelCase`: should always start with a verb.  
   Examples: `DriveForward`, `StopMotors`. Function names must clearly describe their purpose.
-- **Classes/Structs** use `PascalCase`:  
-  Example: `MotorController`.
+- **Classes/Structs** use `PascalCase`, example: `MotorController`.
 - **Members of a class**: private members should start with `lower_case_with_underscore`, and the letter should be the first letter of the class.  
   Example: `m_speed`.
 

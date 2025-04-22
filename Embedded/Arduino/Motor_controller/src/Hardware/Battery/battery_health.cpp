@@ -28,7 +28,7 @@ bool islastSignalActive = false; // ska vara false från början
 unsigned long lastSignalWarn_time = 0;
 
 // Läser av det analoga värdet från A0 och räknar ut laddningen av batteriet
-float batteryHealth(int analogPin, float Vref)
+float CalculateBatteryHealth(int analogPin, float Vref)
 {
   int rawADC = analogRead(analogPin);       // Läser av det analoga Pinnen
   float voltage = (rawADC * Vref) / 1023.0; // 0-1023 (10 bitars)
@@ -47,7 +47,7 @@ enum BatteryStatus
   Battery_Warning = 1,
   Battery_Shutdown = 2
 };
-int checkBatteryLevel(float current_level)
+int CheckBatteryLevel(float current_level)
 {
   // Fösta gränsen, dags att ladda
   const float Warning = 7.0;
@@ -66,18 +66,18 @@ int checkBatteryLevel(float current_level)
   }
 }
 
-void checkBatteryAndWarn()
+void CheckBatteryAndWarn()
 {
   // Current voltage of the battery
-  float voltage = batteryHealth(A0, Vref);
+  float voltage = CalculateBatteryHealth(A0, Vref);
 
   // Battery Level
-  int level = checkBatteryLevel(voltage);
+  int level = CheckBatteryLevel(voltage);
 
   if (level == Battery_Shutdown)
   {
     // last signal
-    warningSignal(true);
+    TriggerWarningSignal(true);
 
     // shutdown()
   }
@@ -89,7 +89,7 @@ void checkBatteryAndWarn()
     // Så att det triggas igång varje 30 Sekunder
     if (diff >= warningReminder)
     {
-      warningSignal(false);
+      TriggerWarningSignal(false);
       lastWarning_Time = c_time;
     }
   }
@@ -101,25 +101,25 @@ void checkBatteryAndWarn()
 }
 
 // Bestämmer vilken varning signal som ska användas och sen sätter igång den
-void warningSignal(bool level)
+void TriggerWarningSignal(bool level)
 {
   // True = last signal
   // false = First signal
   if (level)
   {
-    lastSignalStart();
-    lastSignal();
+    StartLastSignal();
+    TriggerLastSignal();
   }
   else
   {
 
-    firstSignalStart();
-    firstSignal();
+    StartFirstSignal();
+    TriggerFirstSignal();
   }
 }
 
 // Funktion för att flagga igång firstSignal funktionen och ha rätta värden där
-void firstSignalStart()
+void StartFirstSignal()
 {
   isFirstSignalActive = true;
   signal_S = 0;
@@ -127,7 +127,7 @@ void firstSignalStart()
 }
 
 // Piper en kort stund 4 gånger
-void firstSignal()
+void TriggerFirstSignal()
 {
 
   static unsigned long lastToggleTime = 0;
@@ -169,14 +169,14 @@ void firstSignal()
 }
 
 // Funktionen för att sätta på timer och säga att last signal är aktiv
-void lastSignalStart()
+void StartLastSignal()
 {
   islastSignalActive = true;
   lastSignalWarn_time = millis(); // Börjar räkna sekunder.
 }
 
 // Lång Ljud signal systemet ska stängas av
-void lastSignal()
+void TriggerLastSignal()
 {
 
   // Om inte signalen är aktiv ska inget hända
