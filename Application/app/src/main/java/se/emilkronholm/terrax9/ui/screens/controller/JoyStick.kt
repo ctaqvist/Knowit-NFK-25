@@ -40,6 +40,7 @@ fun JoyStick(
     // VisualOffset should be slightly less than actualOffset as otherwise it is hard to "max out" the speed.
     val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.5f).toPx() }
     val maxActualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.7f).toPx() }
+    val deadZoneOffset = 0.2
 
     var offset by remember { mutableStateOf(Offset.Zero) }
 
@@ -60,9 +61,13 @@ fun JoyStick(
                         val clampedVisualOffset = newOffset.clampWithin(maxVisualOffset)
 
                         offset = clampedVisualOffset
-                        val normalizedOffset = offset.normalize(maxActualOffset)
-                        onMove(normalizedOffset.x, -normalizedOffset.y)
 
+                        val normalizedOffset = offset.normalize(maxActualOffset)
+
+                        // Only update onMove if offset is greater than the deadzone
+                        if (normalizedOffset.getDistance() > deadZoneOffset) {
+                            onMove(normalizedOffset.x, -normalizedOffset.y)
+                        } else onMove(0f, 0f)
                     }
                 )
             },
