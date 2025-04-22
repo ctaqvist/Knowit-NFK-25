@@ -27,7 +27,7 @@ async def handle_movement(command, params, websocket, arduino):
         websocket_response["response"] = "Light turned OFF"
 
     # Send to Arduino and return response via WebSocket
-    arduino.send(arduino, serial_command)
+    arduino.send(serial_command)
     await websocket.send(json.dumps(websocket_response))
 
 
