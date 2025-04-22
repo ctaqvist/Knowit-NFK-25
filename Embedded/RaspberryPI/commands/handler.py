@@ -4,7 +4,6 @@ from .lights import *
 from commands.forwarder import *
 
 # This function processes incoming commands sent over a WebSocket connection.
-
 async def process_command(websocket, command, params, arduino):
     print("[DEBUG] Params received:", params)
 

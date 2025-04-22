@@ -16,5 +16,5 @@ async def forward_joystick_to_arduino(steer_data, arduino):
         "y": round(y, 2)
     })
 
-    send_to_arduino(arduino, serial_command)
+    arduino.send(serial_command) 
     print(f"[SENDING TO ARDUINO]: {serial_command}")
