@@ -1,7 +1,7 @@
 import json
-from communication.serial_helper import *
+from communication.serial_helper import arduino
 
-async def forward_joystick_to_arduino(steer_data, arduino):
+async def forward_joystick_to_arduino(steer_data):
     try:
         x = float(steer_data["x"])
         y = float(steer_data["y"])

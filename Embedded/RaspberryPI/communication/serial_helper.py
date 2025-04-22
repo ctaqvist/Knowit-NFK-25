@@ -1,10 +1,9 @@
 import serial
-import json
 import time
 import serial.tools.list_ports
 
 class ArduinoConnection:
-    def __init__(self, baudrate=9600):
+    def __init__(self):
         self.baudrate = 9600
         self.serial = None
 
@@ -33,27 +32,35 @@ class ArduinoConnection:
                 time.sleep(2)
 
     def send(self, message):
+        # Validate input
         if not message or not isinstance(message, str):
             print(f"Invalid message – skipping send: {message}")
-            return
+            return False  # sending failed
+
         try:
+            # Write message to serial (append newline and encode)
             self.serial.write((message + '\n').encode())
             print(f"Sent to Arduino: {message}")
             time.sleep(0.05)
+
+            # If there's a response from Arduino, read and print it
             if self.serial.in_waiting:
                 response = self.serial.readline().decode().strip()
                 print(f"Arduino replied: {response}")
-                return response
+
+            return True  # sending succeeded
+
         except (serial.SerialException, OSError) as e:
-            print(f"Error sending to Arduino: {e}. Reconnecting...")
-            self.connect()
+            # Handle communication errors without reconnecting here
+            print(f"Error sending to Arduino: {e}")
+            return False
+
 
     def read_line(self):
         try:
             return self.serial.readline().decode('utf-8').strip()
         except (serial.SerialException, OSError) as e:
             print(f"Error reading from Arduino: {e}. Reconnecting...")
-            self.connect()
             return ""
 
 # Global instance

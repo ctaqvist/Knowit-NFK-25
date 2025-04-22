@@ -4,12 +4,12 @@ from .lights import *
 from commands.forwarder import *
 
 # This function processes incoming commands sent over a WebSocket connection.
-async def process_command(websocket, command, params, arduino):
+async def process_command(websocket, command, params):
     print("[DEBUG] Params received:", params)
 
     if "steer" in params:
         print("[DEBUG] Steering data found – forwarding to Arduino")
-        await forward_joystick_to_arduino(params["steer"], arduino)
+        await forward_joystick_to_arduino(params["steer"])
         return
 
     # Then handle normal command types
@@ -20,6 +20,6 @@ async def process_command(websocket, command, params, arduino):
     elif command == "STOP_STREAM":
         await handle_stop_stream_command(websocket)
     elif command:
-        await handle_movement(command, params, websocket, arduino)
+        await handle_light_command(command, websocket)
     else:
         print("No command or steer data found – skipping message.")

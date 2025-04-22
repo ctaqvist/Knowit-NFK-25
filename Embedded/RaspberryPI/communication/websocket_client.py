@@ -3,11 +3,10 @@ import websockets
 from config.settings import ROVER_ID, SERVER_URL
 from commands.handler import *
 from commands.forwarder import *
-from communication.serial_helper import arduino
 
 # Main async function to listen to server commands
 async def listen_to_server():
-    async with websockets.connect(SERVER_URI) as websocket:
+    async with websockets.connect(SERVER_URL) as websocket:
         print("Connected to server")
 
         # Register the rover on the server

@@ -2,9 +2,9 @@ import json
 from communication.serial_helper import arduino
 from config.settings import ROVER_ID
 
-# This function handles movement-related commands sent to the rover.
+# This function handles light-related commands sent to the rover.
 # It receives commands over a WebSocket and sends the appropriate instructions to the Arduino.
-async def handle_movement(command, params, websocket, arduino):
+async def handle_light_command(command, websocket):
     # Default to sending the command directly
     serial_command = command
     websocket_response = {
