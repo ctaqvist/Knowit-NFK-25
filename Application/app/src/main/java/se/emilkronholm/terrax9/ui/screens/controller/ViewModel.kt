@@ -17,6 +17,7 @@ class ViewModel: ViewModel() {
     var job: Job? = null
     fun onMovement(x: Float, y: Float) {
 
+        // WARNING: Blocks UI
         dataService.ensureOpenConnection()
 
         job?.cancel()
