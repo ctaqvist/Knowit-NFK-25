@@ -35,6 +35,9 @@ fun JoyStick(
 ) {
     val baseSize = 300.dp
     val knobSize = 120.dp
+
+    // These two values represent a maximum offset the joystick's center can be from it's starting point.
+    // VisualOffset should be slightly less than actualOffset as otherwise it is hard to "max out" the speed.
     val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.5f).toPx() }
     val maxActualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.7f).toPx() }
 
@@ -52,47 +55,13 @@ fun JoyStick(
                         onMove(0f, 0f)
                     },
                     onDrag = { change, dragAmount ->
+                        // New offset after drag
                         val newOffset = offset + dragAmount
-//                        println("drag: $change")
+                        val clampedVisualOffset = newOffset.clampWithin(maxVisualOffset)
 
-                        var limitedOffset =
-                            if (isFixed) {
-                                if (newOffset.y.absoluteValue > newOffset.x.absoluteValue) {
-                                    val sign = newOffset.y/newOffset.y.absoluteValue
-                                    Offset(
-                                        x = 0f,
-                                        y = if (maxActualOffset < newOffset.y.absoluteValue) maxActualOffset * sign else newOffset.y
-                                    )
-                                } else {
-                                    val sign = newOffset.x/newOffset.x.absoluteValue
-                                    Offset(
-                                        x = if (maxActualOffset < newOffset.x.absoluteValue) maxActualOffset * sign else newOffset.x,
-                                        y = 0f
-                                    )
-                                }
-                            }
-                            else if (newOffset.getDistance() > maxVisualOffset) {
-                                val angle = atan2(newOffset.y, newOffset.x)
-
-                                Offset(
-                                    x = cos(angle) * maxVisualOffset,
-                                    y = sin(angle) * maxVisualOffset
-                                )
-                            }
-                            else {
-                                newOffset
-                            }
-
-                        offset = limitedOffset
-
-                        val normalizedX = (offset.x / maxVisualOffset).coerceIn(-1f, 1f)
-                        val normalizedY = (offset.y / maxVisualOffset).coerceIn(-1f, 1f)
-                        val angleInDegrees =
-                            Math
-                                .toDegrees(atan2(newOffset.y, newOffset.x).toDouble())
-                                .toFloat() * -1
-//                        println(angleInDegrees)
-                        onMove(normalizedX, -normalizedY)
+                        offset = clampedVisualOffset
+                        val normalizedOffset = offset.normalize(maxActualOffset)
+                        onMove(normalizedOffset.x, -normalizedOffset.y)
 
                     }
                 )
@@ -107,4 +76,22 @@ fun JoyStick(
                 .background(Color.Black)
         )
     }
+}
+
+// Clamps the offset within maxDistance
+private fun Offset.clampWithin(maxDistance: Float): Offset {
+    return if (this.getDistance() > maxDistance) {
+        val angle = atan2(this.y, this.x)
+
+        return Offset(
+            x = cos(angle) * maxDistance,
+            y = sin(angle) * maxDistance
+        )
+    } else this
+}
+
+private fun Offset.normalize(maxLength: Float): Offset {
+    val normalizedX = (this.x / maxLength).coerceIn(-1f, 1f)
+    val normalizedY = (this.y / maxLength).coerceIn(-1f, 1f)
+    return Offset(normalizedX, normalizedY)
 }
