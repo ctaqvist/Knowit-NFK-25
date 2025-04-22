@@ -55,6 +55,6 @@ Your Raspberry Pi should now be connected to the Arduino.
 
 Below is an example of the output you might see when running the Python script to connect the Raspberry Pi to the Arduino:
 
-![Example Output]("Connection between server and RPI.png"g)
+![Example Output](Connection-between-server-and-RPI.png)
 
 This output shows the connection status, the received parameters, and any relevant debug messages.
