@@ -26,10 +26,14 @@ val client = HttpClient {
     install(HttpTimeout) {
         requestTimeoutMillis = 5000
         connectTimeoutMillis = 5000
-        socketTimeoutMillis = 1000*60*5
+        socketTimeoutMillis = 1000 * 60 * 5 // 5 minutes (have not tested this)
     }
 }
 
+// This data service controls data transfer
+// It acts as a domain layer and is not bound by android context
+// As of ticket 145, we will connect and suspend on the UI thread meaning that the UI freezes as we are connecting to the server.
+// This due to a bug where we connect many times and create duplicate listeners
 class DataService(private val uri: String = "") {
     private var socket: WebSocketSession? = null
     private var receiveJob: Job? = null
@@ -40,12 +44,7 @@ class DataService(private val uri: String = "") {
         }
     }
 
-    fun connectBlocking() {
-        runBlocking {
-            connect()
-        }
-    }
-
+    // Initialize a socket and create callbacks
     private suspend fun connect() {
         try {
             socket?.close()
@@ -81,9 +80,11 @@ class DataService(private val uri: String = "") {
         }
     }
 
+    // Helper to ensure socket is open. If not it will connect one the main thread.
     fun ensureOpenConnection() {
         if (socket == null || socket?.isActive == false) {
             println("Socket seems to be closed or null, connecting again.")
+            // WARNING: This hack works but blocks UI
             runBlocking {
                 socket?.close()
                 connect()
