@@ -7,7 +7,6 @@ class ArduinoConnection:
     def __init__(self, baudrate=9600):
         self.baudrate = 9600
         self.serial = None
-        self.connect()
 
     def find_arduino_port(self):
         ports = serial.tools.list_ports.comports()
