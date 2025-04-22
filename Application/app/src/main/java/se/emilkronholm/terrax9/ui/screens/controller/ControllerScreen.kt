@@ -43,6 +43,7 @@ import se.emilkronholm.terrax9.ui.screens.controller.ViewModel
 import se.emilkronholm.terrax9.ui.theme.AppColors
 import kotlin.math.*
 
+// This screen is the entry point for the controller dashboard.
 @Composable
 fun ControllerScreen() {
     val viewModel: ViewModel = ViewModel()
@@ -145,6 +146,7 @@ fun VideoStream(
 ) {
     AndroidView(factory = { context ->
         WebView(context).apply {
+            // I have not yet experimented with these settings
             settings.apply {
                 javaScriptEnabled = true
                 mediaPlaybackRequiresUserGesture = false
