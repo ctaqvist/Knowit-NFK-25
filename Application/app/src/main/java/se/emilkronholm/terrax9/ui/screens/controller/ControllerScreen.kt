@@ -35,7 +35,7 @@ fun ControllerScreen() {
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.Center
         ) {
-            VideoStream(modifier = Modifier.fillMaxHeight(0.6f).aspectRatio(ratio = 16f/9f),)
+            VideoStream(modifier = Modifier.fillMaxHeight(0.5f).aspectRatio(ratio = 16f/9f),)
         }
 
         Text("hej")
