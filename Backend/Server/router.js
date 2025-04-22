@@ -56,7 +56,7 @@ expressApp.post('/login', (req, res) => {
     const {username, password} = req.body;
     console.log(username, password)
     if(username === "test" && password === "test"){
-        const token = jwt.sign({username: username}, SECRET_KEY, {expiresIn: '1h'})
+        const token = jwt.sign({username: username}, SECRET_KEY, {expiresIn: '6h'})
         return res.json({ token })
     }
     else
@@ -67,7 +67,7 @@ expressApp.post('/login', (req, res) => {
 })
 
 expressApp.get('/', (req, res) => {
-    res.status(200).json({ message: "Logged in!" })
+    res.status(200).json({ message: "Hello World!" })
 })
 
 
