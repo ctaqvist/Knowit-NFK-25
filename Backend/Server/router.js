@@ -3,18 +3,26 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import fs from 'fs'
 import jwt from 'jsonwebtoken'
+import authCheck from './jwtMiddleware.js';
+import bodyParser from 'body-parser'
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const expressApp = express()
 
+// This is needed for form POSTs
+expressApp.use(bodyParser.urlencoded({ extended: true })); 
+// This is for JSON data
+expressApp.use(bodyParser.json()); 
+
 const imagesStaticPath = path.join(__dirname, "img")
 const baseURL = 'http://test.lazyloops.se/images/'
 
 const SECRET_KEY = "HiThisIsSecretKey"
-
-expressApp.get('/images', (req, res) => {
+// Middleware authCheck checks if the user has right to visit this route
+expressApp.get('/images', authCheck(SECRET_KEY), (req, res) => {
     // Fetch a list of images
     fs.readdir(imagesStaticPath, (err, files) => {
         if (err) {
@@ -22,6 +30,8 @@ expressApp.get('/images', (req, res) => {
             res.status(500).send("Error while getting images")
         }
         // Create url of each image
+
+
         const urls = files.map(imgName => {
             return new URL(imgName, baseURL);
         })
@@ -44,18 +54,20 @@ expressApp.get('/images/:imageName', (req, res) => {
 
 expressApp.post('/login', (req, res) => {
     const {username, password} = req.body;
+    console.log(username, password)
     if(username === "test" && password === "test"){
         const token = jwt.sign({username: username}, SECRET_KEY, {expiresIn: '1h'})
         return res.json({ token })
     }
     else
-    {
+    {   
+        console.log("access denied")
         res.status(500).json({message : "Wrong user/password"})        
     }
 })
 
 expressApp.get('/', (req, res) => {
-    res.status(200).json({ message: "Hello, world!" })
+    res.status(200).json({ message: "Logged in!" })
 })
 
 
