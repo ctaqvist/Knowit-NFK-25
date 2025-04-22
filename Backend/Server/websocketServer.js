@@ -16,11 +16,6 @@ function initializeWebSocketServer(server) {
         const url = new URL(req.url, `http://${req.headers.host}`);
         // Get the token value in the request
         const token = url.searchParams.get('token');
-        if(!token){
-            console.log('No token!');
-            ws.close(4001, 'No token!')
-            return
-        }
         try{
             const decoded = jwt.verify(token, SECRET_KEY)
             // Attach the token to the ws 
