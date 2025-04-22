@@ -21,13 +21,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import se.emilkronholm.terrax9.ui.theme.AppColors
-import kotlin.math.PI
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
+//TODO: Restructure :)
 @Composable
 fun JoyCon(
     isFixed: Boolean = false,
@@ -35,7 +35,8 @@ fun JoyCon(
 ) {
     val baseSize = 300.dp
     val knobSize = 120.dp
-    val maxOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.5f).toPx() }
+    val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.5f).toPx() }
+    val maxActualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.7f).toPx() }
 
     var offset by remember { mutableStateOf(Offset.Zero) }
 
@@ -60,31 +61,32 @@ fun JoyCon(
                                     val sign = newOffset.y/newOffset.y.absoluteValue
                                     Offset(
                                         x = 0f,
-                                        y = if (maxOffset < newOffset.y.absoluteValue) maxOffset * sign else newOffset.y
+                                        y = if (maxActualOffset < newOffset.y.absoluteValue) maxActualOffset * sign else newOffset.y
                                     )
                                 } else {
                                     val sign = newOffset.x/newOffset.x.absoluteValue
                                     Offset(
-                                        x = if (maxOffset < newOffset.x.absoluteValue) maxOffset * sign else newOffset.x,
+                                        x = if (maxActualOffset < newOffset.x.absoluteValue) maxActualOffset * sign else newOffset.x,
                                         y = 0f
                                     )
                                 }
                             }
-                            else if (newOffset.getDistance() > maxOffset) {
-                            val angle = atan2(newOffset.y, newOffset.x)
+                            else if (newOffset.getDistance() > maxVisualOffset) {
+                                val angle = atan2(newOffset.y, newOffset.x)
 
-                            Offset(
-                                x = cos(angle) * maxOffset,
-                                y = sin(angle) * maxOffset
-                            )
-                        } else {
-                            newOffset
-                        }
+                                Offset(
+                                    x = cos(angle) * maxVisualOffset,
+                                    y = sin(angle) * maxVisualOffset
+                                )
+                            }
+                            else {
+                                newOffset
+                            }
 
                         offset = limitedOffset
 
-                        val normalizedX = (offset.x / maxOffset).coerceIn(-1f, 1f)
-                        val normalizedY = (offset.y / maxOffset).coerceIn(-1f, 1f)
+                        val normalizedX = (offset.x / maxVisualOffset).coerceIn(-1f, 1f)
+                        val normalizedY = (offset.y / maxVisualOffset).coerceIn(-1f, 1f)
                         val angleInDegrees =
                             Math
                                 .toDegrees(atan2(newOffset.y, newOffset.x).toDouble())
