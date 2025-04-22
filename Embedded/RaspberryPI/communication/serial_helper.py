@@ -12,7 +12,7 @@ class ArduinoConnection:
     def find_arduino_port(self):
         ports = serial.tools.list_ports.comports()
         for port in ports:
-            if "Arduino" in port.description or "ttyACM" in port.device or "ttyUSB" in port.device:
+            if ("Arduino" in port.description) or ("ttyACM" in port.device) or ("ttyUSB" in port.device):
                 print(f"Found Arduino on {port.device}")
                 return port.device
         print("Could not find Arduino automatically.")
