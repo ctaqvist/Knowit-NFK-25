@@ -1,6 +1,6 @@
 import json
 import websockets
-from config.settings import ROVER_ID, SERVER_URI
+from config.settings import ROVER_ID, SERVER_URL
 from commands.handler import *
 from commands.forwarder import *
 from communication.serial_helper import arduino
