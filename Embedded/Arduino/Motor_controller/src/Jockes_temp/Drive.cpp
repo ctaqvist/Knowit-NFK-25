@@ -20,14 +20,35 @@ float Drive::calculateHypotenuse() {
 
 // Funktion som beräknar hastigheten för vänster däck
 float Drive::leftSpeedFunc() {
-    return (( 1 - ( x + 1 ) / 2 ) * calculateHypotenuse() );
+    if (y == 0) {
+        return -x; // Tank turn left
+    }
+
+    float speed = y;
+    float turn = x;
+
+    // Ju mer till höger man styr, desto saktare roterar vänster däck
+    float left_speed = speed * (1.0f - (turn > 0 ? turn : 0));
+
+    // Begränsar hastigheten till [-1, 1]
+    left_speed = fmaxf(-1.0f, fminf(1.0f, left_speed));
+    return left_speed;
 }
 
 // Funktion som beräknar hastigheten för höger däck
 float Drive::rightSpeedFunc() {
-    return ((( x + 1 ) / 2 ) * calculateHypotenuse() );
-}
+    if (y == 0) {
+        return x; // Tank turn right
+    }
 
+    float speed = y;
+    float turn = x;
+    float right_speed = speed * (1.0f + (turn < 0 ? turn : 0));
+
+    // Begränsar hastigheten till [-1, 1]
+    right_speed = fmaxf(-1.0f, fminf(1.0f, right_speed));
+    return right_speed;
+}
 DriveState Drive::getState() {
     if (y > 0 && x == 0)
         return FORWARD;
@@ -46,22 +67,25 @@ void Drive::algorithm() {
     float left_speed = leftSpeedFunc();
     float right_speed = rightSpeedFunc();
     DriveState dir = getState();
+
+    printf("Left Speed: %.2f, Right Speed: %.2f\n", left_speed, right_speed);
+
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
         case FORWARD:
-            printf("State: GO FWD");
+            printf("State: GO FWD\n");
             break;
         case BACKWARD:
-            printf("State: GO BWD");
+            printf("State: GO BWD\n");
             break;
         case TTR:
-            printf("State: TTR");
+            printf("State: TTR\n");
             break;
         case TTL:
-            printf("State: TTL");
+            printf("State: TTL\n");
             break;
         default:
-            printf("State: STOPPED");
+            printf("State: STOPPED\n");
             break;
         }
     // George (leftspeed, rightspeed, dir)

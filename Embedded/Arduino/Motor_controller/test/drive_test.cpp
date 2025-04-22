@@ -45,7 +45,7 @@ TEST(DriveTest, CalculateHypotenuse) {
 
 TEST(DriveTest, LeftSpeedFunc) {
     Drive drive(0.5f, 0.5f);
-    float expected = 0.18f;
+    float expected = 0.25f;
     float actual = drive.leftSpeedFunc();
     // Skriv ut värden oavsett testresultat:
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
@@ -55,7 +55,7 @@ TEST(DriveTest, LeftSpeedFunc) {
 
 TEST(DriveTest, RightSpeedFunc) {
     Drive drive(0.5f, 0.5f);
-    float expected = 0.53f;
+    float expected = 0.5f;
     float actual = drive.rightSpeedFunc();
     // Skriv ut värden oavsett testresultat:
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
@@ -91,22 +91,24 @@ TEST(DriveTest, GetStateTTL) {
     EXPECT_EQ(drive.getState(), TTL) << "Expected TTL when (x=1, y=0)";
 }
 
-// Testfall för TTR (TankTurn Right): y == 0 och x > 1
-TEST(DriveTest, GetStateTTR) {
+// Tank Turn Right
+TEST(DriveTest, AlgorithmPrintsTTR) {
     Drive drive(1.0f, 0.0f);
-    DriveState expected = TTR;
-    DriveState actual = drive.getState();
-    std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
-    EXPECT_EQ(drive.getState(), TTR) << "Expected TTR when (x=-1, y=0)";
+    testing::internal::CaptureStdout();
+    drive.algorithm();
+    std::string output = testing::internal::GetCapturedStdout();
+    std::string expected = "Left Speed: -1.00, Right Speed: 1.00\nState: TTR\n";
+    EXPECT_EQ(output, expected);
 }
 
-// Testfall för STOPPED: andra värden, ex. x=0.5 och y=0.5
-TEST(DriveTest, GetStateStopped) {
-    Drive drive(0.5f, 0.5f);
-    DriveState expected = STOPPED;
-    DriveState actual = drive.getState();
-    std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
-    EXPECT_EQ(drive.getState(), STOPPED) << "Expected STOPPED when (x=0.5, y=0.5)";
+// Tank Turn Left
+TEST(DriveTest, AlgorithmPrintsTTL) {
+    Drive drive(-1.0f, 0.0f);
+    testing::internal::CaptureStdout();
+    drive.algorithm();
+    std::string output = testing::internal::GetCapturedStdout();
+    std::string expected = "Left Speed: 1.00, Right Speed: -1.00\nState: TTL\n";
+    EXPECT_EQ(output, expected);
 }
 
 // Testfall för Algorithm()-funktionen med capture av stdout
@@ -116,7 +118,7 @@ TEST(DriveTest, AlgorithmPrintsForward) {
     drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
-    std::string expected = "State: GO FWD";
+    std::string expected = "Left Speed: 1.00, Right Speed: 1.00\nState: GO FWD\n";
     std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
     
     // Assertion
@@ -131,35 +133,7 @@ TEST(DriveTest, AlgorithmPrintsBackward) {
     drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
-    std::string expected = "State: GO BWD";
-    std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
-    
-    // Assertion
-    EXPECT_EQ(output, expected)
-        << "Expected state: " << expected << ", but got: " << output;
-}
-// ska ge TTL.
-TEST(DriveTest, AlgorithmPrintsTTL) {
-    Drive drive(1.0f, 0.0f);
-    testing::internal::CaptureStdout();
-    drive.algorithm();
-    std::string output = testing::internal::GetCapturedStdout();
-    // Den förväntade utskriften
-    std::string expected = "State: TTR";
-    std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
-    
-    // Assertion
-    EXPECT_EQ(output, expected)
-        << "Expected state: " << expected << ", but got: " << output;
-}
-// ska ge TTR
-TEST(DriveTest, AlgorithmPrintsTTR) {
-    Drive drive(-1.0f, 0.0f);
-    testing::internal::CaptureStdout();
-    drive.algorithm();
-    std::string output = testing::internal::GetCapturedStdout();
-    // Den förväntade utskriften
-    std::string expected = "State: TTL";
+    std::string expected = "Left Speed: -1.00, Right Speed: -1.00\nState: GO BWD\n";
     std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
     
     // Assertion
@@ -173,7 +147,7 @@ TEST(DriveTest, AlgorithmPrintsSTOPPED) {
     drive.algorithm();
     std::string output = testing::internal::GetCapturedStdout();
     // Den förväntade utskriften
-    std::string expected = "State: STOPPED";
+    std::string expected = "Left Speed: -0.00, Right Speed: 0.00\nState: STOPPED\n";
     std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
     
     // Assertion

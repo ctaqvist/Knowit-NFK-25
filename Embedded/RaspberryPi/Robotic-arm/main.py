@@ -31,37 +31,45 @@ servo2.start(0)
 servo3.start(0)
 servo4.start(0)
 
-servos = [servo1, servo2, servo3, servo4]
+arm_servos = [servo1, servo2, servo3]
+claw_servo = [servo4]
 
 try:
     # Start at 0° (neutral) for all servos.
     print(f"Starting at {neutral}°")
-    move_servos(servos, 0, 0)
+    move_servos(claw_servo, 0, 0)
     sleep(1)
     
     # Rotate from 0° to 90°.
     print(f"Moving from {neutral}° to {right}°")
-    move_servos(servos, 0, 90)
+    move_servos(claw_servo, 0, 90)
+    sleep(1)
+
+    move_servos([servo1], 0, left)
+    sleep(1)
+
+    move_servos([servo1], 0, 0)
     sleep(1)
     
     # Move from 90° back to 0°.
-    print(f"Moving from {right}° back to {neutral}°")
-    move_servos(servos, 90, 0)
-    sleep(1)
+    ##print(f"Moving from {right}° back to {neutral}°")
+    # move_servos(arm_servos, 90, 0)
+    # sleep(1)
     
     # Rotate from 0° to -90°.
-    print(f"Moving from {neutral}° to {left}°")
-    move_servos(servos, 0, -90)
-    sleep(1)
+    # print(f"Moving from {neutral}° to {left}°")
+    # move_servos(arm_servos, 0, -90)
+    # sleep(1)
     
     # Return from -90° back to 0°.
-    print(f"Moving from {left}° back to {neutral}°")
-    move_servos(servos, -90, 0)
-    sleep(1)
+    # print(f"Moving from {left}° back to {neutral}°")
+    #move_servos(arm_servos, -90, 0)
+    # sleep(1)
 
 finally:
     # Resettar duty cycle till 0% och kör en clean-up.
-    for servo in servos:
+    claw_servo[0].ChangeDutyCycle(0)
+    for servo in arm_servos:
         servo.ChangeDutyCycle(0)
         servo.stop()
     GPIO.cleanup() 
