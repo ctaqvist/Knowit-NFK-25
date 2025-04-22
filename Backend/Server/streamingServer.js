@@ -5,7 +5,6 @@ import { WebSocketServer } from 'ws';
 function startStreamingServer(ports) {
     const wss = new WebSocketServer({ port: ports.outputPort });
     const clients = new Set();
-    //let streamProcess = null
 
     // Output
     wss.on('connection', (ws) => {
@@ -18,11 +17,10 @@ function startStreamingServer(ports) {
         });
     });
 
-
     // Start FFMPEG process, listening for the stream from rover
     startFFMPEG();
 
-    function startFFMPEG(){
+    function startFFMPEG() {
         // Input
         const streamProcess = spawn('ffmpeg', [
             '-fflags', 'nobuffer', // reduce buffering for lower latency
@@ -51,8 +49,6 @@ function startStreamingServer(ports) {
             setTimeout(startFFMPEG, 1000);
         });
     }
-
-
 }
 
 export default startStreamingServer
