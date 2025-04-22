@@ -5,7 +5,7 @@ import json
 import base64
 from datetime import datetime
 
-URI = "ws://13.60.235.253:9000"
+URI = "ws://localhost:8080"
 
 # Used to get messages from terminal
 
@@ -35,7 +35,7 @@ async def receive_messages(websocket):
 
                     print(f"\nImage saved as {filename}")
                 else:
-                    print(f"\nReceived (non-image): {"sdf"}")
+                    print(f"\nReceived (non-image): {message}")
             except json.JSONDecodeError:
                 print(f"\nReceived (non-JSON): {message}")
 
@@ -43,7 +43,7 @@ async def receive_messages(websocket):
         print("Connection closed")
 
 async def main():
-    uri = "ws://test.lazyloops.se:80"
+    uri = "ws://localhost:80?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE3NDUzMzAzNzEsImV4cCI6MTc0NTM1MTk3MX0.hYS6RJzDPkoy7wpav7gakb2cuaNOrSFdT0Pj9eMbhWE"
     async with websockets.connect(uri) as websocket:
         print("Connected to server")
 
