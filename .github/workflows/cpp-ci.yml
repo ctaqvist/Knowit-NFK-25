@@ -1,13 +1,26 @@
-name: CI
+name: C++ CI
 
 on:
   push:
     branches: [ master ]
+    paths:
+      - '**/*.cpp'
+      - 'Embedded/Arduino/Motor_controller/CMakeLists.txt'
+      - 'Embedded/Arduino/**/*.h'
+      - '.github/workflows/cpp-ci.yml'
   pull_request:
     branches: [ master ]
+    paths:
+      - '**/*.cpp'
+      - 'Embedded/Arduino/Motor_controller/CMakeLists.txt'
+      - 'Embedded/Arduino/**/*.h'
+      - '.github/workflows/cpp-ci.yml'
+
+permissions:
+  contents: read
 
 jobs:
-  build-and-test:
+  cpp-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,7 +30,7 @@ jobs:
 
     steps:
       - name: Checkout code (with submodules)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         with:
           submodules: recursive
 
