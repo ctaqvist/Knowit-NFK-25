@@ -3,6 +3,8 @@ import { useAuth } from '../../hooks/useAuth';
 import Menu from '@/components/Editor/Menu';
 import AuthMFA from '@/components/Editor/AuthMFA';
 import Spinner from '@/components/Spinner';
+import { EnrollMFA } from '@/components/Editor/EnrollMFA';
+
 function Editor() {
   const { user } = useAuth()
   const { MFAStatus, loading } = useAuth()
@@ -14,7 +16,9 @@ function Editor() {
   if (loading) return <Spinner />
 
   // If user has enabled MFA + is currently unverified, will be asked to verify
-  if (MFAStatus === 'Unverified') {
+  if (MFAStatus === null) {
+    return <EnrollMFA onEnrolled={() => window.location.reload()} />
+  } else if (MFAStatus === 'Unverified') {
     return <AuthMFA onSuccess={() => window.location.reload()} />
   }
   return <Menu />

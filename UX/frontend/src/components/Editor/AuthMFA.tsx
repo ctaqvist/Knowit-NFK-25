@@ -1,4 +1,5 @@
 import { supabase } from '@/config/supabase';
+import { useAuth } from '@/hooks/useAuth';
 import { Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 
@@ -9,6 +10,7 @@ function AuthMFA({
 }) {
   const [verifyCode, setVerifyCode] = useState('');
   const [error, setError] = useState('');
+  const { signOut } = useAuth()
 
   const handleSubmit = () => {
     setError('');
@@ -40,6 +42,7 @@ function AuthMFA({
       onSuccess();
     })();
   };
+
   return (
     <Box
       sx={{
@@ -61,13 +64,22 @@ function AuthMFA({
         value={verifyCode}
         onChange={(e) => setVerifyCode(e.target.value.trim())}
       />
-      <Button
-        sx={{ my: 2 }}
-        variant='outlined'
-        onClick={handleSubmit}
-      >
-        Submit
-      </Button>
+      <Box>
+        <Button
+          sx={{ my: 2, mr: 1 }}
+          variant='outlined'
+          onClick={handleSubmit}
+        >
+          Submit
+        </Button>
+        <Button
+          sx={{ my: 2 }}
+          variant='outlined'
+          onClick={signOut}
+        >
+          Cancel
+        </Button>
+      </Box>
     </Box>
   );
 }

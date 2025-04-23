@@ -9,35 +9,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const loadUserSession = async () => {
+      setLoading(true);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setSession(session);
+        setUser(session?.user ?? null);
+
+        const { data: assuranceData, error: assuranceError } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+        const { data: factorData, error: factorError } = await supabase.auth.mfa.listFactors();
+
+        if (assuranceError || !assuranceData || factorError || factorData.all.length < 1) {
+          setMFAStatus(null);
+        } else if (assuranceData.currentLevel === 'aal1' && assuranceData.nextLevel === 'aal2') {
+          setMFAStatus('Unverified');
+        } else if (assuranceData.currentLevel === 'aal2') {
+          setMFAStatus('Verified');
+        } else {
+          setMFAStatus(null);
+        }
+      } catch (error) {
+        console.error('Error loading auth:', error);
+        setMFAStatus(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserSession();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
     });
-
-    (async () => {
-      try {
-        setLoading(true)
-        const { data, error } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-        if (error || !data || !session?.user.factors) return setMFAStatus(null)
-        if (data.currentLevel === 'aal1' && data.nextLevel === 'aal2') return setMFAStatus('Unverified')
-        if (data.currentLevel === 'aal2' && data.nextLevel === 'aal2') return setMFAStatus('Verified')
-        else if (data.currentLevel === 'aal1' && data.nextLevel === 'aal1') return setMFAStatus(null)
-      } catch (error) {
-        setMFAStatus(null)
-      } finally {
-        setLoading(false)
-      }
-    })()
-
 
     return () => subscription.unsubscribe();
   }, []);
