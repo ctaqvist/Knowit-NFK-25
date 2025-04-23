@@ -62,7 +62,7 @@ function initializeWebSocketServer(server) {
             return parsed
         }
         catch (err) {
-            console.log("Message isn't valid JSON. Parsing as raw...")
+            console.warn("Message isn't valid JSON. Parsing as raw...")
             const parsed = { raw: message.toString() }
             return parsed
         }
