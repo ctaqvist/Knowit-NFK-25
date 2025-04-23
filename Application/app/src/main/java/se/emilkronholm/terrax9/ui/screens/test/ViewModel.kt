@@ -26,7 +26,7 @@ class ViewModel(private val uri: String = "") : ViewModel() {
     private val ROVER_ID = "rover-001"
     private var socket: WebSocketSession? = null
     private var job: Job? = null
-    private val commandProtocol = RoverCommandProtocol(roverId = ROVER_ID)
+    private val commandProtocol = Commands
     // PUBLIC INTERFACE
     private val _recentMessage = MutableSharedFlow<String>()
     val recentMessage = _recentMessage.asSharedFlow()
