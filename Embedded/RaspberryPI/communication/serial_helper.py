@@ -6,7 +6,6 @@ class ArduinoConnection:
     def __init__(self):
         self.baudrate = 9600
         self.serial = None
-        self.not_found_logged = False
 
     def find_arduino_port(self):
         ports = serial.tools.list_ports.comports()
@@ -17,13 +16,11 @@ class ArduinoConnection:
         for port in ports:
             if (port.vid, port.pid) in known_arduino_vid_pid:
                 print(f"Found Arduino Uno R4 Mininma on {port.device} (VID:PID = {port.vid:04X}:{port.pid:04X})")
-                self.not_found_logged = False 
                 return port.device
-            
-        if not self.not_found_logged:
-            print("Could not find Arduino Uno R4 Minima.")
-            self.not_found_logged = True  
+            else: 
 
+                print(f"Skipped {port.device} (VID:PID = {port.vid:04X}:{port.pid:04X}) - Not Uno R4 Minima")
+        print("Could not find Arduino Uno R4 Minima.")
         return None
 
 
