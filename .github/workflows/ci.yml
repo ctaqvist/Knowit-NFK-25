@@ -28,6 +28,7 @@ jobs:
 
       # Konfiguerar CMake
       - name: Configure (compiler=${{ matrix.compiler }}, type=${{ matrix.build_type }})
+        working-directory: Embedded/Arduino/Motor_controller
         run: |
           export CXX=${{ matrix.compiler }}++
           cmake -S . -B build \
