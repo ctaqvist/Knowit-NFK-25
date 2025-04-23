@@ -19,6 +19,8 @@ jobs:
       # Hämtar koden
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+            submodules: 'recursive'
 
       # Installerar CMake & build tools
       - name: Install dependencies
