@@ -10,18 +10,25 @@ int signal_C = 0; // antal gånger det ska pipa.
 
 
 /*Variabler för Last Signal funktionen*/
-const unsigned long warningReminder = 30000; // 30 Sek, ska ge en varning varje 30 Sek
-unsigned long lastWarning_Time = 0;          // För att mäta tiden, för hur många sek sen first signal
+
+// 30 Sek, ska ge en varning varje 30 Sek
+const unsigned long warningReminder = 30000; 
+// För att mäta tiden, för hur många sek sen first signal
+unsigned long lastWarning_Time = 0;          
 
 /*Variabler för LastSignal Start funktionen*/
-bool islastSignalActive = false; // ska vara false från början
+
+// ska vara false från början
+bool islastSignalActive = false; 
 unsigned long lastSignalWarn_time = 0;
 
 // Läser av det analoga värdet från A0 och räknar ut laddningen av batteriet
 float CalculateBatteryHealth(int analogPin, float Vref)
 {
-  int rawADC = analogRead(analogPin);       // Läser av det analoga Pinnen
-  float voltage = (rawADC * Vref) / 1023.0; // 0-1023 (10 bitars)
+  // Läser av det analoga Pinnen
+  int rawADC = analogRead(analogPin);       
+  // 0-1023 (10 bitars)
+  float voltage = (rawADC * Vref) / 1023.0; 
   float batteryVoltage = voltage * ((R1 + R2) / R2);
 
   // Ger batteri nivån
@@ -32,7 +39,8 @@ int CheckBatteryLevel(float current_level)
 {
   // Fösta gränsen, dags att ladda
   const float Warning = 7.0;
-  const float Shutdown_Level = 6.4; // Nu ska allting stängas av
+  // Nu ska allting stängas av
+  const float Shutdown_Level = 6.4; 
   if (current_level <= Warning && current_level > Shutdown_Level)
   {
     return Battery_Warning;
@@ -65,7 +73,8 @@ void CheckBatteryAndWarn()
   else if (level == Battery_Warning)
   {
     // First signal
-    unsigned long c_time = millis(); // Millis gör att den tiden inte pausar allt annat utan kör i bakgrunden
+    // Millis gör att den tiden inte pausar allt annat utan kör i bakgrunden
+    unsigned long c_time = millis(); 
     unsigned long diff = c_time - lastWarning_Time;
     // Så att det triggas igång varje 30 Sekunder
     if (diff >= warningReminder)
@@ -153,7 +162,8 @@ void TriggerFirstSignal()
 void StartLastSignal()
 {
   islastSignalActive = true;
-  lastSignalWarn_time = millis(); // Börjar räkna sekunder.
+  // Börjar räkna sekunder.
+  lastSignalWarn_time = millis(); 
 }
 
 // Lång Ljud signal systemet ska stängas av
@@ -167,7 +177,8 @@ void TriggerLastSignal()
   if (lastSignalWarn_time >= 6000)
   {
     analogWrite(BUZZER_PIN, 0);
-    islastSignalActive = false; // klar med funktionen
+    // klar med funktionen
+    islastSignalActive = false; 
     // shutdown; SENARE NU BEHÖVS DET INTE
   }
   else

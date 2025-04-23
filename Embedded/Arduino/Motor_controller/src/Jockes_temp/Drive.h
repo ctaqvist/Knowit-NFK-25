@@ -20,12 +20,12 @@ class Drive {
 
     public:
         Drive(float x, float y);
-        float calculateHypotenuse();
-        float leftSpeedFunc();
-        float rightSpeedFunc();
+        float CalculateHypotenuse();
+        float CalculateLeftSpeedFunc();
+        float CalculateRightSpeedFunc();
         // Funktion som returnerar ett state baserat på x och y
-        DriveState getState();
-        void algorithm();
+        DriveState GetState();
+        void ExecuteDriveLogic();
 };
 
 #endif
