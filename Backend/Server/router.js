@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import fs from 'fs'
 import jwt from 'jsonwebtoken'
-import authCheck from './jwtMiddleware.js';
+import authCheck from './routeAuthMiddleware.js';
 import bodyParser from 'body-parser'
 
 const USER = "test"
