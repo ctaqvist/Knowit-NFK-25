@@ -1,5 +1,6 @@
-#include "MotorControl.h"
+#include "motor_control.h"
 //George
+/* 
 MotorControl motorControl;
 
 void MotorControl::init() {
@@ -30,3 +31,4 @@ String MotorControl::getStatus() {
   return "Left: " + motorLeft.getDirection() + "(" + motorLeft.getSpeed() + "), " +
          "Right: " + motorRight.getDirection() + "(" + motorRight.getSpeed() + ")";
 }
+*/

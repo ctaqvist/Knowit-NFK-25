@@ -27,7 +27,7 @@ interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
   vertical?: boolean;
   /**
    * Number of times to repeat the content
-   * @default 1
+   * @default 4
    */
   repeat?: number;
 }
@@ -38,14 +38,14 @@ export function Marquee({
   pauseOnHover = false,
   children,
   vertical = false,
-  repeat = 2,
+  repeat = 4,
   ...props
 }: MarqueeProps) {
   return (
     <div
       {...props}
       className={cn(
-        "group flex overflow-hidden p-2 [--duration:40s] [--gap:12rem] [gap:var(--gap)]",
+        "group flex overflow-hidden p-2 [--duration:40s] [--gap:30px] [gap:var(--gap)]",
         {
           "flex-row": !vertical,
           "flex-col": vertical,
@@ -58,7 +58,7 @@ export function Marquee({
         .map((_, i) => (
           <div
             key={i}
-            className={cn("flex  justify-evenly w-full shrink-0 justify-around [gap:var(--gap)]", {
+            className={cn("flex shrink-0 justify-around [gap:var(--gap)]", {
               "animate-marquee flex-row": !vertical,
               "animate-marquee-vertical flex-col": vertical,
               "group-hover:[animation-play-state:paused]": pauseOnHover,

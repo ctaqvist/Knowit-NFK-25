@@ -5,7 +5,7 @@ import json
 import base64
 from datetime import datetime
 
-URI = "ws://13.60.235.253:9000"
+URI = "ws://localhost:9000"
 
 # Used to get messages from terminal
 
@@ -35,7 +35,7 @@ async def receive_messages(websocket):
 
                     print(f"\nImage saved as {filename}")
                 else:
-                    print(f"\nReceived (non-image): {"sdf"}")
+                    print(f"\nReceived (non-image): {message}")
             except json.JSONDecodeError:
                 print(f"\nReceived (non-JSON): {message}")
 

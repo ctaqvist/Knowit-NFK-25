@@ -3,7 +3,7 @@ import json
 import time
 
 # Connects to Arduino via serial
-def connect_to_arduino(port='/dev/ttyACM1', baudrate=9600):
+def connect_to_arduino(port='/dev/ttyACM0', baudrate=9600):
     try:
         arduino = serial.Serial(port, baudrate)
         time.sleep(2)  # Wait for connection to stabilize
@@ -13,18 +13,18 @@ def connect_to_arduino(port='/dev/ttyACM1', baudrate=9600):
         print(f"Error connecting to Arduino: {e}")
         return None
 
-# Sends a message to Arduino over serial
-def send_to_arduino(arduino, message):
-  
-    if not message or not isinstance(message, str):
-        print(f"Invalid message – skipping send: {message}")
+# Sends a command to Arduino over serial
+def send_to_arduino(arduino, command):
+    if not command or not isinstance(command, str):
+        print(f"Invalid message – skipping send: {command}")
         return
 
     try:
-        arduino.write((message + '\n').encode())  
-        print(f"Sent to Arduino: {message}")
+        arduino.write((command + '\n').encode())  
+        print(f"Sent to Arduino: {command}")
 
-        time.sleep(0.05)  # delay to allow Arduino to process the message
+        # delay to allow Arduino to process the message
+        time.sleep(0.05)  
         if arduino.in_waiting:
             response = arduino.readline().decode('utf-8').strip()
             print(f"[Arduino replied]: {response}")

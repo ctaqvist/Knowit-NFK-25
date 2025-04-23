@@ -23,9 +23,10 @@ val client = HttpClient(CIO) {
 }
 
 class ViewModel(private val uri: String = "") : ViewModel() {
+    private val ROVER_ID = "rover-001"
     private var socket: WebSocketSession? = null
     private var job: Job? = null
-
+    private val commandProtocol = RoverCommandProtocol(roverId = ROVER_ID)
     // PUBLIC INTERFACE
     private val _recentMessage = MutableSharedFlow<String>()
     val recentMessage = _recentMessage.asSharedFlow()
@@ -34,14 +35,14 @@ class ViewModel(private val uri: String = "") : ViewModel() {
 
     fun sendConnect() = viewModelScope.launch { connect() }
     fun sendDisconnect() = viewModelScope.launch { disconnect() }
-    fun sendStartStream() = sendCommand("STREAM")
-    fun sendStopStream() = sendCommand("END-STREAM")
-    fun sendTakePicture() = sendCommand("PIC")
-    fun sendTankTurn() = sendCommand("TANKTURN")
-    fun sendPing() = sendMessage("ping")
+    fun sendStartStream() = sendMessage(commandProtocol.startStream())
+    fun sendStopStream() = sendMessage(commandProtocol.stopStream())
+    fun sendTakePicture() = sendMessage(commandProtocol.takePicture())
+    fun sendTankTurn() = sendMessage(commandProtocol.tankTurn())
+    fun sendPing() = sendMessage(commandProtocol.ping())
     fun sendReloadVideo() = reloadVideoKey.value++
-    fun sendStartHeadlights() = sendCommand("HEADLIGHT_ON")
-    fun sendCloseHeadlights() = sendCommand("HEADLIGHT_OFF")
+    fun sendStartHeadlights() = sendMessage(commandProtocol.startHeadlights())
+    fun sendCloseHeadlights() = sendMessage(commandProtocol.closeHeadlights())
 
     // PRIVATE INTERFACE
     private fun isConnected() = socket != null
@@ -76,11 +77,6 @@ class ViewModel(private val uri: String = "") : ViewModel() {
         } catch (e: Exception) {
             println("Error: ${e.localizedMessage}")
         }
-    }
-
-    // Helper to send messages
-    private fun sendCommand(command: String) {
-        sendMessage("""{ "rover_id": "rover-001", "command": "$command" }""")
     }
 
     private fun sendMessage(message: String) {
