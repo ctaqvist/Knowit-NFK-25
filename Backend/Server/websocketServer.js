@@ -1,7 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
-import jwt from 'jsonwebtoken'
 import wsAuthCheck from './webSocketAuthMiddleware.js';
 
 // Use the same key as in express app
@@ -12,13 +11,8 @@ function initializeWebSocketServer(server) {
     let clients = new Set();
 
     wss.on('connection', (ws, req) => {
-        wsAuthCheck(ws, req);
-        /*// Create a url with connection request 
-        const url = new URL(req.url, `http://${req.headers.host}`);
-        // Get the token value in the request
-        const token = url.searchParams.get('token');
         try{
-            const decoded = jwt.verify(token, SECRET_KEY)
+            const decoded = wsAuthCheck(req, SECRET_KEY);
             // Attach the token to the ws 
             ws.token = decoded
             console.log(`${decoded.username} is connected to web socket!`)
@@ -27,7 +21,7 @@ function initializeWebSocketServer(server) {
             // Close the connection if token is invalid
             ws.close(4001, 'Invalid token!')
             return
-        }*/
+        }
 
         console.log('A new client just connected.');
         clients.add(ws);
