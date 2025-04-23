@@ -2,6 +2,7 @@ import json
 import websockets
 from config.settings import ROVER_ID, SERVER_URI
 from commands.arm.handler import process_command as arm_command_handler
+from commands.rover.handler import process_command as rover_command_handler # type: ignore
 
 # Main async function to listen to server commands
 async def listen_to_server():
