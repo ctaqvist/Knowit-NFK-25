@@ -25,7 +25,7 @@ const baseURL = 'http://test.lazyloops.se/images/'
 const SECRET_KEY = "HiThisIsSecretKey"
 
 // Middleware authCheck checks if the user has right to visit this route
-expressApp.get('/images', authCheck(SECRET_KEY), (req, res) => {
+expressApp.get('/images', authCheck, (req, res) => {
     // Fetch a list of images
     fs.readdir(imagesStaticPath, (err, files) => {
         if (err) {
@@ -42,7 +42,7 @@ expressApp.get('/images', authCheck(SECRET_KEY), (req, res) => {
     })
 })
 
-expressApp.get('/images/:imageName', (req, res) => {
+expressApp.get('/images/:imageName', authCheck, (req, res) => {
     const { imageName } = req.params
     const filePath = path.join(imagesStaticPath, imageName);
     // Check if the file path exist

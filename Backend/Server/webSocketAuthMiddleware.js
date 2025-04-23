@@ -1,7 +1,9 @@
 
 import jwt from 'jsonwebtoken'
 
-function wsAuthCheck(req, SECRET_KEY){
+const SECRET_KEY = "HiThisIsSecretKey";
+
+function wsAuthCheck(req){
     // Create a url with connection request 
     const url = new URL(req.url, `http://${req.headers.host}`);
     // Get the token value in the request

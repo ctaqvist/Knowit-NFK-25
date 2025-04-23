@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken'
 
-function authCheck(SECRET_KEY){
+const SECRET_KEY = "HiThisIsSecretKey";
+
+function authCheck(){
     // The authCheck returns a middleware
     return (req, res, next) => {
     // The token should be included as a query to the url

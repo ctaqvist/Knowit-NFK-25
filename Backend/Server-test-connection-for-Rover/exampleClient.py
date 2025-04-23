@@ -43,7 +43,7 @@ async def receive_messages(websocket):
         print("Connection closed")
 
 async def main():
-    uri = "ws://localhost:9000?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpYXQiOjE3NDUzOTg2NjgsImV4cCI6MTc0NTQyMDI2OH0.1OMrTu_A5wzxQk6iJdt88pwtLVLGfauAyyRYrwgsqZA"
+    uri = "ws://localhost:80?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDU0MDAwOTJ9.Afp7bmRont-WP2rGang2A7sTrc2mN2KZTyU3XjySl5k"
     async with websockets.connect(uri) as websocket:
         print("Connected to server")
 

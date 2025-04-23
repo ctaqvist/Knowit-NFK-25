@@ -3,8 +3,6 @@ import { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
 import wsAuthCheck from './webSocketAuthMiddleware.js';
 
-const SECRET_KEY = "HiThisIsSecretKey"
-
 function startStreamingServer(ports) {
     const wss = new WebSocketServer({ port: ports.outputPort });
     const clients = new Set();
@@ -12,7 +10,7 @@ function startStreamingServer(ports) {
     // Output
     wss.on('connection', (ws, req) => {
         try{
-            const decoded = wsAuthCheck(req, SECRET_KEY)
+            const decoded = wsAuthCheck(req)
             ws.token = decoded
             console.log(`${decoded.username} is connected to streaming server`)
         }
