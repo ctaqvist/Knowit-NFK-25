@@ -9,37 +9,31 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    # Optional: matrix over compilers and build types
     strategy:
       matrix:
         compiler: [ gcc, clang ]
         build_type: [ Debug, Release ]
 
     steps:
-      # Hämtar koden
-      - name: Checkout code
+      - name: Checkout code (with submodules)
         uses: actions/checkout@v4
         with:
-            submodules: 'recursive'
+          submodules: recursive
 
-      # Installerar CMake & build tools
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake build-essential
 
-      # Konfiguerar CMake
-      - name: Configure (compiler=${{ matrix.compiler }}, type=${{ matrix.build_type }})
+      - name: Configure, build & test
+        # Everything below runs from your Motor_controller directory
         working-directory: Embedded/Arduino/Motor_controller
         run: |
+          # select compiler
           export CXX=${{ matrix.compiler }}++
-          cmake -S . -B build \
-            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-
-      # Kompilerar
-      - name: Build
-        run: cmake --build build -- -j$(nproc)
-
-      # Kör testerna
-      - name: Run tests
-        run: ctest --output-on-failure --test-dir build
+          # configure into a build/ subfolder
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          # compile
+          cmake --build build -- -j$(nproc)
+          # run your GoogleTest suite
+          ctest --output-on-failure --test-dir build
