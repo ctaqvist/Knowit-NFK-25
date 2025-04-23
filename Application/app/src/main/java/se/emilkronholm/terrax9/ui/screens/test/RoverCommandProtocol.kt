@@ -1,7 +1,8 @@
 package se.emilkronholm.terrax9.ui.screens.test
 
-class RoverCommandProtocol(private val roverId: String) {
+object Commands {
 
+    private val roverId: String = "rover-001"
     private fun createCommand(command: Command): String {
         return """{ "rover_id": "$roverId", "command": "${command.value}" }"""
     }

@@ -1,18 +1,14 @@
 package se.emilkronholm.terrax9.ui.screens.controller
 
-import android.provider.ContactsContract.Data
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import se.emilkronholm.terrax9.services.DataService
 
-enum class Command {
-    PIC, START_STREAM, STOP_STREAM, TANK_TURN, HEADLIGHT_ON, HEADLIGHT_OFF, FWD, STOP
-}
+class ViewModel(roverID: String): ViewModel() {
 
-class ViewModel: ViewModel() {
-
+//    val commands = RoverCommandProtocol(roverID)
     val dataService = DataService("terrax9.se")
     var job: Job? = null
     fun onMovement(x: Float, y: Float) {
@@ -27,7 +23,12 @@ class ViewModel: ViewModel() {
         }
     }
 
-    fun sendCommand(command: Command) {
-        dataService.sendCommand(command.toString())
+    fun sendCommand(command: String) {
+        dataService.sendCommand(command)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        dataService.close()
     }
 }

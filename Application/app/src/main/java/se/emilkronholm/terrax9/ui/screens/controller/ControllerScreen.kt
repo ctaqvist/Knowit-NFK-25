@@ -20,12 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import se.emilkronholm.terrax9.ui.screens.test.Commands
 import se.emilkronholm.terrax9.ui.theme.AppColors
 
 // This screen is the entry point for the controller dashboard.
 @Composable
 fun ControllerScreen() {
-    val viewModel: ViewModel = ViewModel()
+    val viewModel: ViewModel = ViewModel("rover-001")
     Column(
         modifier = Modifier.padding(bottom = 15.dp, start = 80.dp, end = 80.dp)
     ) {
@@ -54,21 +55,21 @@ fun ControllerScreen() {
                 IconButton(
                     icon = Icons.Filled.Face,
                     onClick = {
-                        viewModel.sendCommand(command = Command.PIC)
+                        viewModel.sendCommand(Commands.takePicture())
                     }
                 )
 
                 IconButton(
                     icon = Icons.Filled.KeyboardArrowUp,
                     onClick = {
-                        viewModel.sendCommand(command = Command.HEADLIGHT_ON)
+                        viewModel.sendCommand(Commands.startHeadlights())
                     }
                 )
 
                 IconButton(
                     icon = Icons.Filled.KeyboardArrowDown,
                     onClick = {
-                        viewModel.sendCommand(command = Command.HEADLIGHT_OFF)
+                        viewModel.sendCommand(Commands.closeHeadlights())
                     }
                 )
             }
@@ -77,14 +78,14 @@ fun ControllerScreen() {
                 IconButton(
                     icon = Icons.Filled.Call,
                     onClick = {
-                        viewModel.sendCommand(command = Command.START_STREAM)
+                        viewModel.sendCommand(Commands.startStream())
                     }
                 )
 
                 IconButton(
                     icon = Icons.Filled.Close,
                     onClick = {
-                        viewModel.sendCommand(command = Command.STOP_STREAM)
+                        viewModel.sendCommand(Commands.stopStream())
                     }
                 )
             }

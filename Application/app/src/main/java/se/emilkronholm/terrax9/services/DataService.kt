@@ -95,6 +95,7 @@ class DataService(private val uri: String = "") {
     }
 
     // Helper to send messages
+    // XXX: Obsolete
     fun sendCommand(command: String) {
         sendMessage("""{ "rover_id": "rover-001", "command": "$command" }""")
     }
@@ -122,7 +123,7 @@ class DataService(private val uri: String = "") {
         }
     }
 
-    private fun sendMessage(message: String) {
+    fun sendMessage(message: String) {
         ensureOpenConnection()
         runBlocking {
             launch {
