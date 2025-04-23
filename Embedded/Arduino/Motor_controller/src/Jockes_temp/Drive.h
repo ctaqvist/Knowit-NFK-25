@@ -1,9 +1,6 @@
 #ifndef DRIVE_H
 #define DRIVE_H
 
-#include <Arduino.h>
-// Jockes
-
 //TTL = Tankturn left, TTR = Tankturn right
 enum DriveState {
     FORWARD,
