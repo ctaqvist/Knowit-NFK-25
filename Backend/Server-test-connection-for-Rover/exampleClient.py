@@ -5,7 +5,8 @@ import json
 import base64
 from datetime import datetime
 
-URI = "ws://localhost:8080"
+
+URI = "ws://localhost:9000"
 
 # Used to get messages from terminal
 

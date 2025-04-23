@@ -30,31 +30,38 @@ function startStreamingServer(ports) {
         });
     });
 
-    // Input
-    const stream = spawn('ffmpeg', [
-        '-fflags', 'nobuffer', // reduce buffering for lower latency
-        '-i', `srt://0.0.0.0:${ports.inputPort}?mode=listener`, // listen for incoming SRT connections on the given port
-        '-c:v', 'copy', // copy the video stream without re-encoding
-        '-an', // disable audio processing
-        '-f', 'mpegts', // output format is MPEG-TS
-        'pipe:1' // send the output to stdout
-    ])
+    // Start FFMPEG process, listening for the stream from rover
+    startFFMPEG();
 
-    stream.stdout.on('data', (chunk) => {
-        for (const client of clients) {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(chunk);
+    function startFFMPEG() {
+        // Input
+        const streamProcess = spawn('ffmpeg', [
+            '-fflags', 'nobuffer', // reduce buffering for lower latency
+            '-i', `srt://0.0.0.0:${ports.inputPort}?mode=listener`, // listen for incoming SRT connections on the given port
+            '-c:v', 'copy', // copy the video stream without re-encoding
+            '-an', // disable audio processing
+            '-f', 'mpegts', // output format is MPEG-TS
+            'pipe:1' // send the output to stdout
+        ])
+
+        streamProcess.stdout.on('data', (chunk) => {
+            for (const client of clients) {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(chunk);
+                }
             }
-        }
-    })
+        })
 
-    stream.stderr.on('data', (data) => {
-        console.error(`[ffmpeg] ${data}`);
-    });
+        streamProcess.stderr.on('data', (data) => {
+            console.error(`[ffmpeg] ${data}`);
+        });
 
-    stream.on('close', (code) => {
-        console.log(`FFmpeg exited with code ${code}`);
-    });
+        streamProcess.on('close', (code) => {
+            console.log(`FFmpeg exited with code ${code}`);
+            // Start new ffmpeg process after previous one is closed
+            setTimeout(startFFMPEG, 1000);
+        });
+    }
 }
 
 export default startStreamingServer
