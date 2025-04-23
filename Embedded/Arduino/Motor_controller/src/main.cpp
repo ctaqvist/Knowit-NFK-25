@@ -36,7 +36,7 @@ void setup() {
 void loop() {
   //commandHandler.listen();
   //motorControl.update();
-  checkBatteryAndWarn ();
+  CheckBatteryAndWarn ();
   delay(1000);
   forward();
   delay(1000);

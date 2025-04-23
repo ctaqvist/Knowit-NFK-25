@@ -4,13 +4,13 @@
 const int SpotLights_Pin = 12;
 
 //Funktion som sätter på SpotLights
-void spotlightOn ()
+void TurnSpotlightOn ()
 {
   digitalWrite(SpotLights_Pin, HIGH);
 }
 
 //Funktion som stänger av SpotLights
-void spotlightOff ()
+void TurnSpotLightOff ()
 {
   digitalWrite(SpotLights_Pin, LOW);
 }

@@ -1,6 +1,30 @@
 #ifndef BATTERY_H
 #define BATTERY_H
+#include <Arduino.h>
+/* Batteri status nivåer
+*  0 => Allting är ok
+*  1 => First Signal
+*  2 => Last Signal*/
+enum BatteryStatus
+{
+  Battery_OK = 0,
+  Battery_Warning = 1,
+  Battery_Shutdown = 2
+};
 
+// Hardware relaterade konstanter
+
+// Pin nummer för Buzzer
+constexpr int BUZZER_PIN = 13;
+
+// Resistor 1
+constexpr float R1 = 20000.0;
+
+// Resistor 2
+constexpr float R2 = 10000.0;
+
+// Arduinos Spänningsreferens
+constexpr float Vref = 5.0; 
 /*
 * Funktion som läser av analoga värdet av batteriet för att ta reda på laddningen kvar
 * Vref- Reference voltage av kortet

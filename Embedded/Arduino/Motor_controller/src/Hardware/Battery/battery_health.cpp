@@ -1,14 +1,6 @@
 #include "battery_health.h"
 #include <Arduino.h>
 
-/*
- * Function for battery health.
- * analogPin - Number of the pin to read the battery voltage level
- * Vref of the Micro controller
- */
-const int Buzzer_Pin = 13;
-const float R1 = 20000.0;
-const float R2 = 10000.0;
 
 /*Variabler för firstSignal funktionen*/
 unsigned long startTime_FirstSignal = 0;
@@ -16,8 +8,6 @@ bool isFirstSignalActive = false;
 int signal_S = 0; // 0 = off & 1 = on
 int signal_C = 0; // antal gånger det ska pipa.
 
-// Arduinos Spänningsreferens
-const float Vref = 5.0;
 
 /*Variabler för Last Signal funktionen*/
 const unsigned long warningReminder = 30000; // 30 Sek, ska ge en varning varje 30 Sek
@@ -38,15 +28,6 @@ float CalculateBatteryHealth(int analogPin, float Vref)
   return batteryVoltage;
 }
 
-// Om 0 => allting är ok
-// Om 1 => First signal
-// Om 2 => Last signal
-enum BatteryStatus
-{
-  Battery_OK = 0,
-  Battery_Warning = 1,
-  Battery_Shutdown = 2
-};
 int CheckBatteryLevel(float current_level)
 {
   // Fösta gränsen, dags att ladda
@@ -142,12 +123,12 @@ void TriggerFirstSignal()
 
     if (signal_S == 0)
     {
-      analogWrite(Buzzer_Pin, 200);
+      analogWrite(BUZZER_PIN, 200);
       signal_S = 1;
     }
     else
     {
-      analogWrite(Buzzer_Pin, 0);
+      analogWrite(BUZZER_PIN, 0);
       signal_S = 0;
       signal_C++;
       // Efter 4 st pipa ljud
@@ -161,9 +142,9 @@ void TriggerFirstSignal()
 
   for (int i = 0; i < 4; i++)
   {
-    analogWrite(Buzzer_Pin, 200);
+    analogWrite(BUZZER_PIN, 200);
     delay(500);
-    analogWrite(Buzzer_Pin, 0);
+    analogWrite(BUZZER_PIN, 0);
     delay(500);
   }
 }
@@ -185,13 +166,13 @@ void TriggerLastSignal()
   // Om det har gått 6 sekunder, då ska det inte pipa längre
   if (lastSignalWarn_time >= 6000)
   {
-    analogWrite(Buzzer_Pin, 0);
+    analogWrite(BUZZER_PIN, 0);
     islastSignalActive = false; // klar med funktionen
     // shutdown; SENARE NU BEHÖVS DET INTE
   }
   else
   {
-    analogWrite(Buzzer_Pin, 255);
+    analogWrite(BUZZER_PIN, 255);
     Serial.println(lastSignalWarn_time);
   }
 }
