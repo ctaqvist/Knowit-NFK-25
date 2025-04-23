@@ -3,7 +3,6 @@ import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
 import wsAuthCheck from './webSocketAuthMiddleware.js';
 
-// Use the same key as in express app
 const SECRET_KEY = "HiThisIsSecretKey";
 
 function initializeWebSocketServer(server) {

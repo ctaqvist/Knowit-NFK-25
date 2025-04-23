@@ -9,6 +9,7 @@ function startStreamingServer(ports) {
 
     // Output
     wss.on('connection', (ws, req) => {
+        // Authentication check
         try{
             const decoded = wsAuthCheck(req)
             ws.token = decoded

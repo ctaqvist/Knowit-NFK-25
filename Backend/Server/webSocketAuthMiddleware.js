@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 
 const SECRET_KEY = "HiThisIsSecretKey";
 
+// This middleware checks whether the client is allowed to connect to web sockets on the server
 function wsAuthCheck(req){
     // Create a url with connection request 
     const url = new URL(req.url, `http://${req.headers.host}`);

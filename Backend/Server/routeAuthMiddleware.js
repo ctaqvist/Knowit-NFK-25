@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 
 const SECRET_KEY = "HiThisIsSecretKey";
 
+// This middleware checks whether a user is authorized to access a route on the server.
 function authCheck(){
     // The authCheck returns a middleware
     return (req, res, next) => {
