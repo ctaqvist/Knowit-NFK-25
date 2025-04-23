@@ -4,10 +4,12 @@ from config.settings import ROVER_ID, SERVER_URI
 from commands.arm.handler import process_command as arm_command_handler
 from commands.rover.handler import process_command as rover_command_handler # type: ignore
 
-# Main async function to listen to server commands
+# Main async function that connects to the WebSocket server
+# and listens for commands directed to either the rover or the robot arm.
 async def listen_to_server():
     active_handler = None
     
+    # Connect to the server
     async with websockets.connect(SERVER_URI) as websocket:
         print("Connected to server")
 
@@ -22,8 +24,10 @@ async def listen_to_server():
             print(f"[ERROR] Failed to decode registration JSON: {e}")
             mode = "rover"
         
+        # Select handler based on mode
         active_handler = arm_command_handler if mode == "arm" else rover_command_handler    
         
+        # Acknowledge registration to the server
         await websocket.send(json.dumps({
             "type": "register",
             "rover_id": ROVER_ID,
@@ -49,4 +53,5 @@ async def listen_to_server():
                 print("[ERROR] No commands found in the message")
                 continue   
             
+            # Dispatch the command to the correct handler
             await active_handler(command, websocket, params)        

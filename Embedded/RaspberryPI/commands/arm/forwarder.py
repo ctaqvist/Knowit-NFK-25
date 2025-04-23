@@ -1,35 +1,48 @@
 import json
 from config.settings import ROVER_ID
+from robotic_arm.servo_controller import move_arm, move_claw   # type: ignore
 
-# Placeholder for actual arm movement logic
-def move_arm_and_claw(x_angle: int, y_angle: int, claw_angle: int):
-    print(f"[ARM] Move to X: {x_angle}, Y: {y_angle}, Claw: {claw_angle}")
-
-# Convert joystick value to angle
-def to_angle(value: float, claw=False) -> int:
-    return int(value * 90) if claw else int((value - 0.5) * 180)
-
-async def forward_arm(params, websocket):
+# Forwards joystick x/y values to the robot arm
+async def forward_arm(arm_data, websocket):
     try:
-        x = float(params.get("x", 0.5))
-        y = float(params.get("y", 0.5))
-        claw = float(params.get("claw", 0.0))
+        x = float(arm_data["x"])
+        y = float(arm_data["y"])
+    except (KeyError, ValueError, TypeError):
+        await websocket.send(json.dumps({
+            "rover_id": ROVER_ID,
+            "status": "error",
+            "message": "[steer-arm] Invalid x/y values"
+        }))
+        return
 
-        x_angle = to_angle(x)
-        y_angle = to_angle(y)
-        claw_angle = to_angle(claw, claw=True)
+    move_arm(x, y)
 
-        move_arm_and_claw(x_angle, y_angle, claw_angle)
+    await websocket.send(json.dumps({
+        "rover_id": ROVER_ID,
+        "status": "ok",
+        "response": "Arm moved",
+        "x": x,
+        "y": y
+    }))
 
-        if websocket:
-            await websocket.send(json.dumps({
-                "rover_id": ROVER_ID,
-                "response": f"Moved arm to x:{x_angle}, y:{y_angle}, claw:{claw_angle}"
-            }))
-    except Exception as e:
-        print(f"[ERROR] Invalid arm input: {e}")
-        if websocket:
-            await websocket.send(json.dumps({
-                "rover_id": ROVER_ID,
-                "response": "[ERROR] Invalid data for arm movement"
-            }))
+
+# Forwards joystick value to the robot claw
+async def forward_claw(claw_data, websocket):
+    try:
+        claw = float(claw_data["claw"])
+    except (KeyError, ValueError, TypeError):
+        await websocket.send(json.dumps({
+            "rover_id": ROVER_ID,
+            "status": "error",
+            "message": "[steer-claw] Invalid claw value"
+        }))
+        return
+
+    move_claw(claw)
+
+    await websocket.send(json.dumps({
+        "rover_id": ROVER_ID,
+        "status": "ok",
+        "response": "Claw moved",
+        "claw": claw
+    }))
