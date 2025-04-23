@@ -6,6 +6,7 @@ export interface AuthContextType {
   user: User | null;
   loading: boolean;
   signOut: () => Promise<void>;
+  MFAStatus: 'Verified' | 'Unverified' | null | undefined
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

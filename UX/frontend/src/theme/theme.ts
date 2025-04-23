@@ -24,7 +24,7 @@ export const theme = createTheme({
       fontSize: 'clamp(40px, 3vw, 48px);',
       fontWeight: 700,
       fontFamily: 'Lexend Exa, sans-serif',
-      textWrap: 'balance'
+      textWrap: 'balance',
     },
     h2: {
       fontSize: '36px',
@@ -55,7 +55,7 @@ export const theme = createTheme({
       fontSize: '20px',
       fontWeight: 400,
       fontFamily: 'Instrument Sans, sans-serif',
-      lineHeight: '30px'
+      lineHeight: '30px',
     },
     body2: {
       fontSize: '18px',
@@ -78,6 +78,11 @@ export const theme = createTheme({
       letterSpacing: '2.88px',
       fontWeight: 700,
     },
+    subheading2: {
+      fontSize: 20,
+      fontWeight: 500,
+      fontFamily: 'Lexend Exa, sans-serif'
+    }
   },
   shadows: [
     'none',
@@ -122,10 +127,17 @@ export const theme = createTheme({
           boxShadow: 'none',
           filter: 'drop-shadow(0px 11px 10px black)',
           '& a :hover': { textShadow: '0px 9px 8px #5526FF' },
-          '& a': { color: 'text.primary', textDecoration: 'none', transition: 'text-shadow 60ms' },
-          '& a:is(#logo) img': { transition: 'filter 60ms',  transitionDelay: 0 },
+          '& a': {
+            color: 'text.primary',
+            textDecoration: 'none',
+            transition: 'text-shadow 60ms',
+          },
+          '& a:is(#logo) img': {
+            transition: 'filter 60ms',
+            transitionDelay: 0,
+          },
           '& a:is(#logo):hover img': {
-            filter: 'drop-shadow(0px 10px 10px #5526FF)'
+            filter: 'drop-shadow(0px 10px 10px #5526FF)',
           }, //
           '& a:not(#logo)::after': {
             content: '""',
@@ -142,6 +154,8 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
+          width: 'fit-content',
+          maxWidth: '100%',
           variants: [
             {
               props: { variant: 'contained' },
@@ -162,18 +176,43 @@ export const theme = createTheme({
                 '&:hover': {
                   boxShadow: '8px 8px 14px 0px rgba(255, 255, 255, 0.24)',
                   border: '1px solid rgba(255, 255, 255, 0.50)',
-                  backgroundColor: '#5526FF'
-                }
-              }
-            }
-          ]
-        }
-      }
+                  backgroundColor: '#5526FF',
+                },
+              },
+            },
+          ],
+        },
+      },
     },
     MuiButtonBase: {
       defaultProps: {
-        disableRipple: true
-      }
-    }
+        disableRipple: true,
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          maxWidth: '100%',
+          color: '#FFF',
+          flex: 1,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#05030C',
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#181724',
+          border: '1px solid rgba(188, 197, 255, 1)',
+          '&::placeholder': { color: 'rgb(93 92 101)' },
+        },
+      },
+    },
   },
 });
