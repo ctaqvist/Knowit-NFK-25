@@ -14,6 +14,7 @@ import io.ktor.websocket.readText
 import io.ktor.websocket.send
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -44,6 +45,13 @@ class DataService(private val uri: String = "") {
         }
     }
 
+    fun close() {
+        runBlocking {
+            socket?.close()
+            receiveJob?.cancel()
+        }
+    }
+
     // Initialize a socket and create callbacks
     private suspend fun connect() {
         try {
@@ -64,6 +72,10 @@ class DataService(private val uri: String = "") {
 
             // Listen to incoming messages
             socket?.let { session ->
+                // We run the recieve job on GlobalScope because it is a simple fix to ensure
+                // the job isn't tied to any lifecycle.
+                // This may not be an ideal solution as it is easy to get leaks.
+                // In future this should be done in a different way.
                 receiveJob = kotlinx.coroutines.GlobalScope.launch {
                     for (frame in session.incoming) {
                         if (frame is Frame.Text) {
