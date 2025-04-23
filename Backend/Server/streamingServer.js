@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
-import jwt from 'jsonwebtoken'
+import wsAuthCheck from './webSocketAuthMiddleware.js';
 
 const SECRET_KEY = "HiThisIsSecretKey"
 
@@ -11,15 +11,14 @@ function startStreamingServer(ports) {
 
     // Output
     wss.on('connection', (ws, req) => {
-        const url = new URL(req.url, `http://${req.headers.host}`);
-        const token = url.searchParams.get('token');
         try{
-            const decoded = jwt.verify(token, SECRET_KEY)
+            const decoded = wsAuthCheck(req, SECRET_KEY)
             ws.token = decoded
             console.log(`${decoded.username} is connected to streaming server`)
         }
         catch{
             ws.close(4001, 'Invalid token!')
+            console.log('Invalid token')
             return;
         }
         
