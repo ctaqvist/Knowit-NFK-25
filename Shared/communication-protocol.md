@@ -31,57 +31,21 @@ The following commands are reactive and the sender passes ownership to the rover
 ```
 {
     "roverID": -roverID-,
-    "steer": [
+    "steer": {
+        "x": -xValue-,
+        "y": -yValue-
+    }
+}
+```
+
+### Control the arm
+
+```
+{
+    "roverID": -roverID-,
+    "steer-arm": [
         "x": -xValue-,
         "y": -yValue-
     ]
 }
 ```
-
-**Example command** recommends the rover to go straight. 
-```
-{
-    "roverID": "rover-001",
-    "steer": [
-        "x": 0.00,
-        "y": 1.00
-    ]
-}
-```
-
-**Example command** recommends the rover to rotate clock-wise in place
-
-```
-{
-    "roverID": "rover-001",
-    "steer": [
-        "x": 1.00,
-        "y": 0.00
-    ]
-}
-```
-
-**Example command** recommends the rover to rotate anti-clock-wise
-
-```
-{
-    "roverID": "rover-001",
-    "steer": [
-        "x": 0.00,
-        "y": -1.00
-    ]
-}
-```
-
-**Example command** recommends the rover to go 45 degrees to the left
-
-```
-{
-    "roverID": "rover-001",
-    "steer": [
-        "x": 0.70,
-        "y": 0.70
-    ]
-}
-```
-
