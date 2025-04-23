@@ -67,7 +67,7 @@ class ArduinoConnection:
             return False
 
 
-    def read_line(self):
+    def read_received_data(self):
         try:
             return self.serial.readline().decode('utf-8').strip()
         except (serial.SerialException, OSError) as e:
