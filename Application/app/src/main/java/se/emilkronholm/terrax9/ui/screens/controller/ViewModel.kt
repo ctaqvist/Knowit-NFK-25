@@ -8,7 +8,6 @@ import se.emilkronholm.terrax9.services.DataService
 
 class ViewModel(roverID: String): ViewModel() {
 
-//    val commands = RoverCommandProtocol(roverID)
     val dataService = DataService("terrax9.se")
     var job: Job? = null
     fun onMovement(x: Float, y: Float) {
@@ -24,7 +23,9 @@ class ViewModel(roverID: String): ViewModel() {
     }
 
     fun sendCommand(command: String) {
-        dataService.sendCommand(command)
+        viewModelScope.launch {
+            dataService.sendMessage(command)
+        }
     }
 
     override fun onCleared() {
