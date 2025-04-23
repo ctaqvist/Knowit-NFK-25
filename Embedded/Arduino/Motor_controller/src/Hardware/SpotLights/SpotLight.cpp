@@ -1,4 +1,4 @@
-#include "spotlight.h"
+#include "SpotLight.h"
 #include <Arduino.h>
 
 const int SpotLights_Pin = 12;
