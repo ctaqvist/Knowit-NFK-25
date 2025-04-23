@@ -11,8 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        compiler: [ gcc, clang ]
-        build_type: [ Debug, Release ]
+        # Use the actual compiler executables, not "gcc"/"clang"
+        cxx: [g++, clang++]
+        build_type: [Debug, Release]
 
     steps:
       - name: Checkout code (with submodules)
@@ -26,14 +27,11 @@ jobs:
           sudo apt-get install -y cmake build-essential
 
       - name: Configure, build & test
-        # Everything below runs from your Motor_controller directory
         working-directory: Embedded/Arduino/Motor_controller
         run: |
-          # select compiler
-          export CXX=${{ matrix.compiler }}++
-          # configure into a build/ subfolder
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-          # compile
+          # Tell CMake exactly which C++ compiler to use
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DCMAKE_CXX_COMPILER=${{ matrix.cxx }}
           cmake --build build -- -j$(nproc)
-          # run your GoogleTest suite
           ctest --output-on-failure --test-dir build
