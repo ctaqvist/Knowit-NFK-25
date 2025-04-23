@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken'
 import authCheck from './jwtMiddleware.js';
 import bodyParser from 'body-parser'
 
+const USER = "test"
+const PASS = "test"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +23,7 @@ const imagesStaticPath = path.join(__dirname, "img")
 const baseURL = 'http://test.lazyloops.se/images/'
 
 const SECRET_KEY = "HiThisIsSecretKey"
+
 // Middleware authCheck checks if the user has right to visit this route
 expressApp.get('/images', authCheck(SECRET_KEY), (req, res) => {
     // Fetch a list of images
@@ -55,7 +58,7 @@ expressApp.get('/images/:imageName', (req, res) => {
 expressApp.post('/login', (req, res) => {
     const {username, password} = req.body;
     console.log(username, password)
-    if(username === "test" && password === "test"){
+    if(username === USER && password === PASS){
         const token = jwt.sign({username: username}, SECRET_KEY, {expiresIn: '6h'})
         return res.json({ token })
     }
