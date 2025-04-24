@@ -1,16 +1,16 @@
 #include "SpotLight.h"
 #include <Arduino.h>
 
-const int SpotLights_Pin = 12;
+const int SPOTLIGHTS_PIN = 12;
 
 //Funktion som sätter på SpotLights
 void TurnSpotlightOn ()
 {
-  digitalWrite(SpotLights_Pin, HIGH);
+  digitalWrite(SPOTLIGHTS_PIN, HIGH);
 }
 
 //Funktion som stänger av SpotLights
 void TurnSpotLightOff ()
 {
-  digitalWrite(SpotLights_Pin, LOW);
+  digitalWrite( SPOTLIGHTS_PIN, LOW);
 }

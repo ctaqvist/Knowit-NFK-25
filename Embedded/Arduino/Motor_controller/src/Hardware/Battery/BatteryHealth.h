@@ -25,6 +25,16 @@ constexpr float R2 = 10000.0;
 
 // Arduinos Spänningsreferens
 constexpr float Vref = 5.0; 
+
+// 30 Sek, ska ge en varning varje 30 Sek. Används i lastSignal funktionen
+constexpr unsigned long warningReminder = 30000;
+
+
+// Varnings nivåer för batteriet
+// Första gränsen, dags att ladda
+constexpr float Warning = 7.0; 
+// Nu ska allting stängas av
+constexpr float Shutdown_Level = 6.4;
 /*
 * Funktion som läser av analoga värdet av batteriet för att ta reda på laddningen kvar
 * Vref- Reference voltage av kortet

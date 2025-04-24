@@ -7,7 +7,7 @@
   Examples: `motorSpeed`, `ledState`.
 - **Constants** use `UPPER_CASE_WITH_UNDERSCORES`:  
   Examples: `MAX_SPEED`, `PWM_A`.
-- **Functions** use `CamelCase`: should always start with a verb.  
+- **Functions** use `PascalCase`: should always start with a verb.  
   Examples: `DriveForward`, `StopMotors`. Function names must clearly describe their purpose.
 - **Classes/Structs** use `PascalCase`, example: `MotorController`.
 - **Members of a class**: private members should start with `lower_case_with_underscore`, and the letter should be the first letter of the class.  
@@ -33,6 +33,8 @@
 - Place opening braces on the same line as control statements or function declarations, and have **one space** between `()` and `{`:
 
 ```cpp
-void doSomething() {
+void doSomething() 
+{
     // code
 }
+``` 

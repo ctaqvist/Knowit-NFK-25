@@ -1,34 +1,29 @@
 #include "BatteryHealth.h"
 #include <Arduino.h>
 
-
 /*Variabler för firstSignal funktionen*/
-unsigned long startTime_FirstSignal = 0;
-bool isFirstSignalActive = false;
-int signal_S = 0; // 0 = off & 1 = on
-int signal_C = 0; // antal gånger det ska pipa.
-
+unsigned long firstSignalStartTime = 0;
+bool firstSignalActive = false;
+int buzzerState = 0;      // 0 = off & 1 = on
+int buzzerPulseCount = 0; // antal gånger det ska pipa.
 
 /*Variabler för Last Signal funktionen*/
-
-// 30 Sek, ska ge en varning varje 30 Sek
-const unsigned long warningReminder = 30000; 
 // För att mäta tiden, för hur många sek sen first signal
-unsigned long lastWarning_Time = 0;          
+unsigned long lastWarningTriggerTime = 0;
 
 /*Variabler för LastSignal Start funktionen*/
 
 // ska vara false från början
-bool islastSignalActive = false; 
-unsigned long lastSignalWarn_time = 0;
+bool lastSignalActive = false;
+unsigned long lastSignalStartTime = 0;
 
 // Läser av det analoga värdet från A0 och räknar ut laddningen av batteriet
 float CalculateBatteryHealth(int analogPin, float Vref)
 {
   // Läser av det analoga Pinnen
-  int rawADC = analogRead(analogPin);       
+  int rawADC = analogRead(analogPin);
   // 0-1023 (10 bitars)
-  float voltage = (rawADC * Vref) / 1023.0; 
+  float voltage = (rawADC * Vref) / 1023.0;
   float batteryVoltage = voltage * ((R1 + R2) / R2);
 
   // Ger batteri nivån
@@ -37,10 +32,6 @@ float CalculateBatteryHealth(int analogPin, float Vref)
 
 int CheckBatteryLevel(float current_level)
 {
-  // Fösta gränsen, dags att ladda
-  const float Warning = 7.0;
-  // Nu ska allting stängas av
-  const float Shutdown_Level = 6.4; 
   if (current_level <= Warning && current_level > Shutdown_Level)
   {
     return Battery_Warning;
@@ -74,13 +65,13 @@ void CheckBatteryAndWarn()
   {
     // First signal
     // Millis gör att den tiden inte pausar allt annat utan kör i bakgrunden
-    unsigned long c_time = millis(); 
-    unsigned long diff = c_time - lastWarning_Time;
+    unsigned long currentTime = millis();
+    unsigned long timeSinceLastWarning = currentTime - lastWarningTriggerTime;
     // Så att det triggas igång varje 30 Sekunder
-    if (diff >= warningReminder)
+    if (timeSinceLastWarning >= warningReminder)
     {
       TriggerWarningSignal(false);
-      lastWarning_Time = c_time;
+      lastWarningTriggerTime = currentTime;
     }
   }
 
@@ -102,7 +93,6 @@ void TriggerWarningSignal(bool level)
   }
   else
   {
-
     StartFirstSignal();
     TriggerFirstSignal();
   }
@@ -111,9 +101,9 @@ void TriggerWarningSignal(bool level)
 // Funktion för att flagga igång firstSignal funktionen och ha rätta värden där
 void StartFirstSignal()
 {
-  isFirstSignalActive = true;
-  signal_S = 0;
-  signal_C = 0;
+  firstSignalActive = true;
+  buzzerState = 0;
+  buzzerPulseCount = 0;
 }
 
 // Piper en kort stund 4 gånger
@@ -121,30 +111,30 @@ void TriggerFirstSignal()
 {
 
   static unsigned long lastToggleTime = 0;
-  unsigned long current_T = millis();
+  unsigned long currentTime = millis();
 
-  if (!isFirstSignalActive)
+  if (!firstSignalActive)
     return;
 
-  if (current_T - lastToggleTime >= 500)
+  if (currentTime - lastToggleTime >= 500)
   {
-    lastToggleTime = current_T;
+    lastToggleTime = currentTime;
 
-    if (signal_S == 0)
+    if (buzzerState == 0)
     {
       analogWrite(BUZZER_PIN, 200);
-      signal_S = 1;
+      buzzerState = 1;
     }
     else
     {
       analogWrite(BUZZER_PIN, 0);
-      signal_S = 0;
-      signal_C++;
+      buzzerState = 0;
+      buzzerPulseCount++;
       // Efter 4 st pipa ljud
-      if (signal_C >= 4)
+      if (buzzerPulseCount >= 4)
       {
-        isFirstSignalActive = false;
-        signal_C = 0;
+        firstSignalActive = false;
+        buzzerPulseCount = 0;
       }
     }
   }
@@ -161,9 +151,9 @@ void TriggerFirstSignal()
 // Funktionen för att sätta på timer och säga att last signal är aktiv
 void StartLastSignal()
 {
-  islastSignalActive = true;
+  lastSignalActive = true;
   // Börjar räkna sekunder.
-  lastSignalWarn_time = millis(); 
+  lastSignalStartTime = millis();
 }
 
 // Lång Ljud signal systemet ska stängas av
@@ -171,19 +161,21 @@ void TriggerLastSignal()
 {
 
   // Om inte signalen är aktiv ska inget hända
-  if (!islastSignalActive)
+  if (!lastSignalActive)
+  {
     return;
+  }
   // Om det har gått 6 sekunder, då ska det inte pipa längre
-  if (lastSignalWarn_time >= 6000)
+  if (lastSignalStartTime >= 6000)
   {
     analogWrite(BUZZER_PIN, 0);
     // klar med funktionen
-    islastSignalActive = false; 
+    lastSignalActive = false;
     // shutdown; SENARE NU BEHÖVS DET INTE
   }
   else
   {
     analogWrite(BUZZER_PIN, 255);
-    Serial.println(lastSignalWarn_time);
+    Serial.println(lastSignalStartTime);
   }
 }
