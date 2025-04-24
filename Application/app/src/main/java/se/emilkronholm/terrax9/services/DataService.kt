@@ -124,7 +124,8 @@ class DataService(private val uri: String = "") {
 
         if (newExtremeValue || newValue) {
             // Send new data message
-            sendMessage(Commands.steer(x, y))
+            //sendMessage(Commands.steer(x, y))
+            sendMessage(Commands.arm(x, y))
 
             // Update last X and Y
             lastX = x
