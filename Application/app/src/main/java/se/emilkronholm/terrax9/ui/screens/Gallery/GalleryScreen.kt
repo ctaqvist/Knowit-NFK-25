@@ -77,7 +77,7 @@ fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
                 )
             }
 
-            imageUrls.isEmpty() -> {
+            imageUrls.isEmpty() && !isLoading -> {
                 Text(
                     "No images to display.",
                     modifier = Modifier
