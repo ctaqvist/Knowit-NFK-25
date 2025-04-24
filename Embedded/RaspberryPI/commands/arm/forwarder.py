@@ -27,7 +27,7 @@ async def forward_arm(arm_data,websocket):
     }))
 
 # Forwards joystick value to the robot claw
-async def forward_claw(claw_data,websocket):
+async def forward_claw(claw_data, websocket):
     try:
         claw = float(claw_data["claw"])
     except (KeyError, ValueError, TypeError):
