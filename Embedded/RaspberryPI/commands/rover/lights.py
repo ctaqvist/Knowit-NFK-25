@@ -29,5 +29,3 @@ async def handle_light_command(command, websocket):
     # Send to Arduino and return response via WebSocket
     arduino.send(serial_command)
     await websocket.send(json.dumps(websocket_response))
-
-

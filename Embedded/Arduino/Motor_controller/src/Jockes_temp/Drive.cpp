@@ -14,41 +14,44 @@ Drive::Drive(float x, float y) {
 
 // Funktion som beräknar hypotenusan
 // returnerar sqrt(x^2 + y^2)
-float Drive::CalculateHypotenuse() {
+float Drive::calculateHypotenuse() {
     return ( sqrt( x * x + y * y ));
 }
 
 // Funktion som beräknar hastigheten för vänster däck
-float Drive::CalculateLeftSpeedFunc() {
+float Drive::leftSpeedFunc() {
+
     float speed = y;
     float turn = x;
 
     // Ju mer till vänster man styr, desto saktare roterar vänster däck
     // if turn < 0 (styr vänster)
     // left_speed = speed * (1.0 - turn)
-    float leftSpeed = speed * (1.0f + (turn < 0 ? turn : 0));
+    float left_speed = speed * (1.0f + (turn < 0 ? turn : 0));
 
     // Begränsar hastigheten till [-1, 1]
-    leftSpeed = fmaxf(-1.0f, fminf(1.0f, leftSpeed));
-    return leftSpeed;
+    left_speed = fmaxf(-1.0f, fminf(1.0f, left_speed));
+    return left_speed;
 }
 
 // Funktion som beräknar hastigheten för höger däck
-float Drive::CalculateRightSpeedFunc() {
+float Drive::rightSpeedFunc() {
+
     float speed = y;
     float turn = x;
+
 
     // Ju mer till höger man styr, desto saktare roterar höger däck
     // if turn < 0 (styr höger)
     // right_speed = speed * (1.0 - turn)
-    float rightSpeed = speed * (1.0f - (turn > 0 ? turn : 0));
+    float right_speed = speed * (1.0f - (turn > 0 ? turn : 0));
 
     // Begränsar hastigheten till [-1, 1]
-    rightSpeed = fmaxf(-1.0f, fminf(1.0f, rightSpeed));
-    return rightSpeed;
+    right_speed = fmaxf(-1.0f, fminf(1.0f, right_speed));
+    return right_speed;
 }
 
-DriveState Drive::GetState() {
+DriveState Drive::getState() {
     if (y > 0 && x == 0)
         return FORWARD;
     else if (y < 0 && x == 0)
@@ -67,36 +70,37 @@ DriveState Drive::GetState() {
    Om state är FORWARD eller BACKWARD, ska en annan funktion anropas som styr motorerna, där left_speed, right_speed samt dir skickas
    Om state är STOPPED, ska en annan funktion anropas som stoppar motorerna
 */
-void Drive::ExecuteDriveLogic() {
-    float currentSpeed = CalculateHypotenuse();
-    float leftSpeed = CalculateLeftSpeedFunc();
-    float rightSpeed = CalculateRightSpeedFunc();
-    DriveState dir = GetState();
+void Drive::algorithm() {
+    float current_speed = calculateHypotenuse();
+    float left_speed = leftSpeedFunc();
+    float right_speed = rightSpeedFunc();
+    DriveState dir = getState();
 
-    printf("Left Speed: %.2f, Right Speed: %.2f\n", leftSpeed, rightSpeed);
+    printf("Left Speed: %.2f, Right Speed: %.2f\n", left_speed, right_speed);
 
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
         case FORWARD:
             printf("State: GO FWD\n");
-            // George (leftSpeed, rightSpeed, dir)
+            // George (leftspeed, rightspeed, dir)
             break;
         case BACKWARD:
             printf("State: GO BWD\n");
-            // George (leftSpeed, rightSpeed, dir)
+            // George (leftspeed, rightspeed, dir)
             break;
         case TTR:
             printf("State: TTR\n");
-            // George_TT (currentSpeed,dir)
+            // George_TT (current_speed,dir)
             break;
         case TTL:
             printf("State: TTL\n");
-            // George_TT (currentSpeed,dir)
+            // George_TT (current_speed,dir)
             break;
         default:
             printf("State: STOPPED\n");
             // George_STOPP_PLS
             break;
         }
-  // George (leftSpeed, rightSpeed, dir)
+    // George (leftspeed, rightspeed, dir)
 }
+

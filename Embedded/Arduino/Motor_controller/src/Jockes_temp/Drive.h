@@ -1,6 +1,9 @@
 #ifndef DRIVE_H
 #define DRIVE_H
 
+#include <Arduino.h>
+// Jockes
+
 //TTL = Tankturn left, TTR = Tankturn right
 enum DriveState {
     FORWARD,
@@ -17,12 +20,12 @@ class Drive {
 
     public:
         Drive(float x, float y);
-        float CalculateHypotenuse();
-        float CalculateLeftSpeedFunc();
-        float CalculateRightSpeedFunc();
+        float calculateHypotenuse();
+        float leftSpeedFunc();
+        float rightSpeedFunc();
         // Funktion som returnerar ett state baserat på x och y
-        DriveState GetState();
-        void ExecuteDriveLogic();
+        DriveState getState();
+        void algorithm();
 };
 
 #endif

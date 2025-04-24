@@ -9,7 +9,7 @@ const __dirname = path.dirname(__filename);
 const expressApp = express()
 
 const imagesStaticPath = path.join(__dirname, "img")
-const baseURL = 'https://terrax9.se/images/'
+const baseURL = 'http://test.lazyloops.se/images/'
 
 expressApp.get('/images', (req, res) => {
     // Fetch a list of images

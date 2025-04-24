@@ -1,8 +1,6 @@
 # Knowit-NFK-25
-Welcome to Knowit NFK 2025 where we create an interplanetary rover!
+Welcome to Knoit NFK 2025 where we create a moonrover!
 
-[![C++ CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/cpp-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/cpp-ci.yml)
-[![Python CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/python-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/python-ci.yml)
 
 ___  
 ## Workflow standard

@@ -11,8 +11,6 @@ function initializeWebSocketServer(server) {
         clients.add(ws);
 
         ws.on('message', (msg) => {
-            // Log client and it's message
-            console.log(`[Message]: ${msg}`)
 
             // Special ping/pong case
             if (msg == "ping") {
@@ -48,6 +46,7 @@ function initializeWebSocketServer(server) {
     function forwardMessageToAllClients(parsed, clients, ws) {
         clients.forEach((client) => {
             if (client.readyState === WebSocket.OPEN) {
+                console.log(parsed)
                 client.send(JSON.stringify({
                     sender: client === ws ? '[SERVER]' : '[CLIENT]', ...parsed
                 }))
@@ -62,7 +61,7 @@ function initializeWebSocketServer(server) {
             return parsed
         }
         catch (err) {
-            console.warn("Message isn't valid JSON. Parsing as raw...")
+            console.log("The message couldn't be parsed. ", err)
             const parsed = { raw: message.toString() }
             return parsed
         }
