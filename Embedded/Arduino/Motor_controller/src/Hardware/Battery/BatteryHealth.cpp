@@ -4,8 +4,10 @@
 /*Variabler för firstSignal funktionen*/
 unsigned long firstSignalStartTime = 0;
 bool firstSignalActive = false;
-int buzzerState = 0;      // 0 = off & 1 = on
-int buzzerPulseCount = 0; // antal gånger det ska pipa.
+// 0 = off & 1 = on
+int buzzerState = 0;
+// antal gånger det ska pipa.      
+int buzzerPulseCount = 0; 
 
 /*Variabler för Last Signal funktionen*/
 // För att mäta tiden, för hur många sek sen first signal
@@ -109,10 +111,8 @@ void StartFirstSignal()
 // Piper en kort stund 4 gånger
 void TriggerFirstSignal()
 {
-
   static unsigned long lastToggleTime = 0;
   unsigned long currentTime = millis();
-
   if (!firstSignalActive)
     return;
 
@@ -138,7 +138,6 @@ void TriggerFirstSignal()
       }
     }
   }
-
   for (int i = 0; i < 4; i++)
   {
     analogWrite(BUZZER_PIN, 200);
@@ -159,7 +158,6 @@ void StartLastSignal()
 // Lång Ljud signal systemet ska stängas av
 void TriggerLastSignal()
 {
-
   // Om inte signalen är aktiv ska inget hända
   if (!lastSignalActive)
   {

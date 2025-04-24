@@ -12,7 +12,6 @@ const int PWM_AB = 3; //D3
 const int PWM_CD = 5; //D5 
 
 //Test funktion medan jag bygger upp rovern
-
 void forward() {
   digitalWrite(MOTOR_A, HIGH);
   digitalWrite(MOTOR_B, LOW);
