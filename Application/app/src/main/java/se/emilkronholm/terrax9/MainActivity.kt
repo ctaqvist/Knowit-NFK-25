@@ -1,5 +1,6 @@
 package se.emilkronholm.terrax9
 
+import GalleryScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import se.emilkronholm.terrax9.ui.theme.Terrax9Theme
-import se.emilkronholm.terrax9.ui.screens.controller.ControllerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
                         // TestScreen()
-                        ControllerScreen()
+                        //ControllerScreen()
+                        GalleryScreen()
                     }
                 }
             }
