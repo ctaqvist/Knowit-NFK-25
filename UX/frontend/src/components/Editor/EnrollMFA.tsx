@@ -52,16 +52,19 @@ export function EnrollMFA({
     if (wantsToEnroll) {
       (async () => {
         try {
+          setError('')
+          setVerifyError('')
           const { data: listData, error: listError } = await supabase.auth.mfa.listFactors();
-          if (listError) throw new Error('Something went wrong when fetching devices');
+          if (listError) throw listError;
 
           // Only allow one device per user
-          if (listData.totp.length > 0) throw new Error('We only allow one device per user. If you wish to change the device, remove it in the settings beforehand')
+          if (listData.totp.length > 0) throw new Error('We only allow one device per user. If you wish to change the device, log in and remove the active device the settings')
 
           // If the user has started the process, it will be stored until it activates
           if (listData.all[0] && listData.totp.length < 1) {
             setFactorId(listData.all[0].id)
-            const STORED_QR = JSON.parse(sessionStorage.getItem('QR')!)
+            const STORED_QR = JSON.parse(sessionStorage.getItem('QR') ?? '')
+            if (!STORED_QR) throw new Error(`No stored QR was found`)
             return setQR(STORED_QR)
           }
 

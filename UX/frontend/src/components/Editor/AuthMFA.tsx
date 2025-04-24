@@ -48,7 +48,7 @@ function AuthMFA({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        maxWidth: 500,
+        maxWidth: 400,
         m: '5rem auto'
       }}>
       <Typography
