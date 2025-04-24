@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("io.coil-kt:coil-compose:2.6.0") // Or the latest version
 
+    implementation("androidx.compose.material:material:1.6.6")
+
     implementation("io.ktor:ktor-client-core:2.3.7")
     implementation("io.ktor:ktor-client-cio:2.3.7")
     implementation("io.ktor:ktor-client-websockets:2.3.7")

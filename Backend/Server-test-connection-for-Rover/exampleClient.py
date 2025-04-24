@@ -43,7 +43,7 @@ async def receive_messages(websocket):
         print("Connection closed")
 
 async def main():
-    uri = "ws://test.lazyloops.se:80"
+    uri = "wss://terrax9.se"
     async with websockets.connect(uri) as websocket:
         print("Connected to server")
 

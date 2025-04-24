@@ -52,4 +52,8 @@ class GalleryViewModel : ViewModel() {
             .map { it.trim().removeSurrounding("\"") }
             .filter { it.isNotBlank() }
     }
+
+    fun refreshImages() {
+        fetchImages()
+    }
 }
