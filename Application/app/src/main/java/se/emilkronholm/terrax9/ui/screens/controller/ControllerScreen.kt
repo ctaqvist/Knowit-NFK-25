@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -17,15 +18,100 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import se.emilkronholm.terrax9.R
 import se.emilkronholm.terrax9.ui.screens.test.Commands
 import se.emilkronholm.terrax9.ui.theme.AppColors
 
-// This screen is the entry point for the controller dashboard.
+@Composable
+fun UpperDashboard() {
+    val viewModel: ViewModel = ViewModel("rover-001")
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            //Left side
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Off")
+                IconButton(
+                    text = "Lights",
+                    iconRes = R.drawable.settings
+                ) { }
+            }
+
+            // Video
+            VideoStream(modifier = Modifier
+                .weight(3f)
+                .aspectRatio(ratio = 16f / 9f))
+
+            // Buttons
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                IconButton(
+                    text = "Gallery",
+                    iconRes = R.drawable.images
+                ) { }
+
+                IconButton(
+                    text = "Settings",
+                    iconRes = R.drawable.settings
+                ) { }
+            }
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                JoyStick(onMove = { x, y ->
+                    viewModel.onMovement(x, y)
+                })
+                IconButton(text = "Take photo", iconRes = R.drawable.camera) { }
+                JoyStick()
+                JoyStick()
+            }
+        }
+    }
+
+}
+
+@Composable
+fun JoySticks() {
+    // 4 Items (JS, btn, JS, JS)
+}
+
 @Composable
 fun ControllerScreen() {
+    // Upper half
+    UpperDashboard()
+
+
+//    ControllerScreen1()
+    // Lower half
+}
+
+// This screen is the entry point for the controller dashboard.
+@Composable
+fun ControllerScreen1() {
     val viewModel: ViewModel = ViewModel("rover-001")
     Column(
         modifier = Modifier.padding(bottom = 15.dp, start = 80.dp, end = 80.dp)
@@ -36,7 +122,9 @@ fun ControllerScreen() {
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.Center
         ) {
-            VideoStream(modifier = Modifier.fillMaxHeight(0.5f).aspectRatio(ratio = 16f/9f),)
+            VideoStream(modifier = Modifier
+                .fillMaxHeight(0.5f)
+                .aspectRatio(ratio = 16f / 9f))
         }
 
         Text("hej")
@@ -141,5 +229,5 @@ fun VideoStream(
             webChromeClient = WebChromeClient()
             loadUrl("file:///android_asset/stream_player.html")
         }
-    }, modifier = modifier)
+    }, modifier = modifier.border(3.dp, color = Color.White))
 }
