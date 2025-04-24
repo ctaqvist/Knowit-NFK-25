@@ -24,3 +24,11 @@ declare module '@mui/material/Typography' {
     subheading2: true;
   }
 }
+
+// Custom  Components
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    text_contained: true;
+  }
+}

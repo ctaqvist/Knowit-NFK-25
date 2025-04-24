@@ -16,7 +16,7 @@ function Editor() {
   if (loading) return <Spinner />
 
   // If user has enabled MFA + is currently unverified, will be asked to verify
-  if (MFAStatus === null) {
+  if (!MFAStatus) {
     return <EnrollMFA onEnrolled={() => window.location.reload()} />
   } else if (MFAStatus === 'Unverified') {
     return <AuthMFA onSuccess={() => window.location.reload()} />

@@ -1,6 +1,6 @@
 import { supabase } from '@/config/supabase';
 import { useAuth } from '@/hooks/useAuth';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 
 export function EnrollMFA({
@@ -12,15 +12,17 @@ export function EnrollMFA({
   const [qr, setQR] = useState('');
   const [verifyCode, setVerifyCode] = useState('');
   const [error, setError] = useState('');
+  const [verifyError, setVerifyError] = useState('');
   const [wantsToEnroll, setWantsToEnroll] = useState(false)
   const { signOut } = useAuth()
 
   const onEnableClicked = async () => {
     setError('');
+    setVerifyError('')
     try {
       const challenge = await supabase.auth.mfa.challenge({ factorId });
       if (challenge.error) {
-        setError(challenge.error.message);
+        setVerifyError(challenge.error.message);
         return;
       }
 
@@ -34,12 +36,14 @@ export function EnrollMFA({
 
       if (verify.error) {
         await supabase.auth.refreshSession();
-        setError(verify.error.message);
-        return;
+        setVerifyError('Invalid TOTP code entered')
+        throw new Error()
       }
 
+      sessionStorage.removeItem('QR')
       onEnrolled();
     } catch (err: any) {
+      console.error(`Failed to verify MFA: `, err)
       setError(err.message ?? 'Unexpected error');
     }
   };
@@ -48,31 +52,34 @@ export function EnrollMFA({
     if (wantsToEnroll) {
       (async () => {
         try {
-          // First check for any existing unverified factors
           const { data: listData, error: listError } = await supabase.auth.mfa.listFactors();
-          if (listError) throw listError;
+          if (listError) throw new Error('Something went wrong when fetching devices');
 
-          const unverifiedFactor = listData?.all.find(f => f.status === 'unverified' && f.factor_type === 'totp');
+          // Only allow one device per user
+          if (listData.totp.length > 0) throw new Error('We only allow one device per user. If you wish to change the device, remove it in the settings beforehand')
 
-          if (unverifiedFactor) {
-            setFactorId(unverifiedFactor.id);
-            return;
+          // If the user has started the process, it will be stored until it activates
+          if (listData.all[0] && listData.totp.length < 1) {
+            setFactorId(listData.all[0].id)
+            const STORED_QR = JSON.parse(sessionStorage.getItem('QR')!)
+            return setQR(STORED_QR)
           }
 
           // If none exist, attempt to enroll a new one
           const { data: enrollData, error: enrollError } = await supabase.auth.mfa.enroll({
             factorType: 'totp',
             issuer: 'TerraX9',
+            friendlyName: 'Device 1'
           });
-
-
-
 
           if (enrollError) throw enrollError;
 
           setFactorId(enrollData.id);
           setQR(enrollData.totp.qr_code);
+          sessionStorage.setItem('QR', JSON.stringify(enrollData.totp.qr_code))
         } catch (err: any) {
+          setWantsToEnroll(false)
+          console.error(err)
           setError(err.message ?? 'Failed to enroll MFA');
         }
       })();
@@ -86,44 +93,57 @@ export function EnrollMFA({
         flexDirection: 'column',
         width: 'fit-content',
         margin: '5rem auto',
-        p: 4,
+        p: 2,
         gap: 2,
-        maxWidth: 500
       }}
     >
       {
         wantsToEnroll ?
           (
-            <>
-              {error && <Typography variant='body1' color="error">Sorry, there was an issue enabling MFA. Try again later or contact IT support</Typography>}
-              {qr && <img src={qr} alt="QR code unavailable" />}
+            <Stack direction='row' gap={2}>
 
-              <TextField
-                variant="outlined"
-                value={verifyCode}
-                onChange={(e) => setVerifyCode(e.target.value.trim())}
-              />
+              {qr && <img style={{ width: 250, height: 250 }} src={qr} alt="QR code unavailable" />}
+              <Stack sx={{ py: 2, flex: 1, width: 290 }} direction={'column'} gap={2}>
+                {verifyError ? <Typography variant='body2' color="error">{verifyError}</Typography> : <Typography variant='body2'>Enter the code provided by your authenticator app below</Typography>}
+                <TextField
+                  onFocus={() => setVerifyError('')}
+                  variant="outlined"
+                  value={verifyCode}
+                  onChange={(e) => setVerifyCode(e.target.value.trim())}
+                  sx={{
+                    letterSpacing: '4px',
+                    '& .MuiInputBase-root': { fontSize: '1.5rem' }
+                  }}
+                />
 
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <Button type="button" variant="outlined" onClick={onEnableClicked}>
-                  Enable
-                </Button>
-                <Button type="button" variant="outlined" onClick={() => setWantsToEnroll(false)}>
-                  Cancel
-                </Button>
-              </Box>
-
-            </>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button variant="text_contained" onClick={onEnableClicked}>
+                    Enable
+                  </Button>
+                  <Button variant="outlined" onClick={() => setWantsToEnroll(false)}>
+                    Cancel
+                  </Button>
+                </Box>
+              </Stack>
+            </Stack>
           )
           :
-          <>
-            <Typography>We require all administrators to enable Multi-Factor Authentication</Typography>
-            <Box>
-              <Button onClick={() => setWantsToEnroll(true)}>Enable</Button>
-              <Button onClick={signOut}>Cancel</Button>
-            </Box>
-          </>
+
+          error ? (
+            <>
+              <Typography variant='body2' color="error">{error}</Typography>
+              <Button variant='text_contained' onClick={signOut}>Return</Button>
+            </>
+          )
+            :
+            <Stack sx={{ maxWidth: 400, gap: 2 }}>
+              <Typography>We require all administrators to enable Multi-Factor Authentication</Typography>
+              <Stack direction='row' gap={1}>
+                <Button variant='text_contained' onClick={() => setWantsToEnroll(true)}>Enable</Button>
+                <Button variant='outlined' onClick={signOut}>Cancel</Button>
+              </Stack>
+            </Stack>
       }
-    </Box>
+    </Box >
   );
 }

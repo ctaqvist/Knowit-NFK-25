@@ -180,6 +180,14 @@ export const theme = createTheme({
                 },
               },
             },
+            {
+              props: { variant: 'text_contained'},
+              style: {
+                backgroundColor: '#5526FF',
+                color: '#FFF',
+                '&:hover': {backgroundColor: '#3C16C3'}
+              }
+            }
           ],
         },
       },

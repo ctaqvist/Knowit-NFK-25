@@ -67,7 +67,7 @@ function AuthMFA({
       <Box>
         <Button
           sx={{ my: 2, mr: 1 }}
-          variant='outlined'
+          variant='text_contained'
           onClick={handleSubmit}
         >
           Submit
