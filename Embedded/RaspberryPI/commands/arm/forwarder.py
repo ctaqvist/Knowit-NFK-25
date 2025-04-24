@@ -1,4 +1,4 @@
-import json
+Simport json
 from RaspberryPI.config.settings import ROVER_ID
 from RaspberryPI.Robotic_arm.servo_module.functions import move_arm, move_claw
 
@@ -11,7 +11,7 @@ async def forward_arm(arm_data, websocket):
         await websocket.send(json.dumps({
             "rover_id": ROVER_ID,
             "status": "error",
-            "message": "[steer-arm] Invalid x/y values"
+            "message": "[steer_arm] Invalid x/y values"
         }))
         return
 
@@ -33,7 +33,7 @@ async def forward_claw(claw_data, websocket):
         await websocket.send(json.dumps({
             "rover_id": ROVER_ID,
             "status": "error",
-            "message": "[steer-claw] Invalid claw value"
+            "message": "[steer_claw] Invalid claw value"
         }))
         return
 
