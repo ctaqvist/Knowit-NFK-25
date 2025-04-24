@@ -1,5 +1,5 @@
 from time import sleep
-import RPi.GPIO as GPIO # type: ignore
+import RPi.GPIO as GPIO
 def angle_to_duty(angle):
 
     # Mappa vinkeln till duty cycle
@@ -20,14 +20,3 @@ def move_servos(servos, start_angle, end_angle, step=1, delay=0.02):
             servo.ChangeDutyCycle(duty)
         sleep(delay)
     sleep(0.5)
-    
-    # --- Added for forwarder compatibility ---
-def move_arm(x, y):
-    print(f"[DEBUG] move_arm called with x={x}, y={y}")
-    # Example usage: move_servos([servo1, servo2], current_angle, target_angle)
-    pass
-
-def move_claw(value):
-    print(f"[DEBUG] move_claw called with value={value}")
-    # Example usage: move_servos([claw_servo], current_angle, target_angle)
-    pass

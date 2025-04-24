@@ -1,4 +1,4 @@
-import RPi.GPIO as GPIO # type: ignore
+import RPi.GPIO as GPIO
 from servo_module.functions import move_servos
 from time import sleep
 

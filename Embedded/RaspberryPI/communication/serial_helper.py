@@ -23,6 +23,7 @@ class ArduinoConnection:
         print("Could not find Arduino Uno R4 Minima.")
         return None
 
+
     def connect(self):
         while True:
             port = self.find_arduino_port()
@@ -62,6 +63,7 @@ class ArduinoConnection:
             print(f"Error sending to Arduino: {e}")
             return False
 
+
     def read_received_data(self):
         try:
             return self.serial.readline().decode('utf-8').strip()
@@ -71,3 +73,15 @@ class ArduinoConnection:
 
 # Global instance
 arduino = ArduinoConnection()
+
+
+
+
+
+
+
+
+
+
+
+
