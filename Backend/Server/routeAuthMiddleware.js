@@ -10,7 +10,7 @@ function authCheck() {
         const token = req.query.token;
         if (!token) return res.status(401).json({ message: "Access denied!" });
         try {
-            const decoded = jwt.verify(token, SECRET_KEY);
+            jwt.verify(token, SECRET_KEY);
             // Add userId to the request
             req.userId = token.userId;
             next()
