@@ -33,3 +33,6 @@ async def listen_to_server():
                 continue
 
             await process_command(websocket, command, params, arduino)
+            
+            
+            #hej
