@@ -36,7 +36,7 @@ export class PageService {
       };
     } catch (error) {
       console.error('Error when fetching pages: ', error);
-      throw new Error('Error when fetching pages: ', error);
+      throw new Error(`Error when fetching pages`);
     }
   }
 
@@ -51,7 +51,7 @@ export class PageService {
 
       if (error) {
         console.error('Error when fetching page: ', error);
-        throw new Error('Error when fetching page: ', error);
+        throw new Error(`Error when fetching ${page} page`);
       }
 
       //Convert the blob to JSON
@@ -63,7 +63,7 @@ export class PageService {
       };
     } catch (error) {
       console.error('Error when fetching page: ', error);
-      throw new Error('Error when fetching page: ', error);
+      throw new Error(`Error when fetching ${page} page`);
     }
   }
 
@@ -76,7 +76,7 @@ export class PageService {
 
       if (error) {
         console.error('Error when fetching reviews: ', error);
-        throw new Error('Error when fetching reviews', error);
+        throw new Error(`Error when fetching reviews`);
       }
 
       const formattedReview = data?.map((review) => ({
@@ -90,7 +90,7 @@ export class PageService {
       };
     } catch (error) {
       console.error('Error when fetching reviews: ', error);
-      throw new Error('Error when fetching reviews: ', error);
+      throw new Error(`Error when fetching reviews`);
     }
   }
 }
