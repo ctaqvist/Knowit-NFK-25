@@ -1,2 +1,2 @@
 ROVER_ID = "rover-001"
-SERVER_URI = "wss://terrax9.se"
+SERVER_URL = "wss://terrax9.se"

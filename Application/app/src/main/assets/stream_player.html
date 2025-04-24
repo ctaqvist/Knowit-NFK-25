@@ -3,12 +3,19 @@
 <head>
     <title>Live Stream</title>
     <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <style>
         html, body {
           margin: 0;
           padding: 0;
           background: black;
           overflow: hidden;
+        }
+
+      video {
+        max-width: 100%;
+        height: auto;
         }
     </style>
 </head>
@@ -20,7 +27,7 @@
       const player = mpegts.createPlayer({
         type: 'mpegts',
         isLive: true,
-        url: 'ws://test.lazyloops.se:9000'
+        url: 'ws://terrax9.se:9000'
       });
 
       player.attachMediaElement(video);

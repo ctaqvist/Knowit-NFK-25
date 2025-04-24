@@ -20,7 +20,6 @@ float Drive::CalculateHypotenuse() {
 
 // Funktion som beräknar hastigheten för vänster däck
 float Drive::CalculateLeftSpeedFunc() {
-
     float speed = y;
     float turn = x;
 
@@ -36,10 +35,8 @@ float Drive::CalculateLeftSpeedFunc() {
 
 // Funktion som beräknar hastigheten för höger däck
 float Drive::CalculateRightSpeedFunc() {
-
     float speed = y;
     float turn = x;
-
 
     // Ju mer till höger man styr, desto saktare roterar höger däck
     // if turn < 0 (styr höger)
@@ -101,6 +98,5 @@ void Drive::ExecuteDriveLogic() {
             // George_STOPP_PLS
             break;
         }
-    // George (leftSpeed, rightSpeed, dir)
+  // George (leftSpeed, rightSpeed, dir)
 }
-
