@@ -12,4 +12,5 @@ function wsAuthCheck(req) {
     if (!token) throw new Error('No token is provided!');
     return jwt.verify(token, SECRET_KEY);
 }
+
 export default wsAuthCheck
