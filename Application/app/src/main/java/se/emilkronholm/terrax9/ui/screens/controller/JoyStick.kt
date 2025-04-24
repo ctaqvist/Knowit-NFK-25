@@ -1,11 +1,15 @@
 package se.emilkronholm.terrax9.ui.screens.controller
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,10 +20,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import se.emilkronholm.terrax9.R
 import se.emilkronholm.terrax9.ui.theme.AppColors
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
@@ -33,8 +43,8 @@ fun JoyStick(
     isFixed: Boolean = false,
     onMove: (x: Float, y: Float) -> Unit = { _, _ -> }
 ) {
-    val baseSize = 300.dp
-    val knobSize = 120.dp
+    val baseSize = 340.dp
+    val knobSize = 170.dp
 
     // These two values represent a maximum offset the joystick's center can be from it's starting point.
     // VisualOffset should be slightly less than actualOffset as otherwise it is hard to "max out" the speed.
@@ -49,8 +59,13 @@ fun JoyStick(
     Box(
         modifier = Modifier
             .size(baseSize)
-            .clip(CircleShape)
-            .background(AppColors.SecondaryLight)
+            .border(
+                width = 2.dp,
+                color = Color.White,
+                shape = RoundedCornerShape(baseSize)
+            )
+//            .background(color = Color.Cyan)
+            //.border(width = 2.dp, color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 400.dp)))
             .pointerInput(Unit) {
                 detectDragGestures(
                     onDragEnd = {
@@ -75,12 +90,13 @@ fun JoyStick(
             },
         contentAlignment = Alignment.Center
     ) {
-        Box(
+        Image(
+            painter = painterResource(id = R.drawable.joystickcenter),
+            contentDescription = "Joystick center",
             modifier = Modifier
                 .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
                 .size(knobSize)
-                .clip(CircleShape)
-                .background(Color.Black)
+                .zIndex(10f)
         )
     }
 }
@@ -101,4 +117,11 @@ private fun Offset.normalize(maxLength: Float): Offset {
     val normalizedX = (this.x / maxLength).coerceIn(-1f, 1f)
     val normalizedY = (this.y / maxLength).coerceIn(-1f, 1f)
     return Offset(normalizedX, normalizedY)
+}
+
+
+@Preview
+@Composable
+fun JoyStickPreview() {
+    JoyStick()
 }
