@@ -32,11 +32,11 @@ float CalculateBatteryHealth(int analogPin, float Vref)
 
 int CheckBatteryLevel(float current_level)
 {
-  if (current_level <= Warning && current_level > Shutdown_Level)
+  if (current_level <= BATTERY_WARNING_LEVEL && current_level > BATTERY_SHUTDOWN_LEVEL)
   {
     return Battery_Warning;
   }
-  else if (current_level <= Shutdown_Level)
+  else if (current_level <= BATTERY_SHUTDOWN_LEVEL)
   {
     return Battery_Shutdown;
   }
@@ -49,7 +49,7 @@ int CheckBatteryLevel(float current_level)
 void CheckBatteryAndWarn()
 {
   // Current voltage of the battery
-  float voltage = CalculateBatteryHealth(A0, Vref);
+  float voltage = CalculateBatteryHealth(A0, VREF);
 
   // Battery Level
   int level = CheckBatteryLevel(voltage);
@@ -68,7 +68,7 @@ void CheckBatteryAndWarn()
     unsigned long currentTime = millis();
     unsigned long timeSinceLastWarning = currentTime - lastWarningTriggerTime;
     // Så att det triggas igång varje 30 Sekunder
-    if (timeSinceLastWarning >= warningReminder)
+    if (timeSinceLastWarning >= WARNING_REMINDER)
     {
       TriggerWarningSignal(false);
       lastWarningTriggerTime = currentTime;
