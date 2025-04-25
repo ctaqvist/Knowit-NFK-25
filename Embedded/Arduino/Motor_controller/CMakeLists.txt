@@ -24,9 +24,6 @@ add_executable(drive_test
     test/drive_test.cpp
 )
 
-include_directories(test/FakeMotorController)
-
-
 # Link your library with GTest's main; GTest::gtest_main pulls in GTest::gtest and pthreads
 target_link_libraries(drive_test
     PRIVATE
