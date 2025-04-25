@@ -54,8 +54,9 @@ fun UpperDashboard() {
                 Text("Off")
                 IconButton(
                     text = "Lights",
-                    iconRes = R.drawable.settings
-                ) { }
+                    iconRes = R.drawable.lights,
+                    onClick = viewModel::toggleLights
+                )
             }
 
             // Video
@@ -67,7 +68,6 @@ fun UpperDashboard() {
                         3.dp, color = Color.White, shape = RoundedCornerShape(size = 12.dp)
                     )
                     .clip(RoundedCornerShape(24.dp))
-
             )
 
             // Buttons
@@ -80,6 +80,8 @@ fun UpperDashboard() {
                     text = "Gallery",
                     iconRes = R.drawable.images
                 ) { }
+
+                Spacer(modifier = Modifier.padding(16.dp))
 
                 IconButton(
                     text = "Settings",
@@ -97,12 +99,10 @@ fun UpperDashboard() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                JoyStick(onMove = { x, y ->
-                    viewModel.onMovement(x, y)
-                })
-                IconButton(text = "Take photo", iconRes = R.drawable.camera) { }
-                JoyStick()
-                JoyStick()
+                JoyStick(onMove = viewModel::onMovement)
+                IconButton(text = "Take photo", iconRes = R.drawable.camera, onClick = viewModel::takePhoto)
+                JoyStick(onMove = viewModel::onMovement)
+                JoyStick(onMove = viewModel::onMovement)
             }
         }
     }
