@@ -35,4 +35,4 @@ jobs:
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE/Embedded" >> $GITHUB_ENV
 
       - name: Run pytest
-        run: pytest --maxfail=1 --disable-warnings -q
+        run: python -m pytest --maxfail=1 --disable-warnings -q
