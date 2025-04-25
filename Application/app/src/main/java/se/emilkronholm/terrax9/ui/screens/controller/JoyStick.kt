@@ -43,12 +43,12 @@ fun JoyStick(
     isFixed: Boolean = false,
     onMove: (x: Float, y: Float) -> Unit = { _, _ -> }
 ) {
-    val baseSize = 340.dp
-    val knobSize = 170.dp
+    val baseSize = 240.dp
+    val knobSize = 140.dp
 
     // These two values represent a maximum offset the joystick's center can be from it's starting point.
     // VisualOffset should be slightly less than actualOffset as otherwise it is hard to "max out" the speed.
-    val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1.5f).toPx() }
+    val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1f).toPx() }
 
     // 95% of visualOffset, meaning the outer 5% will always be capped to max value in all directions.
     val maxActualOffset = maxVisualOffset * 0.95f
