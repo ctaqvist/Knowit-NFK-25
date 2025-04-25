@@ -6,11 +6,11 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Your stubs folder
-include_directories(src/Jockes_temp/stubs)
+include_directories(src/Calculations/stubs)
 
 # Build your Drive library
 add_library(Drive STATIC
-    src/Jockes_temp/Drive.cpp
+    src/Calculations/Drive.cpp
 )
 
 # Pull in GoogleTest (assumes you have external/googletest checked out)
@@ -36,3 +36,5 @@ add_test(
     NAME DriveTests
     COMMAND drive_test
 )
+
+target_compile_definitions(drive_test PRIVATE TEST_ENVIRONMENT)

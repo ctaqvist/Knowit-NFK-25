@@ -4,6 +4,13 @@
 #include <stdio.h>
 #include "Hardware/Motor/MotorController.h"
 
+/* Följande används för att få till CI tester att passa */
+#ifndef TEST_ENVIRONMENT
+#include "Hardware/Motor/MotorController.h"
+#else
+#include "../../test/mocks/MotorControllerMock.h"
+#endif
+
 using namespace std;
 
 // Hämtar globala instansen av MotorController
@@ -71,11 +78,11 @@ DriveState Drive::GetState() {
    Om state är STOPPED, ska en annan funktion anropas som stoppar motorerna
 */
 void Drive::ExecuteDriveLogic() {
-    float currentSpeed = round(CalculateHypotenuse());
-    float leftSpeed = round(CalculateLeftSpeedFunc());
-    float rightSpeed = round(CalculateRightSpeedFunc());
+    int currentSpeed = round(CalculateHypotenuse());
+    int leftSpeed = round(CalculateLeftSpeedFunc());
+    int rightSpeed = round(CalculateRightSpeedFunc());
     DriveState dir = GetState();
-    printf("Left Speed: %.2f, Right Speed: %.2f\n", leftSpeed, rightSpeed);
+    printf("Left Speed: %d, Right Speed: %d\n", leftSpeed, rightSpeed);
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
         case FORWARD:

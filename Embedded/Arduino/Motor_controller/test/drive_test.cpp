@@ -1,6 +1,9 @@
 #include "gtest/gtest.h"
-#include "../src/Jockes_temp/Drive.h"
+#include "../src/Calculations/Drive.h"
 #include <cmath>
+// Inkludera mock istället för riktiga MotorController
+#include "mocks/MotorControllerMock.h"
+
 using namespace std;
 
 string stateToString(DriveState state) {
