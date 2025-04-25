@@ -3,25 +3,24 @@
 
 #include <iostream>
 
-// En fake MotorController som bara loggar anrop
 class MotorController {
-  public:
-    MotorController() {}
+public:
+    MotorController () {}
     void DriveForward(int leftSpeed, int rightSpeed) {
-        std::cout << "Mock DriveForward called\n";
+        std::cout << "Mock DriveForward: " << leftSpeed << ", " << rightSpeed << std::endl;
     }
     void DriveBackward(int leftSpeed, int rightSpeed) {
-        std::cout << "Mock DriveBackward called\n";
+        std::cout << "Mock DriveBackward: " << leftSpeed << ", " << rightSpeed << std::endl;
     }
     void MakeTankTurnLeft(int speed) {
-        std::cout << "Mock MakeTankTurnLeft called\n";
+        std::cout << "Mock TankTurnLeft: " << speed << std::endl;
     }
     void MakeTankTurnRight(int speed) {
-        std::cout << "Mock MakeTankTurnRight called\n";
+        std::cout << "Mock TankTurnRight: " << speed << std::endl;
     }
     void StopMotors() {
-        std::cout << "Mock StopMotors called\n";
+        std::cout << "Mock StopMotors\n";
     }
 };
 
-#endif // MOTOR_CONTROLLER_MOCK_H
+#endif

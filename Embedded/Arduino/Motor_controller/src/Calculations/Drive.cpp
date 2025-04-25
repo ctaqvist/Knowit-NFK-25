@@ -1,17 +1,15 @@
-//#include <iostream>
 #include <math.h>
 #include "Drive.h"
 #include <stdio.h>
-#include "Hardware/Motor/MotorController.h"
 
-/* Följande används för att få till CI tester att passa */
-#ifndef TEST_ENVIRONMENT
-#include "Hardware/Motor/MotorController.h"
-#else
+#ifdef TEST_ENVIRONMENT
 #include "../../test/mocks/MotorControllerMock.h"
+#else
+#include "Hardware/Motor/MotorController.h"
 #endif
 
 using namespace std;
+
 
 // Hämtar globala instansen av MotorController
 extern MotorController motorController;
