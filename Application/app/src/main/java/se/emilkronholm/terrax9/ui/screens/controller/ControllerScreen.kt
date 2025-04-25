@@ -27,13 +27,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import se.emilkronholm.terrax9.R
+import se.emilkronholm.terrax9.Routes
 import se.emilkronholm.terrax9.ui.screens.test.Commands
 import se.emilkronholm.terrax9.ui.theme.AppColors
 
 @Composable
-fun UpperDashboard() {
-    val viewModel: ViewModel = ViewModel("rover-001")
+fun UpperDashboard(navController: NavController) {
+    val viewModel: ViewModel = viewModel()
+    val isLighted by viewModel.isLighted.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
@@ -51,7 +56,7 @@ fun UpperDashboard() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
             ) {
-                Text("Off")
+                Text(if (isLighted) "ON" else "OFF")
                 IconButton(
                     text = "Lights",
                     iconRes = R.drawable.lights,
@@ -79,7 +84,9 @@ fun UpperDashboard() {
                 IconButton(
                     text = "Gallery",
                     iconRes = R.drawable.images
-                ) { }
+                ) {
+                    navController.navigate(Routes.Gallery)
+                }
 
                 Spacer(modifier = Modifier.padding(16.dp))
 
@@ -115,21 +122,21 @@ fun JoySticks() {
 }
 
 @Composable
-fun ControllerScreen() {
+fun ControllerScreen(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(R.drawable.backgroundpicture),
             contentDescription = null,
             contentScale = ContentScale.Crop,
         )
-        UpperDashboard()
+        UpperDashboard(navController)
     }
 }
 
 // This screen is the entry point for the controller dashboard.
 @Composable
 fun ControllerScreen1() {
-    val viewModel: ViewModel = ViewModel("rover-001")
+    val viewModel: ViewModel = viewModel()
     Column(
         modifier = Modifier.padding(bottom = 15.dp, start = 80.dp, end = 80.dp)
     ) {

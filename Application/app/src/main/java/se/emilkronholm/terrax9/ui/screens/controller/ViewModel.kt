@@ -6,15 +6,18 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import se.emilkronholm.terrax9.services.DataService
 import se.emilkronholm.terrax9.ui.screens.test.Commands
 
-class ViewModel(roverID: String) : ViewModel() {
+class ViewModel() : ViewModel() {
     val dataService = DataService("terrax9.se")
     var job: Job? = null
-    var isLighted by mutableStateOf<Boolean>(true)
+
+    private val _isLighted = MutableStateFlow(true)
+    val isLighted: StateFlow<Boolean> = _isLighted
 
     fun onMovement(x: Float, y: Float) {
         // WARNING: Blocks UI
@@ -41,12 +44,13 @@ class ViewModel(roverID: String) : ViewModel() {
     // Helpers
     fun takePhoto() = sendCommand(Commands.takePicture())
     fun toggleLights() {
-        isLighted = !isLighted
+        _isLighted.value = !_isLighted.value
+        println(_isLighted.value)
 
-        if (isLighted) {
-            sendCommand(Commands.closeHeadlights())
-        } else {
-            sendCommand(Commands.startHeadlights())
-        }
+//        if (_isLighted.value) {
+//            sendCommand(Commands.closeHeadlights())
+//        } else {
+//            sendCommand(Commands.startHeadlights())
+//        }
     }
 }
