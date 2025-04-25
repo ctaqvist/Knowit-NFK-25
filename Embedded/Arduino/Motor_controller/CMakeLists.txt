@@ -26,15 +26,11 @@ add_executable(drive_test
 
 include_directories(test/FakeMotorController)
 
-add_library(FakeMotorController STATIC
-    test/FakeMotorController/FakeMotorController.cpp
-)
 
 # Link your library with GTest's main; GTest::gtest_main pulls in GTest::gtest and pthreads
 target_link_libraries(drive_test
     PRIVATE
         Drive
-        FakeMotorController
         GTest::gtest_main
 )
 
