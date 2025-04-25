@@ -1,8 +1,8 @@
 import json
 import websockets
 from config.settings import ROVER_ID, SERVER_URL
-from commands.handler import *
-from commands.forwarder import *
+from Embedded.RaspberryPI.commands.rover.handler import *
+from Embedded.RaspberryPI.commands.rover.forwarder import *
 
 # Main async function to listen to server commands
 async def listen_to_server():
@@ -33,3 +33,6 @@ async def listen_to_server():
                 continue
 
             await process_command(websocket, command, params, arduino)
+            
+            
+            #hej
