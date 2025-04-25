@@ -1,7 +1,7 @@
 from ..camera.picture import *
 from ..camera.stream import *
 from .lights import *
-from Embedded.RaspberryPI.commands.rover.forwarder import *
+from .forwarder import *
 
 # This function processes incoming commands sent over a WebSocket connection.
 async def process_command(websocket, command, params):
