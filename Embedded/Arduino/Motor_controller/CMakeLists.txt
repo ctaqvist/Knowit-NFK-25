@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Your stubs folder
-include_directories(src/Calculations/stubs)
+include_directories(test/FakeArduino/Arduino)
 
 # Build your Drive library
 add_library(Drive STATIC
