@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,14 +45,13 @@ fun IconButton(
                     ),
                     shape = RoundedCornerShape(20.dp)
                 )
-                .width(118.dp)
+                .size(95.dp)
                 .border(
                     width = 1.dp,
                     color = Color(0xFFFFFFFF),
                     shape = RoundedCornerShape(size = 20.dp)
                 )
-                .height(118.dp)
-                .padding(start = 35.dp, top = 35.dp, end = 35.dp, bottom = 35.dp)
+                .padding(25.dp)
         )
         Text(text = text, color = Color.White)
     }
