@@ -2,7 +2,7 @@
 #include <math.h>
 #include "Drive.h"
 #include <stdio.h>
-#include "../Hardware/Motor/MotorController.h"
+#include "Hardware/Motor/MotorController.h"
 
 using namespace std;
 
