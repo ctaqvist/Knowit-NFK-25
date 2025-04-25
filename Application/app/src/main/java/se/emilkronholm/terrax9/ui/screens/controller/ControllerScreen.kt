@@ -3,10 +3,12 @@ package se.emilkronholm.terrax9.ui.screens.controller
 import android.annotation.SuppressLint
 import android.webkit.WebChromeClient
 import android.webkit.WebView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Close
@@ -18,8 +20,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import se.emilkronholm.terrax9.R
@@ -30,11 +35,12 @@ import se.emilkronholm.terrax9.ui.theme.AppColors
 fun UpperDashboard() {
     val viewModel: ViewModel = ViewModel("rover-001")
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center
     ) {
         Row(
             modifier = Modifier
-                .fillMaxHeight(0.5f)
+                .fillMaxHeight(0.6f)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
@@ -53,9 +59,16 @@ fun UpperDashboard() {
             }
 
             // Video
-            VideoStream(modifier = Modifier
-                .weight(3f)
-                .aspectRatio(ratio = 16f / 9f))
+            VideoStream(
+                modifier = Modifier
+                    .weight(3f)
+                    .aspectRatio(ratio = 16f / 9f)
+                    .border(
+                        3.dp, color = Color.White, shape = RoundedCornerShape(size = 12.dp)
+                    )
+                    .clip(RoundedCornerShape(24.dp))
+
+            )
 
             // Buttons
             Column(
@@ -80,7 +93,9 @@ fun UpperDashboard() {
             verticalArrangement = Arrangement.Bottom
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 JoyStick(onMove = { x, y ->
                     viewModel.onMovement(x, y)
@@ -101,12 +116,14 @@ fun JoySticks() {
 
 @Composable
 fun ControllerScreen() {
-    // Upper half
-    UpperDashboard()
-
-
-//    ControllerScreen1()
-    // Lower half
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            painter = painterResource(R.drawable.backgroundpicture),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+        )
+        UpperDashboard()
+    }
 }
 
 // This screen is the entry point for the controller dashboard.
@@ -122,9 +139,11 @@ fun ControllerScreen1() {
             verticalAlignment = Alignment.Bottom,
             horizontalArrangement = Arrangement.Center
         ) {
-            VideoStream(modifier = Modifier
-                .fillMaxHeight(0.5f)
-                .aspectRatio(ratio = 16f / 9f))
+            VideoStream(
+                modifier = Modifier
+                    .fillMaxHeight(0.5f)
+                    .aspectRatio(ratio = 16f / 9f)
+            )
         }
 
         Text("hej")
@@ -212,22 +231,26 @@ fun VideoStream(
 //    viewModel: se.emilkronholm.terrax9.ui.screens.test.ViewModel,
     modifier: Modifier = Modifier
 ) {
-    AndroidView(factory = { context ->
-        WebView(context).apply {
-            // I have not yet experimented with these settings
-            settings.apply {
-                javaScriptEnabled = true
-                mediaPlaybackRequiresUserGesture = false
-                setSupportZoom(true)
-                builtInZoomControls = true
-                displayZoomControls = false
-                loadWithOverviewMode = true
-                useWideViewPort = true
+    Box(
+        modifier = modifier
+    ) {
+        AndroidView(factory = { context ->
+            WebView(context).apply {
+                // I have not yet experimented with these settings
+                settings.apply {
+                    javaScriptEnabled = true
+                    mediaPlaybackRequiresUserGesture = false
+                    setSupportZoom(true)
+                    builtInZoomControls = true
+                    displayZoomControls = false
+                    loadWithOverviewMode = true
+                    useWideViewPort = true
+                }
+                settings.javaScriptEnabled = true
+                settings.mediaPlaybackRequiresUserGesture = false
+                webChromeClient = WebChromeClient()
+                loadUrl("file:///android_asset/stream_player.html")
             }
-            settings.javaScriptEnabled = true
-            settings.mediaPlaybackRequiresUserGesture = false
-            webChromeClient = WebChromeClient()
-            loadUrl("file:///android_asset/stream_player.html")
-        }
-    }, modifier = modifier.border(3.dp, color = Color.White))
+        })
+    }
 }
