@@ -29,3 +29,7 @@ inline void Serial_println(char val, int base) {}
 inline void millis() {}
 inline void Serial_read() {}
 inline void Serial_available() {}
+inline void Serial_print(int val) {}
+inline void Serial_print(float val) {}
+inline void Serial_print(char val) {}
+inline void Serial_println() {}
