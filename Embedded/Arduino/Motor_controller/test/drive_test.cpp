@@ -84,20 +84,21 @@ TEST(DriveTest, GetStateBackward) {
     std::cout << "Expected output: " << expected << "\nActual output: " << actual << std::endl;
     EXPECT_EQ(drive.GetState(), BACKWARD) << "Expected BACKWARD when (x=0, y=-1)";
 }
-
 // Testfall för Algorithm()-funktionen med capture av stdout
 TEST(DriveTest, AlgorithmPrintsForward) {
     Drive drive(0.0f, 1.0f);
     testing::internal::CaptureStdout();
     drive.ExecuteDriveLogic();
     std::string output = testing::internal::GetCapturedStdout();
-    // Den förväntade utskriften
-    std::string expected = "Left Speed: 1.00, Right Speed: 1.00\nState: GO FWD\n";
-    std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
-    
-    // Assertion
+
+    // Anpassat för heltals‐utskrift + mock‐rad
+    std::string expected =
+        "Left Speed: 1, Right Speed: 1\n"
+        "State: GO FWD\n"
+        "Mock DriveForward: 1, 1\n";
+
     EXPECT_EQ(output, expected)
-        << "Expected state: " << expected << ", but got: " << output;
+        << "Expected:\n" << expected << "\nbut got:\n" << output;
 }
 
 // ska ge BACKWARD.
@@ -106,27 +107,32 @@ TEST(DriveTest, AlgorithmPrintsBackward) {
     testing::internal::CaptureStdout();
     drive.ExecuteDriveLogic();
     std::string output = testing::internal::GetCapturedStdout();
-    // Den förväntade utskriften
-    std::string expected = "Left Speed: -1.00, Right Speed: -1.00\nState: GO BWD\n";
-    std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
-    
-    // Assertion
+
+    // Anpassat för heltals‐utskrift + mock‐rad
+    std::string expected =
+        "Left Speed: -1, Right Speed: -1\n"
+        "State: GO BWD\n"
+        "Mock DriveBackward: -1, -1\n";
+
     EXPECT_EQ(output, expected)
-        << "Expected state: " << expected << ", but got: " << output;
+        << "Expected:\n" << expected << "\nbut got:\n" << output;
 }
-//ska ge STOPPED
+
+// ska ge STOPPED
 TEST(DriveTest, AlgorithmPrintsSTOPPED) {
     Drive drive(0.0f, 0.0f);
     testing::internal::CaptureStdout();
     drive.ExecuteDriveLogic();
     std::string output = testing::internal::GetCapturedStdout();
-    // Den förväntade utskriften
-    std::string expected = "Left Speed: 0.00, Right Speed: 0.00\nState: STOPPED\n";
-    std::cout << "Expected state: " << expected << "\nActual state: " << output << std::endl;
-    
-    // Assertion
+
+    // Anpassat för heltals‐utskrift + mock‐rad
+    std::string expected =
+        "Left Speed: 0, Right Speed: 0\n"
+        "State: STOPPED\n"
+        "Mock StopMotors\n";
+
     EXPECT_EQ(output, expected)
-        << "Expected state: " << expected << ", but got: " << output;
+        << "Expected:\n" << expected << "\nbut got:\n" << output;
 }
 
 int main(int argc, char **argv) {

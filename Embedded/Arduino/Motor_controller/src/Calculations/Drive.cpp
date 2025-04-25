@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 #ifdef TEST_ENVIRONMENT
-#include "../../test/mocks/MotorControllerMock.h"
+#include "MotorControllerMock.h"
 #else
 #include "Hardware/Motor/MotorController.h"
 #endif
