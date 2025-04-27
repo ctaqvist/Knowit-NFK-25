@@ -20,7 +20,7 @@ import se.emilkronholm.terrax9.Routes
 
 @Composable
 fun ControllerScreen(navController: NavController) {
-    val viewModel: ViewModel = viewModel()
+    val viewModel: ControllerViewModel = viewModel()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -40,7 +40,7 @@ fun ControllerScreen(navController: NavController) {
 }
 
 @Composable
-fun UpperDashboard(viewModel: ViewModel, navController: NavController) {
+fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController) {
     val isLighted by viewModel.isLighted.collectAsState()
 
     Row(
@@ -100,7 +100,7 @@ fun UpperDashboard(viewModel: ViewModel, navController: NavController) {
 }
 
 @Composable
-fun BottomDashboard(viewModel: ViewModel) {
+fun BottomDashboard(viewModel: ControllerViewModel) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Bottom

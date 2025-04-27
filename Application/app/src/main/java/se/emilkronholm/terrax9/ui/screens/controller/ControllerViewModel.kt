@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import se.emilkronholm.terrax9.services.DataService
 import se.emilkronholm.terrax9.services.Commands
 
-class ViewModel() : ViewModel() {
+class ControllerViewModel() : ViewModel() {
     private val dataService = DataService("terrax9.se")
     private var job: Job? = null
 
