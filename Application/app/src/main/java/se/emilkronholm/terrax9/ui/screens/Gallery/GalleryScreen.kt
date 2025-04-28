@@ -1,12 +1,13 @@
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -28,7 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -38,6 +41,7 @@ import se.emilkronholm.terrax9.ui.screens.Gallery.GalleryViewModel
 @Composable
 fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
     val imageUrls by viewModel.imageUrls.collectAsState()
+    val imageGroups by viewModel.imageGroups.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val gridState = rememberLazyGridState()
@@ -87,25 +91,43 @@ fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
             }
 
             else -> {
+                val (others, sortedGroups) = imageGroups.partition { it.title == "Others" }
+                val sortedImageGroups = sortedGroups + others
+
                 LazyVerticalGrid(
-                    state = gridState,
                     columns = GridCells.Fixed(5),
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(10.dp),
+                    state = gridState,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    items(imageUrls) { imageUrl ->
-                        HttpImage(
-                            url = imageUrl,
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .fillMaxWidth()
-                        )
+                    sortedImageGroups.forEach { group ->
+                        // full-width header
+                        item(span = { GridItemSpan(maxLineSpan) }) {
+                            Text(
+                                text = group.title,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                            )
+                        }
+                        // then all the images in that group
+                        items(group.images) { url ->
+                            HttpImage(
+                                url = url,
+                                modifier = Modifier
+                                    .aspectRatio(1f)
+                                    .fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }
         }
+
         PullRefreshIndicator(
             refreshing = refreshing,
             state = pullRefreshState,
