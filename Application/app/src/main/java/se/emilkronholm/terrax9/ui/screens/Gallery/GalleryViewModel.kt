@@ -6,11 +6,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import android.util.Log
 import se.emilkronholm.terrax9.services.APIService
 
 class GalleryViewModel : ViewModel() {
-    private val APIService = APIService()
+    private val apiService = APIService()
 
     private val url = "https://terrax9.se/images/"
 
@@ -46,11 +47,10 @@ class GalleryViewModel : ViewModel() {
     }
 
     private fun fetchImageUrls(url: String): List<String> {
-        val responseBody = APIService.sendHttpRequester(url)
+        val responseBody = apiService.sendHttpRequester(url)
         Log.d("HttpImageUrlsResponse", responseBody)
-        return responseBody.trim().removeSurrounding("[", "]").split(",")
-            .map { it.trim().removeSurrounding("\"") }
-            .filter { it.isNotBlank() }
+
+        return Json.decodeFromString(responseBody)
     }
 
     fun refreshImages() {
