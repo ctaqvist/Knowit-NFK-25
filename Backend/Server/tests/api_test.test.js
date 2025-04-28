@@ -32,32 +32,17 @@ describe('Terrax9 API', () => {
 
 describe('Terrax9 communication test', () => {
     it('test connect with bad token', (done) => {
-        const badToken = 'thisIsInvalidToken';
+        // Connect to server
+        const ws = new WebSocket(`ws://localhost:8080/?token="bad-and-stupid-token"`);
 
-        // Connect to WebSocket server with token in URL
-        const ws = new WebSocket(`ws://localhost:3000/?token=${badToken}`);
-
-        ws.on('open', () => {
-            console.log('Connected to WebSocket server');
-
-            // Here depending on server logic, maybe server closes if token bad
+        // The connection should close immideatly
+        ws.on('close', (code) => {
+            expect(code).toBe(4001);
+            done();
         });
+    });
 
-        ws.on('message', (message) => {
-            console.log('Received:', message.toString());
-        });
+    it('test send pic, server should save image', (done) => {
 
-        ws.on('close', (code, reason) => {
-            console.log('Connection closed:', code, reason.toString());
-
-            // If your server closes for bad token, you can expect a close code
-            expect(code).toBe(4001); // or whatever your server sends for auth failure
-            done(); // Tell Jest test is done
-        });
-
-        ws.on('error', (error) => {
-            console.error('WebSocket error:', error);
-            done(error); // fail test if error
-        });
     });
 });
