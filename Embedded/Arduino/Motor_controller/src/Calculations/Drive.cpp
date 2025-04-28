@@ -1,11 +1,18 @@
-#include <iostream>
-#include <cmath>
+#include <math.h>
 #include "Drive.h"
 #include <stdio.h>
 
+#ifdef TEST_ENVIRONMENT
+#include "MotorControllerMock.h"
+#else
+#include "Hardware/Motor/MotorController.h"
+#endif
+
 using namespace std;
 
-//Jockes
+
+// Hämtar globala instansen av MotorController
+extern MotorController motorController;
 
 Drive::Drive(float x, float y) {
     this -> x = x;
@@ -15,19 +22,17 @@ Drive::Drive(float x, float y) {
 // Funktion som beräknar hypotenusan
 // returnerar sqrt(x^2 + y^2)
 float Drive::CalculateHypotenuse() {
-    return ( sqrt( x * x + y * y ));
+    return (sqrt( x * x + y * y ));
 }
 
 // Funktion som beräknar hastigheten för vänster däck
 float Drive::CalculateLeftSpeedFunc() {
     float speed = y;
     float turn = x;
-
     // Ju mer till vänster man styr, desto saktare roterar vänster däck
     // if turn < 0 (styr vänster)
     // left_speed = speed * (1.0 - turn)
     float leftSpeed = speed * (1.0f + (turn < 0 ? turn : 0));
-
     // Begränsar hastigheten till [-1, 1]
     leftSpeed = fmaxf(-1.0f, fminf(1.0f, leftSpeed));
     return leftSpeed;
@@ -37,28 +42,31 @@ float Drive::CalculateLeftSpeedFunc() {
 float Drive::CalculateRightSpeedFunc() {
     float speed = y;
     float turn = x;
-
     // Ju mer till höger man styr, desto saktare roterar höger däck
     // if turn < 0 (styr höger)
     // right_speed = speed * (1.0 - turn)
     float rightSpeed = speed * (1.0f - (turn > 0 ? turn : 0));
-
     // Begränsar hastigheten till [-1, 1]
     rightSpeed = fmaxf(-1.0f, fminf(1.0f, rightSpeed));
     return rightSpeed;
 }
 
 DriveState Drive::GetState() {
-    if (y > 0 && x == 0)
+    if (y > 0 && x == 0) {
         return FORWARD;
-    else if (y < 0 && x == 0)
+    }
+    else if (y < 0 && x == 0) {
         return BACKWARD;
-    else if (y == 0 && x > 0)
+    }
+    else if (y == 0 && x > 0) {
         return TTR;
-    else if (y == 0 && x < 0)
+    }
+    else if (y == 0 && x < 0) {
         return TTL;
-    else
+    }
+    else {
         return STOPPED;
+    }
 }
 
 /* Denna funktion kommer att kommunicera med MotorController för att styra Rovern 
@@ -68,35 +76,32 @@ DriveState Drive::GetState() {
    Om state är STOPPED, ska en annan funktion anropas som stoppar motorerna
 */
 void Drive::ExecuteDriveLogic() {
-    float currentSpeed = CalculateHypotenuse();
-    float leftSpeed = CalculateLeftSpeedFunc();
-    float rightSpeed = CalculateRightSpeedFunc();
+    int currentSpeed = round(CalculateHypotenuse());
+    int leftSpeed = round(CalculateLeftSpeedFunc());
+    int rightSpeed = round(CalculateRightSpeedFunc());
     DriveState dir = GetState();
-
-    printf("Left Speed: %.2f, Right Speed: %.2f\n", leftSpeed, rightSpeed);
-
+    printf("Left Speed: %d, Right Speed: %d\n", leftSpeed, rightSpeed);
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
         case FORWARD:
             printf("State: GO FWD\n");
-            // George (leftSpeed, rightSpeed, dir)
+            motorController.DriveForward(leftSpeed, rightSpeed);
             break;
         case BACKWARD:
             printf("State: GO BWD\n");
-            // George (leftSpeed, rightSpeed, dir)
+            motorController.DriveBackward(leftSpeed, rightSpeed);
             break;
         case TTR:
             printf("State: TTR\n");
-            // George_TT (currentSpeed,dir)
+            motorController.MakeTankTurnRight(currentSpeed);
             break;
         case TTL:
             printf("State: TTL\n");
-            // George_TT (currentSpeed,dir)
+            motorController.MakeTankTurnLeft(currentSpeed);
             break;
         default:
             printf("State: STOPPED\n");
-            // George_STOPP_PLS
+            motorController.StopMotors();
             break;
-        }
-  // George (leftSpeed, rightSpeed, dir)
+    }
 }
