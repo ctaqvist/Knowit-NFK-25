@@ -20,3 +20,11 @@ def move_servos(servos, start_angle, end_angle, step=1, delay=0.02):
             servo.ChangeDutyCycle(duty)
         sleep(delay)
     sleep(0.5)
+    
+def move_arm(x, y):
+    # your implementation
+    pass
+
+def move_claw(claw_value):
+    # your implementation
+    pass
