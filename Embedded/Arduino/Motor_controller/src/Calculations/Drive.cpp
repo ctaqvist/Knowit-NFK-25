@@ -76,9 +76,9 @@ DriveState Drive::GetState() {
    Om state är STOPPED, ska en annan funktion anropas som stoppar motorerna
 */
 void Drive::ExecuteDriveLogic() {
-    int currentSpeed = round(CalculateHypotenuse());
-    int leftSpeed = round(CalculateLeftSpeedFunc());
-    int rightSpeed = round(CalculateRightSpeedFunc());
+    int currentSpeed = round(CalculateHypotenuse()*255);
+    int leftSpeed = round(CalculateLeftSpeedFunc()*255);
+    int rightSpeed = round(CalculateRightSpeedFunc()*255);
     DriveState dir = GetState();
     printf("Left Speed: %d, Right Speed: %d\n", leftSpeed, rightSpeed);
     // Skriver ut states, beroende på x och y (for testing)
