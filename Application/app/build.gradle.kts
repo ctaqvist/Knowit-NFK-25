@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+    implementation("androidx.compose.material:material:1.6.6")
 
     implementation("io.ktor:ktor-client-core:2.3.7")
     implementation("io.ktor:ktor-client-cio:2.3.7")
@@ -60,6 +63,10 @@ dependencies {
     implementation("com.google.accompanist:accompanist-flowlayout:0.36.0")
     implementation(libs.androidx.navigation.runtime.android)
     implementation(libs.androidx.navigation.compose)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

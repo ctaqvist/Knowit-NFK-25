@@ -43,7 +43,9 @@ async def receive_messages(websocket):
         print("Connection closed")
 
 async def main():
+
     uri = URI
+    
     async with websockets.connect(uri) as websocket:
         print("Connected to server")
 
