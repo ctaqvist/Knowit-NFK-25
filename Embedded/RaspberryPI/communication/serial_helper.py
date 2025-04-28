@@ -1,5 +1,3 @@
-
-# --- make serial optional ---
 try:
     import serial
     import serial.tools.list_ports
