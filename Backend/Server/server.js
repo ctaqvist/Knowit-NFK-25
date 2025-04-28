@@ -1,7 +1,7 @@
-import expressApp from "./router.js";
-import initializeWebSocketServer from "./websocketServer.js";
+import expressApp from "./api/app.js"
+import initializeWebSocketServer from "./communication/websocketServer.js"
+import startStreamingServer from "./streaming/streamingServer.js";
 import http from "http";
-import startStreamingServer from "./streamingServer.js";
 
 // Create node server based on express
 const httpPort = 8080;
