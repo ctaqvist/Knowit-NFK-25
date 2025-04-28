@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Definiera TEST_ENVIRONMENT som en CMake‐option
-option(TEST_ENVIRONMENT "Build for test environment (mock Arduino hardware)" OFF)
+option(TEST_ENVIRONMENT "Build for test environment (mock Arduino hardware)" ON)
 
 # Alltid med i sökvägar
 include_directories(${CMAKE_SOURCE_DIR}/src)
