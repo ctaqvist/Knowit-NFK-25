@@ -1,6 +1,6 @@
 import json
-from communication.serial_helper import arduino
-from config.settings import ROVER_ID
+from RaspberryPI.communication.serial_helper import arduino
+from RaspberryPI.config.settings import ROVER_ID
 
 # This function handles light-related commands sent to the rover.
 # It receives commands over a WebSocket and sends the appropriate instructions to the Arduino.
