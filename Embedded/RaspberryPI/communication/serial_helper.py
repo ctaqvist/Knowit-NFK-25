@@ -81,5 +81,6 @@ class ArduinoConnection:
             print(f"Error reading: {e}; reconnecting...")
             return ""
 
-# global instance
+# Global instance
+
 arduino = ArduinoConnection()
