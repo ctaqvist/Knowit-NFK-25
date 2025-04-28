@@ -71,3 +71,4 @@ class ArduinoConnection:
 
 # Global instance
 arduino = ArduinoConnection()
+#hej
