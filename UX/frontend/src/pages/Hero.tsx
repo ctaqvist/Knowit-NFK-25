@@ -20,31 +20,44 @@ function Hero() {
         // Banner Section
         component='section'
         id='hero_banner'
-        sx={{ height: 1000 }}>
-
-        {/* Video */}
-        <Box sx={{ position: 'relative' }}>
-          <video autoPlay loop muted style={{ width: '100%' }} src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images//hero_banner.mp4`} />
-          <Box aria-hidden='true'
-            sx={{ height: 150, width: '100%', background: 'linear-gradient(0deg, #05030C, rgba(0,0,0,0))', position: 'absolute', bottom: 0 }} />
+        sx={{ height: 1000 }}
+      >
+        <Box sx={{ position: 'relative', height: '100%' }}>
+          <img
+            style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
+            src={`${import.meta.env.VITE_SUPABASE_URL
+              }/storage/v1/object/public/images//hero_banner.png`}
+          />
+          <Box
+            aria-hidden='true'
+            sx={{
+              height: 150,
+              width: '100%',
+              background: 'linear-gradient(0deg, #05030C, rgba(0,0,0,0))',
+              position: 'absolute',
+              bottom: 0,
+            }}
+          />
         </Box>
 
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: { xs: 'center', sm: 'center', md: 'end' },
+            alignItems: { xs: 'center', sm: 'center', md: 'start' },
             margin: '0 auto',
             width: 'clamp(200px, 80vw, 1276px)',
-            textAlign: { xs: 'center', sm: 'center', md: 'end' },
-            position: 'absolute', top: 479, right: 'clamp(5vw, 10vw, 321px)'
+            textAlign: { xs: 'center', sm: 'center', md: 'start' },
+            position: 'absolute',
+            top: 479,
+            right: 'clamp(5vw, 10vw, 321px)',
           }}
         >
           <Typography
             variant='h1'
             color='text.primary'
           >
-            {pages?.hero?.banner?.heading?.value ?? 'Seamless Pickup, Beyond Planets'}
+            TERRA-X9 Interplanetary Rover
           </Typography>
           <Typography
             variant='body1'
@@ -64,8 +77,111 @@ function Hero() {
           <Button variant='contained'>Discover more</Button>
         </Box>
       </Box>
+      {/* Reviews section */}
       <Box
-        // Interested in purchasing Section
+        component='section'
+        id='reviews'
+        position='relative'
+        sx={{
+          backgroundImage:
+            'url("https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images//gabriele-garanzelli-PzO_CitnJdI-unsplash%201-3%203.png")',
+          height: 1080,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box
+          // Decorative element top
+          role='presentation'
+          sx={{
+            height: 151,
+            background:
+              'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.51) 25.48%, rgba(5, 3, 12, 0.83) 59.13%, #05030C 98.08%)',
+          }}
+        />
+
+        <Box>
+          <Typography
+            variant='h2'
+            sx={{ textAlign: 'center', mb: '114px' }}
+          >
+            Our clients reviews
+          </Typography>
+          <Box
+            sx={{
+              gap: '30px',
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'relative',
+            }}
+          >
+            <Box
+              // Decorative element left
+              aria-hidden='true'
+              sx={{
+                width: '20vw',
+                height: '100%',
+                background:
+                  'linear-gradient(-90deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.53) 24.04%, rgba(5, 3, 12, 0.83) 43.75%, #05030C 76.92%)',
+                position: 'absolute',
+                left: 0,
+                zIndex: 3,
+              }}
+            />
+
+            <Marquee
+              pauseOnHover={true}
+              className='w-full p-0 pt-1'
+            >
+              {firstRow?.map((review) => (
+                <ReviewCard
+                  key={review.client}
+                  review={review}
+                />
+              ))}
+            </Marquee>
+            <Marquee
+              pauseOnHover={true}
+              className='w-full p-0 pb-1'
+              reverse={true}
+            >
+              {secondRow?.map((review) => (
+                <ReviewCard
+                  key={review.client}
+                  review={review}
+                />
+              ))}
+            </Marquee>
+            <Box
+              // Decorative element right
+              role='presentation'
+              sx={{
+                width: '20vw',
+                maxWidth: 428,
+                height: '100%',
+                background:
+                  'linear-gradient(90deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.53) 24.04%, rgba(5, 3, 12, 0.83) 43.75%, #05030C 76.92%)',
+                position: 'absolute',
+                right: 0,
+                zIndex: 3,
+              }}
+            />
+          </Box>
+        </Box>
+        <Box
+          // Decorative element
+          aria-hidden='true'
+          sx={{
+            height: 151,
+            background:
+              'linear-gradient(180deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.51) 25.48%, rgba(5, 3, 12, 0.83) 59.13%, #05030C 98.08%)',
+          }}
+        />
+      </Box>
+
+      {/* Interested In Purchasing Section */}
+      <Box
         component='section'
         id='interested_in_purchasing'
         sx={{ height: 999, position: 'relative' }}
@@ -135,116 +251,21 @@ function Hero() {
               variant='h2'
               color='text.main'
             >
-              Interested in purchasing?
+              Curious about what’s next?
             </Typography>
             <Typography
               variant='body1'
               color='text.main'
               sx={{ maxWidth: 724 }}
             >
-              Book a consultation through our contact form, and we’ll help you
-              through the next step of purchasing interplanetary rover TERRA-X9
-              with confidence!
+              Reach out to request the full brief and, if you're ready to dive
+              deeper, book a consultation with our team. We'll walk you through
+              the rover’s core technologies, mission capabilities, and how it
+              fits into the future of space mobility.
             </Typography>
-            <Button variant='contained'>BOOK A CONSULTATION</Button>
+            <Button variant='contained'>Get in touch</Button>
           </Box>
         </Box>
-      </Box>
-
-      {/* Reviews section */}
-      <Box
-        component='section'
-        id='reviews'
-        position='relative'
-        sx={{
-          backgroundImage:
-            'url("https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images//gabriele-garanzelli-PzO_CitnJdI-unsplash%201-3%203.png")',
-          height: 1080,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Box
-          // Decorative element top
-          role='presentation'
-          sx={{
-            height: 151,
-            background:
-              'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.51) 25.48%, rgba(5, 3, 12, 0.83) 59.13%, #05030C 98.08%)',
-          }}
-        />
-
-        <Box>
-          <Typography
-            variant='h2'
-            sx={{ textAlign: 'center', mb: '114px' }}
-          >
-            Our clients reviews
-          </Typography>
-          <Box sx={{ gap: '30px', display: 'flex', flexDirection: 'column', position: 'relative' }}>
-            <Box
-              // Decorative element left
-              aria-hidden='true'
-              sx={{
-                width: '20vw',
-                height: '100%',
-                background:
-                  'linear-gradient(-90deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.53) 24.04%, rgba(5, 3, 12, 0.83) 43.75%, #05030C 76.92%)',
-                position: 'absolute',
-                left: 0,
-                zIndex: 3
-              }}
-            />
-
-            <Marquee
-              pauseOnHover={true}
-              className='w-full p-0 pt-1'
-            >
-              {firstRow?.map((review) => (
-                <ReviewCard
-                  key={review.client}
-                  review={review}
-                />
-              ))}
-            </Marquee>
-            <Marquee
-              pauseOnHover={true}
-              className='w-full p-0 pb-1'
-              reverse={true}
-            >
-              {secondRow?.map((review) => (
-                <ReviewCard
-                  key={review.client}
-                  review={review}
-                />
-              ))}
-            </Marquee>
-            <Box
-              // Decorative element right
-              role='presentation'
-              sx={{
-                width: '20vw',
-                maxWidth: 428,
-                height: '100%',
-                background:
-                  'linear-gradient(90deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.53) 24.04%, rgba(5, 3, 12, 0.83) 43.75%, #05030C 76.92%)',
-                position: 'absolute',
-                right: 0,
-                zIndex: 3
-              }}
-            />
-          </Box>
-        </Box>
-        <Box
-          // Decorative element
-          aria-hidden='true'
-          sx={{
-            height: 151,
-            background:
-              'linear-gradient(180deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.51) 25.48%, rgba(5, 3, 12, 0.83) 59.13%, #05030C 98.08%)',
-          }}
-        />
       </Box>
     </Box>
   );

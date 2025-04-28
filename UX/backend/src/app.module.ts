@@ -7,10 +7,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SupabaseService } from './services/supabase.service';
 import { AdminController } from './controllers/admin.controller';
 import { AdminService } from './services/admin.service';
+import { FileController } from './controllers/files.controller';
 
 @Module({
   imports: [ConfigModule.forRoot()],
-  controllers: [AppController, PageController, AdminController],
+  controllers: [AppController, PageController, AdminController, FileController],
   providers: [AppService, PageService, ConfigService, SupabaseService, AdminService],
 })
 export class AppModule {}

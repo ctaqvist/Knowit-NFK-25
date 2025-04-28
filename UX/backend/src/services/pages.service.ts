@@ -1,6 +1,8 @@
 import { Injectable, Param } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
 import { ApiResponse, Page, Review, Pages } from 'src/types/types';
+import { DownloadableFiles } from 'src/controllers/files.controller';
+import { Response } from 'express';
 
 @Injectable()
 export class PageService {
@@ -32,7 +34,6 @@ export class PageService {
 
       return {
         data: ALLPAGES as Pages,
-        error: null,
       };
     } catch (error) {
       console.error('Error when fetching pages: ', error);
@@ -40,7 +41,7 @@ export class PageService {
     }
   }
 
-  async getPage(@Param('page') page: string): Promise<ApiResponse<Page>> {
+  async getPage(page: string): Promise<ApiResponse<Page>> {
     try {
       // Retrieve from DB bucket
       const CLIENT = this.supabaseService.supabase;
@@ -59,7 +60,6 @@ export class PageService {
 
       return {
         data: parsedBlob as Page,
-        error: null,
       };
     } catch (error) {
       console.error('Error when fetching page: ', error);
@@ -74,10 +74,7 @@ export class PageService {
         content,
         clients(company_name)`);
 
-      if (error) {
-        console.error('Error when fetching reviews: ', error);
-        throw new Error(`Error when fetching reviews`);
-      }
+      if (error) throw error
 
       const formattedReview = data?.map((review) => ({
         content: review.content,
@@ -86,11 +83,28 @@ export class PageService {
 
       return {
         data: formattedReview,
-        error: null,
       };
     } catch (error) {
       console.error('Error when fetching reviews: ', error);
-      throw new Error(`Error when fetching reviews`);
+      return {
+        data: null,
+        error: error,
+        message: 'Something went wrong when fetching reviews'
+      }
     }
+  }
+
+  async getFile(file: string): Promise<Buffer> {
+    const { data, error } = await this.supabaseService.supabase
+      .storage
+      .from('files')
+      .download(`${file}.pdf`);
+
+    if (error || !data) {
+      throw new Error(`Error fetching ${file}: ${error}`);
+    }
+
+    const arrayBuffer = await data.arrayBuffer();
+    return Buffer.from(arrayBuffer);
   }
 }
