@@ -10,6 +10,9 @@
 
 using namespace std;
 
+// Konstant som används för att beräkna hastigheten till PWM
+const int PWM_SCALE = 255;
+
 
 // Hämtar globala instansen av MotorController
 extern MotorController motorController;
@@ -76,9 +79,9 @@ DriveState Drive::GetState() {
    Om state är STOPPED, ska en annan funktion anropas som stoppar motorerna
 */
 void Drive::ExecuteDriveLogic() {
-    int currentSpeed = round(CalculateHypotenuse()*255);
-    int leftSpeed = round(CalculateLeftSpeedFunc()*255);
-    int rightSpeed = round(CalculateRightSpeedFunc()*255);
+    int currentSpeed = round(CalculateHypotenuse()* PWM_SCALE);
+    int leftSpeed = round(CalculateLeftSpeedFunc()* PWM_SCALE);
+    int rightSpeed = round(CalculateRightSpeedFunc()* PWM_SCALE);
     DriveState dir = GetState();
     printf("Left Speed: %d, Right Speed: %d\n", leftSpeed, rightSpeed);
     // Skriver ut states, beroende på x och y (for testing)
