@@ -4,7 +4,7 @@ from .lights import *
 from .forwarder import *
 
 # This function processes incoming commands sent over a WebSocket connection.
-async def process_command(websocket, command, params):
+async def process_command(command, websocket, params):
     print("[DEBUG] Params received:", params)
 
     if "steer" in params:
