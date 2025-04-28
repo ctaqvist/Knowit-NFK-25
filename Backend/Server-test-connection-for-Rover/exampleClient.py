@@ -5,7 +5,8 @@ import json
 import base64
 from datetime import datetime
 
-URI = "wss://terrax9.se"
+
+URI = "ws://localhost:9000"
 
 # Used to get messages from terminal
 
@@ -43,7 +44,7 @@ async def receive_messages(websocket):
         print("Connection closed")
 
 async def main():
-    uri = URI
+    uri = "ws://localhost:80?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDU0MDAwOTJ9.Afp7bmRont-WP2rGang2A7sTrc2mN2KZTyU3XjySl5k"
     async with websockets.connect(uri) as websocket:
         print("Connected to server")
 

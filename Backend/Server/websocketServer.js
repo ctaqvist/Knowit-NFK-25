@@ -1,12 +1,27 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
 import saveImage from './saveImageFromRawData.js';
+import wsAuthCheck from './webSocketAuthMiddleware.js';
+
+const SECRET_KEY = "HiThisIsSecretKey";
 
 function initializeWebSocketServer(server) {
     const wss = new WebSocketServer({ server });
     let clients = new Set();
 
-    wss.on('connection', (ws) => {
+    wss.on('connection', (ws, req) => {
+        try{
+            const decoded = wsAuthCheck(req, SECRET_KEY);
+            // Attach the token to the ws 
+            ws.token = decoded
+            console.log(`${decoded.username} is connected to web socket!`)
+        }
+        catch{
+            // Close the connection if token is invalid
+            ws.close(4001, 'Invalid token!')
+            return
+        }
+
         console.log('A new client just connected.');
         clients.add(ws);
 
@@ -34,8 +49,8 @@ function initializeWebSocketServer(server) {
         })
 
         ws.on('close', () => {
+            console.log(`${ws.token.username} disconnected`);
             clients.delete(ws);
-            console.log('client disconnected')
         })
     })
 
