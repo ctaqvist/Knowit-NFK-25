@@ -1,13 +1,11 @@
 import threading
 import json
-from hardware.video_streamer import *
-from config.settings import ROVER_ID
-# These two functions handle starting and stopping the video stream from the rover.
+from RaspberryPI.hardware.video_streamer import *
+from RaspberryPI.config.settings import ROVER_ID# These two functions handle starting and stopping the video stream from the rover.
 
 # 1. handle_stream_command:
 #    - Sends a message back over WebSocket saying the video stream is starting.
 #    - Starts the video stream in a separate background thread, so it doesn't block other tasks.
-
 
 # These two functions handle starting and stopping the video stream from the rover.
 

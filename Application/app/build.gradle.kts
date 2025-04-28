@@ -61,6 +61,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
     implementation("com.google.accompanist:accompanist-flowlayout:0.36.0")
+    implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.androidx.navigation.compose)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
 
