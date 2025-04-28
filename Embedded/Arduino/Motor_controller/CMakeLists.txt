@@ -1,38 +1,53 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 project(DriveProject)
 
-# C++11
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Your stubs folder
-include_directories(src/Jockes_temp/stubs)
+# Definiera TEST_ENVIRONMENT som en CMake‐option
+option(TEST_ENVIRONMENT "Build for test environment (mock Arduino hardware)" ON)
 
-# Build your Drive library
-add_library(Drive STATIC
-    src/Jockes_temp/Drive.cpp
-)
+# Alltid med i sökvägar
+include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/test/mocks)
 
-# Pull in GoogleTest (assumes you have external/googletest checked out)
-add_subdirectory(external/googletest)
+if(TEST_ENVIRONMENT)
+  message(STATUS ">>> Configuring for TEST environment (no Arduino)")
 
-# Enable CTest so we can register and run tests
-enable_testing()
+  # Bygg biblioteket med BARA Drive.cpp
+  add_library(Drive STATIC
+    src/Calculations/Drive.cpp
+  )
 
-# Build the test executable
-add_executable(drive_test
+  # Definiera TEST_ENVIRONMENT också för Drive‐target
+  target_compile_definitions(Drive PRIVATE TEST_ENVIRONMENT)
+
+  # Dra in googletest & enable testing
+  add_subdirectory(external/googletest)
+  enable_testing()
+
+  # Test‐exekverbar (inkludera också stubben med global instans)
+  add_executable(drive_test
     test/drive_test.cpp
-)
+    test/mocks/MockGlobal.cpp
+  )
 
-# Link your library with GTest's main; GTest::gtest_main pulls in GTest::gtest and pthreads
-target_link_libraries(drive_test
+  target_compile_definitions(drive_test PRIVATE TEST_ENVIRONMENT)
+  target_link_libraries(drive_test
     PRIVATE
-        Drive
-        GTest::gtest_main
-)
+      Drive
+      GTest::gtest_main
+  )
 
-# Register the test with CTest under the name “DriveTests”
-add_test(
-    NAME DriveTests
-    COMMAND drive_test
-)
+  add_test(NAME DriveTests COMMAND drive_test)
+
+else()
+  message(STATUS ">>> Configuring for REAL Arduino environment")
+
+  # Bygg biblioteket med både Drive.cpp och MotorController.cpp
+  add_library(Drive STATIC
+    src/Calculations/Drive.cpp
+    src/Hardware/Motor/MotorController.cpp
+  )
+
+endif()

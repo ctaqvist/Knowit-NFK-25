@@ -17,19 +17,17 @@ function Hero() {
       }}
     >
       <Box
-        // Hero Section
+        // Banner Section
         component='section'
         id='hero_banner'
-        sx={{
-          //Image is currently static.
-          backgroundImage:
-            'url("https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images//video_still.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'bottom',
-          height: 1000,
-          position: 'relative'
-        }}
-      >
+        sx={{ height: 1000 }}>
+
+        {/* Video */}
+        <Box sx={{ position: 'relative' }}>
+          <video autoPlay loop muted style={{ width: '100%' }} src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images//hero_banner.mp4`} />
+          <Box aria-hidden='true'
+            sx={{ height: 150, width: '100%', background: 'linear-gradient(0deg, #05030C, rgba(0,0,0,0))', position: 'absolute', bottom: 0 }} />
+        </Box>
 
         <Box
           sx={{

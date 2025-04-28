@@ -1,13 +1,13 @@
 import pytest
 import json
 from unittest.mock import AsyncMock, patch
-from commands.rover.lights import handle_light_command
+from RaspberryPI.commands.rover.lights import handle_light_command
 
 @pytest.mark.asyncio
 async def test_light_on_command():
     mock_websocket = AsyncMock()
 
-    with patch("communication.serial_helper.arduino.send") as mock_send:
+    with patch("RaspberryPI.communication.serial_helper.arduino.send") as mock_send:
         await handle_light_command("light_on", mock_websocket)
 
         mock_send.assert_called_once_with(json.dumps({
@@ -21,7 +21,7 @@ async def test_light_on_command():
 async def test_light_off_command():
     mock_websocket = AsyncMock()
 
-    with patch("communication.serial_helper.arduino.send") as mock_send:
+    with patch("RaspberryPI.communication.serial_helper.arduino.send") as mock_send:
         await handle_light_command("light_off", mock_websocket)
 
         mock_send.assert_called_once_with(json.dumps({
@@ -35,7 +35,7 @@ async def test_light_off_command():
 async def test_unknown_light_command():
     mock_websocket = AsyncMock()
 
-    with patch("communication.serial_helper.arduino.send") as mock_send:
+    with patch("RaspberryPI.communication.serial_helper.arduino.send") as mock_send:
         await handle_light_command("blink_blue", mock_websocket)
 
         mock_send.assert_called_once_with("blink_blue")  

@@ -6,12 +6,14 @@ declare module '@mui/material/styles' {
     headerlink: React.CSSProperties;
     footerlabel: React.CSSProperties;
     body3: React.CSSProperties;
+    subheading2: React.CSSProperties;
   }
 
   interface TypographyVariantsOptions {
     headerlink?: React.CSSProperties;
     footerlabel?: React.CSSProperties;
     body3?: React.CSSProperties;
+    subheading2?: React.CSSProperties;
   }
 }
 declare module '@mui/material/Typography' {
@@ -19,6 +21,14 @@ declare module '@mui/material/Typography' {
     headerlink: true;
     footerlabel: true;
     body3: true;
+    subheading2: true;
+  }
+}
 
+// Custom  Components
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    text_contained: true;
   }
 }
