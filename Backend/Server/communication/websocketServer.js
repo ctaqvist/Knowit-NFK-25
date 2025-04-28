@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { WebSocket } from 'ws';
-import saveImage from './saveImageFromRawData.js';
+import saveImage from '../api/saveImageFromRawData.js';
 import wsAuthCheck from './webSocketAuthMiddleware.js';
 
 const SECRET_KEY = "HiThisIsSecretKey";
