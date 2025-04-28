@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.test
+package se.terrax9.ui.screens.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

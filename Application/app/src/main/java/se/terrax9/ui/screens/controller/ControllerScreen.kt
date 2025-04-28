@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import android.annotation.SuppressLint
 import android.webkit.WebChromeClient
@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import se.emilkronholm.terrax9.ui.screens.test.Commands
-import se.emilkronholm.terrax9.ui.theme.AppColors
+import se.terrax9.ui.screens.test.Commands
+import se.terrax9.ui.theme.AppColors
 
 // This screen is the entry point for the controller dashboard.
 @Composable

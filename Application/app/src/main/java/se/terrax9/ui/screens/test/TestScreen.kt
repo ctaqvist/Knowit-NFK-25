@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.test
+package se.terrax9.ui.screens.test
 
 import android.annotation.SuppressLint
 import android.webkit.WebChromeClient
@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import se.emilkronholm.terrax9.ui.theme.AppColors
+import se.terrax9.ui.theme.AppColors
 import com.google.accompanist.*
 
 

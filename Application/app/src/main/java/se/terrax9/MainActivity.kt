@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9
+package se.terrax9
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import se.emilkronholm.terrax9.ui.theme.Terrax9Theme
-import se.emilkronholm.terrax9.ui.screens.controller.ControllerScreen
+import se.terrax9.ui.theme.Terrax9Theme
+import se.terrax9.ui.screens.controller.ControllerScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

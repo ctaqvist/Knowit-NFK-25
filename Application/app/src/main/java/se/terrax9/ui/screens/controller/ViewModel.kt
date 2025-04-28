@@ -1,10 +1,10 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import se.emilkronholm.terrax9.services.DataService
+import se.terrax9.services.DataService
 
 class ViewModel(roverID: String): ViewModel() {
 

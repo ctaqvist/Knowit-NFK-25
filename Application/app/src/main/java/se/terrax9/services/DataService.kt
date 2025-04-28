@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.services
+package se.terrax9.services
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
@@ -20,7 +20,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import se.emilkronholm.terrax9.ui.screens.test.Commands
+import se.terrax9.ui.screens.test.Commands
 import java.util.Locale
 import kotlin.math.absoluteValue
 

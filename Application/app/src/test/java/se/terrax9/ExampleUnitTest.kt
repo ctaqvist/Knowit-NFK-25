@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9
+package se.terrax9
 
 import org.junit.Test
 
