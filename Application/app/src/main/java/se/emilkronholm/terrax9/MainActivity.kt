@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import se.emilkronholm.terrax9.ui.screens.controller.ControllerScreen
 import se.emilkronholm.terrax9.ui.theme.Terrax9Theme
 
 object Routes {
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                                 ControllerScreen(navController)
                             }
                             composable(Routes.Gallery) {
-                                Text("hej")
+                                GalleryScreen()
                             }
                         }
                     }
