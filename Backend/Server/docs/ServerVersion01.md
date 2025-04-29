@@ -19,4 +19,17 @@ Routes:
 Live data tranfser through data channel. All messages must be JSON format (altough server has fallback for non-json data, by converting it into {"raw": <-original message-> }).
 
 Special commands in server:
-`pong`: Respons with ping (used for connection test).
+`pong`: Respons with ping (used for connection test). This command does not need to be JSON.
+
+Upload an image:
+Through data channe, you can upload an image. To do this, send this command to the server:
+`{"rover_id": "rover-001", "response":"picture_data", "image_base64": <imagedata>}`
+
+Or manually test with this (as the server will add sender data): 
+`{"rover_id": "rover-001", "response":"picture_data", "image_base64": "${imagebase64}", "sender": "[CLIENT]"}`
+
+The server will forward each message to every other client as of right now.
+
+### Streaming
+
+Stream to the server via srt protocol at port 1234. Recivie it at port 9000.
