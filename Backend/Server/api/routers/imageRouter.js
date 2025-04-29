@@ -4,7 +4,6 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
-
 const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -17,12 +16,12 @@ router.get('/test', (req, res) => {
     res.send("hej");
 });
 
-router.get('/images', (authCheck()), (req, res) => {
+router.get('/images', authCheck, (req, res) => {
     // Fetch a list of images
     fs.readdir(imagesStaticPath, (err, files) => {
         if (err) {
             console.error(err);
-            return res.status(500).send("Error while getting images")
+            return res.status(500).send("Error while getting images.")
         }
 
         // Create url of each image
@@ -41,7 +40,7 @@ router.get('/images/:imageName', authCheck, (req, res) => {
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
             console.error("File not found:", imageName);
-            return res.status(404).send("Image not found");
+            return res.status(404).send("Image not found.");
         }
         return res.sendFile(filePath);
     });
