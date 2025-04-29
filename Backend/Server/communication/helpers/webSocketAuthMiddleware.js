@@ -1,7 +1,9 @@
 
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 
-const SECRET_KEY = "HiThisIsSecretKey";
+dotenv.config()
+const SECRET_KEY = process.env.SECRET_KEY;
 
 // This middleware checks whether the client is allowed to connect to web sockets on the server
 function wsAuthCheck(req) {
@@ -11,10 +13,12 @@ function wsAuthCheck(req) {
     const token = url.searchParams.get('token');
     if (!token) {
         // This is only for development
-        return true;
+        return {
+            username: "admin"
+        };
 
         //XXX: Fix for production
-        //throw new Error('No token is provided!');
+        throw new Error('No token is provided!');
     }
     return jwt.verify(token, SECRET_KEY);
 }
