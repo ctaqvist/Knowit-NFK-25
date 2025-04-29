@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 // This is where you can create tokens 
-
+dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 // Token with infinite lifespan 
