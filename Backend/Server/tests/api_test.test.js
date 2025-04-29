@@ -6,6 +6,8 @@ import fs from 'fs';
 import path from 'path';
 import initializeWebSocketServer from '../communication/websocketServer.js';
 import http from "http";
+import {createTokenForUser} from '../tokenGenerator.js'
+
 
 // Helper for image test
 function getMostRecentImageBase64() {
@@ -54,6 +56,29 @@ describe('Terrax9 API', () => {
         });
         expect(response.statusCode).toBe(401);
     });
+
+    it('test rover login', async () => {
+        const response = await request(expressApp).post('/rover/login').send({
+            roverSerial: "rover-001", password: "1234"
+        });
+        expect(response.statusCode).toBe(200);
+    });
+
+    it('get rovers of user', async () => {
+        const token = await createTokenForUser('admin');
+        const response = await request(expressApp).get(`/userrovers?token=${token}`);
+        expect(response.statusCode).toBe(200);
+        
+        expect(Array.isArray(response.body)).toBe(true);
+
+        if(response.body.length > 0) {
+            const rover = response.body[0];
+            console.log(rover);
+            expect(rover).toHaveProperty('userRoverId');
+            expect(rover).toHaveProperty('userId');
+            expect(rover).toHaveProperty('roverId');
+        }
+    });
 });
 
 // For this to work, port 8080 must be available.
@@ -63,6 +88,14 @@ const websocketServer = initializeWebSocketServer(server);
 server.listen(httpPort);
 
 describe('Terrax9 communication test', () => {
+    afterAll((done) => {
+        server.close(() => {
+            websocketServer.close(() => {
+                done();
+            });
+        });
+    });
+
     it('test connect with bad token', (done) => {
         // Connect to server
         const ws = new WebSocket(`ws://localhost:8080/?token=bad-and-stupid-token`);
@@ -71,6 +104,7 @@ describe('Terrax9 communication test', () => {
             // We expect some error if connection is rejected
             console.log('Connection error as expected:', err.message);
             fail('WebSocket error event was triggered, which should not happen if "close" is expected');
+            ws.close();
             done();
         });
 
@@ -91,7 +125,7 @@ describe('Terrax9 communication test', () => {
         client.on('open', () => {
             client.send(
                 // This is the command to upload an image
-                `{"rover_id": "rover-001", "response":"picture_data", "image_base64": "${imagebase64}", "sender": "[CLIENT]"}`
+                `{"response":"picture_data", "image_base64": "${imagebase64}", "sender": "[ROVER]"}`
             );
 
             // Delay to ensure server saves image
@@ -99,8 +133,15 @@ describe('Terrax9 communication test', () => {
                 // Get the most recent image, convert it back to base64 and compare to the original. Should be the same.
                 const lastImage = getMostRecentImageBase64();
                 expect(lastImage).toBe(imagebase64);
+                client.close();
                 done();
             }, 100);
+        });
+
+        client.on('error', (error) => {
+            console.error('WebSocket error:', error);
+            client.close();
+            done(error);
         });
     });
 });
@@ -118,3 +159,4 @@ describe('api test again', () => {
         }
     });
 });
+

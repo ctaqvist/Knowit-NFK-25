@@ -11,10 +11,10 @@ const __dirname = path.dirname(__filename);
 const imagesStaticPath = path.join(__dirname, "../../img");
 const baseURL = 'https://terrax9.se/images/';
 
-router.get('/test', (req, res) => {
+/*router.get('/test', (req, res) => {
     console.log("Hej!");
     res.send("hej");
-});
+});*/
 
 router.get('/images', authCheck, (req, res) => {
     // Fetch a list of images

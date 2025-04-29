@@ -5,8 +5,9 @@ import json
 import base64
 from datetime import datetime
 
+ROVER_TOKEN_WITH_INFINITE_TIME = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb3ZlcklkIjoxLCJyb3ZlclNlcmlhbCI6InJvdmVyLTAwMSIsImlhdCI6MTc0NjUxMzI2Mn0.7GJFXH6KjS3QPTchEq8eSwRE9oePc04jzHzNvh43eII"
 
-URI = "ws://localhost:9000"
+URI = f"ws://localhost:8080?token={ROVER_TOKEN_WITH_INFINITE_TIME}"
 
 # Used to get messages from terminal
 
@@ -47,7 +48,6 @@ async def main():
 
     uri = URI
     
- 181/replan-architecture-to-be-testable:Backend/Other/Server-test-connection-for-Rover/exampleClient.py
     async with websockets.connect(uri) as websocket:
         print("Connected to server")
 

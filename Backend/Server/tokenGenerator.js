@@ -1,13 +1,32 @@
 import jwt from 'jsonwebtoken'
+import databaseQueries from '../Server/database/databaseQueries.js'
 import dotenv from 'dotenv'
+dotenv.config()
 
-// This is where you can create tokens 
+export async function createTokenForUser(username) {
+    const user = await databaseQueries.getUserByUsername(username)
+    if (!user) {
+        throw new Error('User not found')
+    }
+    const token = jwt.sign(
+        { 
+            userId: user.userId,
+            role: user.roleName
+        },
+        process.env.SECRET_KEY
+    );
+    return token;
+}
 
-const SECRET_KEY = process.env.SECRET_KEY;
+export async function createTokenForRover(roverSerial) {
+    const rover = await databaseQueries.getRoverByRoverSerial(roverSerial)
+    const token = jwt.sign({ 
+        roverId: rover.roverId,
+        roverSerial: rover.rover_serial,
+    },
+        process.env.SECRET_KEY
+    );
+    return token;
+}
 
-// Token with infinite lifespan 
-const token = jwt.sign({}, SECRET_KEY)
-console.log(token)
 
-// This is a token with unlimited lifetime can be used for development
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NDU0MDAwOTJ9.Afp7bmRont-WP2rGang2A7sTrc2mN2KZTyU3XjySl5k

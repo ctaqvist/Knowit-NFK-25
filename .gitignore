@@ -9,6 +9,9 @@ build
 .DS_Store
 deploymentTargetSelector.xml
 
+# Databasfiler
+*.db
+
 # Python
 __pycache__/
 *.py[cod]
