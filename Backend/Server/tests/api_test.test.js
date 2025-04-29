@@ -56,54 +56,54 @@ describe('Terrax9 API', () => {
     });
 });
 
-// // For this to work, port 8080 must be available.
-// const httpPort = 8080;
-// const server = http.createServer();
-// const websocketServer = initializeWebSocketServer(server);
-// server.listen(httpPort);
+// For this to work, port 8080 must be available.
+const httpPort = 8080;
+const server = http.createServer();
+const websocketServer = initializeWebSocketServer(server);
+server.listen(httpPort);
 
-// describe('Terrax9 communication test', () => {
-//     it('test connect with bad token', (done) => {
-//         // Connect to server
-//         const ws = new WebSocket(`ws://localhost:8080/?token=bad-and-stupid-token`);
+describe('Terrax9 communication test', () => {
+    it('test connect with bad token', (done) => {
+        // Connect to server
+        const ws = new WebSocket(`ws://localhost:8080/?token=bad-and-stupid-token`);
 
-//         ws.on('error', (err) => {
-//             // We expect some error if connection is rejected
-//             console.log('Connection error as expected:', err.message);
-//             fail('WebSocket error event was triggered, which should not happen if "close" is expected');
-//             done();
-//         });
+        ws.on('error', (err) => {
+            // We expect some error if connection is rejected
+            console.log('Connection error as expected:', err.message);
+            fail('WebSocket error event was triggered, which should not happen if "close" is expected');
+            done();
+        });
 
-//         ws.on('close', (code) => {
-//             expect(code).toBe(4001); // Server should reject with 4001
-//             done();
-//         });
-//     });
+        ws.on('close', (code) => {
+            expect(code).toBe(4001); // Server should reject with 4001
+            done();
+        });
+    });
 
-//     it('test send pic, server should save image', (done) => {
-//         // Connect to server
-//         const client = new WebSocket(`ws://localhost:8080`);
+    it('test send pic, server should save image', (done) => {
+        // Connect to server
+        const client = new WebSocket(`ws://localhost:8080`);
 
-//         const imageData = "nonesenseimageforaverycooltest:)";
-//         const imagebase64 = Buffer.from(imageData).toString('base64')
+        const imageData = "nonesenseimageforaverycooltest:)";
+        const imagebase64 = Buffer.from(imageData).toString('base64')
 
-//         // Send a nonsense picture, this is usually from the rover.
-//         client.on('open', () => {
-//             client.send(
-//                 // This is the command to upload an image
-//                 `{"rover_id": "rover-001", "response":"picture_data", "image_base64": "${imagebase64}", "sender": "[CLIENT]"}`
-//             );
+        // Send a nonsense picture, this is usually from the rover.
+        client.on('open', () => {
+            client.send(
+                // This is the command to upload an image
+                `{"rover_id": "rover-001", "response":"picture_data", "image_base64": "${imagebase64}", "sender": "[CLIENT]"}`
+            );
 
-//             // Delay to ensure server saves image
-//             setTimeout(() => {
-//                 // Get the most recent image, convert it back to base64 and compare to the original. Should be the same.
-//                 const lastImage = getMostRecentImageBase64();
-//                 expect(lastImage).toBe(imagebase64);
-//                 done();
-//             }, 100);
-//         });
-//     });
-// });
+            // Delay to ensure server saves image
+            setTimeout(() => {
+                // Get the most recent image, convert it back to base64 and compare to the original. Should be the same.
+                const lastImage = getMostRecentImageBase64();
+                expect(lastImage).toBe(imagebase64);
+                done();
+            }, 100);
+        });
+    });
+});
 
 describe('api test again', () => {
     it('get all a list images and test to get every single one', async () => {
