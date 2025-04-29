@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   FormControl,
+  IconButton,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -16,11 +17,17 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Icon from '@/components/Icon';
-import { DownloadableFiles, SupportForm, SupportFormValidity } from '@/types/types';
+import {
+  CustomFile,
+  DownloadableFiles,
+  SupportForm,
+  SupportFormValidity,
+} from '@/types/types';
 import { contentApi } from '@/api/contentApi';
 import React, { useState } from 'react';
 import { validateInput, validateSupportForm } from '@/utils/validate';
 import FileUpload from '@/components/FileUpload';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const INITIAL_FORM_DATA = {
   f_name_input: '',
@@ -30,22 +37,25 @@ const INITIAL_FORM_DATA = {
   issue_category_input: '',
   issue_description_input: '',
   date_input: '',
-  fileUploads: []
-}
+  fileUploads: {
+    loading: false,
+    files: [],
+  },
+};
 
 function Support() {
   const [formData, setFormData] = useState<SupportForm>(INITIAL_FORM_DATA);
   const [alert, setAlert] = useState<{
-    show: boolean,
-    severity: 'error' | 'success',
-    message: string,
-    timeout: NodeJS.Timeout | null
+    show: boolean;
+    severity: 'error' | 'success';
+    message: string;
+    timeout: NodeJS.Timeout | null;
   }>({
     show: false,
     severity: 'success',
     message: '',
-    timeout: null
-  })
+    timeout: null,
+  });
 
   const [formValidity, setFormValidity] = useState<SupportFormValidity>({
     f_name_input: undefined,
@@ -55,7 +65,7 @@ function Support() {
     issue_category_input: undefined,
     issue_description_input: true,
     date_input: undefined,
-  })
+  });
 
   const handleDownload = async (file: DownloadableFiles) => {
     try {
@@ -75,55 +85,110 @@ function Support() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const isValid = validateInput(name, value) ? undefined : true
+    const isValid = validateInput(name, value) ? undefined : true;
     setFormData({ ...formData, [name]: value as string });
-    setFormValidity({ ...formValidity, [name]: isValid })
+    setFormValidity({ ...formValidity, [name]: isValid });
   };
 
   const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
-    const isValid = validateInput(name, value as string) ? undefined : true
+    const isValid = validateInput(name, value as string) ? undefined : true;
     setFormData({ ...formData, [name]: value as string });
-    setFormValidity({ ...formValidity, [name]: isValid })
+    setFormValidity({ ...formValidity, [name]: isValid });
   };
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target
+    const { files } = e.target;
+
+    if (!files) return;
+    if (formData.fileUploads.files.length + files.length > 5)
+      return showAlert('Maximum of 5 images allowed', 'error');
+
+    setFormData({
+      ...formData,
+      ['fileUploads']: {
+        loading: true,
+        files: [...formData.fileUploads.files, ...Array.from(files)],
+      },
+    });
+
+    // Check file validity
+    for (const file of files) {
+      checkFile(file as CustomFile);
+    }
+  };
+
+  async function checkFile(file: CustomFile) {
     const MAX_IMAGE_SIZE_IN_BYTES = 2 * 1024 * 1024;
 
-    if (!files) return
-    const allFiles = []
-    for (const file of files) {
-      // Check uploaded file is an image
+    try {
+      file.loading = true;
+
       if (!['image/png', 'image/jpeg'].includes(file.type)) {
-        return showAlert('File must be png or jpeg format', 'error')
+        throw new Error(
+          'The document is not supported, please delete and upload a .png or .jpeg file.'
+        );
       }
-      // Check image is under the max allowed file size
       if (file.size > MAX_IMAGE_SIZE_IN_BYTES) {
-        return showAlert('File is too large. Max size is 2MB.', 'error')
+        throw new Error('File is too large. Max size is 2MB.');
       }
-      allFiles.push(file)
+
+      file.success = true
+    } catch (error: any) {
+      file.success = false;
+      file.message = error.message;
+    } finally {
+      file.loading = false;
     }
-    setFormData({ ...formData, ['fileUploads']: allFiles });
   }
 
   const handleSubmit = () => {
-    const VALIDITY = validateSupportForm(formData)
-    setFormValidity(VALIDITY)
-    if (Object.values(VALIDITY).includes(true)) return
-    resetSupportForm()
-    showAlert('Your support form has been sent!', 'success')
-  }
+    const VALIDITY = validateSupportForm(formData);
+    setFormValidity(VALIDITY);
+    if (Object.values(VALIDITY).includes(true)) return;
+    resetSupportForm();
+    showAlert('Your support form has been sent!', 'success');
+  };
 
-  const resetSupportForm = () => {
-    setFormData(INITIAL_FORM_DATA)
-  }
+  const resetSupportForm = () => setFormData(INITIAL_FORM_DATA);
 
   const showAlert = (message: string, severity: 'success' | 'error') => {
-    if (alert.timeout) clearTimeout(alert.timeout)
-    const timeout = setTimeout(() => setAlert({ ...alert, ['show']: false }), 4000)
-    setAlert({ show: true, severity: severity, message: message, timeout: timeout })
-  }
+    if (alert.timeout) clearTimeout(alert.timeout);
+    const timeout = setTimeout(
+      () => setAlert({ ...alert, ['show']: false }),
+      4000
+    );
+    setAlert({
+      show: true,
+      severity: severity,
+      message: message,
+      timeout: timeout,
+    });
+  };
+
+  const handleRemoveUpload = (fileToRemove: CustomFile) => {
+    const filteredFiles = formData.fileUploads.files.filter(
+      (file) => file !== fileToRemove
+    );
+    setFormData({
+      ...formData,
+      ['fileUploads']: {
+        files: filteredFiles,
+        loading: false,
+      },
+    });
+  };
+
+
+  const failedFiles = formData.fileUploads.files.filter(
+    (file) => !file.success
+  );
+  const loadingFiles = formData.fileUploads.files.filter(
+    (file) => file.loading
+  );
+  const uploadedFiles = formData.fileUploads.files.filter(
+    (file) => file.success
+  );
 
   return (
     <Box
@@ -132,12 +197,11 @@ function Support() {
         '& > .MuiBox-root': { mx: 'auto' },
       }}
     >
-
-      {alert.show &&
+      {alert.show && (
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
           <Alert severity={alert.severity}>{alert.message}</Alert>
         </Box>
-      }
+      )}
 
       {/* FAQ Section */}
       <Box
@@ -403,8 +467,9 @@ function Support() {
             bottom: '-200px',
             position: 'absolute',
             right: 0,
-            width: 428
-          }}>
+            width: 428,
+          }}
+        >
           <Box
             sx={{
               width: 909,
@@ -438,14 +503,17 @@ function Support() {
             Customer support form
           </Typography>
           <FormControl sx={{ width: '100%' }}>
-            <Stack sx={{
-              width: '100%', gap: '56px',
-              '& > .MuiStack-root': { minHeight: 155 }
-            }}>
+            <Stack
+              sx={{
+                width: '100%',
+                gap: '56px',
+                '& > .MuiStack-root': { minHeight: 155 },
+              }}
+            >
               <Stack
                 direction={'row'}
                 sx={{
-                  '& > .MuiStack-root': { flex: 1, gap: '24px', },
+                  '& > .MuiStack-root': { flex: 1, gap: '24px' },
                   gap: '20px',
                 }}
               >
@@ -460,7 +528,7 @@ function Support() {
                     </Box>
                   </label>
                   <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     error={formValidity.f_name_input}
                     value={formData.f_name_input}
                     onChange={handleInputChange}
@@ -469,8 +537,20 @@ function Support() {
                     id='f_name_input'
                     placeholder='Enter your name'
                     variant='outlined'
-                    helperText={formValidity.f_name_input &&
-                      <Stack gap={'6px'} direction='row'><Icon src='/src/assets/alert_sign.svg' width='28px' />Invalid name</Stack>}
+                    helperText={
+                      formValidity.f_name_input && (
+                        <Stack
+                          gap={'6px'}
+                          direction='row'
+                        >
+                          <Icon
+                            src='/src/assets/alert_sign.svg'
+                            width='28px'
+                          />
+                          Invalid name
+                        </Stack>
+                      )
+                    }
                   />
                 </Stack>
                 <Stack>
@@ -484,7 +564,7 @@ function Support() {
                     </Box>
                   </label>
                   <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     error={formValidity.s_name_input}
                     value={formData.s_name_input}
                     onChange={handleInputChange}
@@ -493,9 +573,21 @@ function Support() {
                     id='s_name_input'
                     placeholder='Enter your surname'
                     variant='outlined'
-                    helperText={formValidity.s_name_input &&
-                      <Stack gap={'6px'} direction='row' component={'p'}>
-                        <Icon src='/src/assets/alert_sign.svg' width='28px' />Invalid name</Stack>}
+                    helperText={
+                      formValidity.s_name_input && (
+                        <Stack
+                          gap={'6px'}
+                          direction='row'
+                          component={'p'}
+                        >
+                          <Icon
+                            src='/src/assets/alert_sign.svg'
+                            width='28px'
+                          />
+                          Invalid name
+                        </Stack>
+                      )
+                    }
                   />
                 </Stack>
               </Stack>
@@ -517,7 +609,7 @@ function Support() {
                     </Box>
                   </label>
                   <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     error={formValidity.email_input}
                     value={formData.email_input}
                     onChange={handleInputChange}
@@ -527,13 +619,27 @@ function Support() {
                     placeholder='Enter your e-mail'
                     variant='outlined'
                     sx={{ gap: '6px' }}
-                    helperText={formValidity.email_input &&
-                      <Stack gap={'6px'} direction='row'><Icon src='/src/assets/alert_sign.svg' width='28px' />Invalid email</Stack>}
+                    helperText={
+                      formValidity.email_input && (
+                        <Stack
+                          gap={'6px'}
+                          direction='row'
+                        >
+                          <Icon
+                            src='/src/assets/alert_sign.svg'
+                            width='28px'
+                          />
+                          Invalid email
+                        </Stack>
+                      )
+                    }
                   />
                 </Stack>
                 <Stack>
-                  <label htmlFor='serial_input'
-                    style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <label
+                    htmlFor='serial_input'
+                    style={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
                     <Box>
                       Serial number of the rover{' '}
                       <Box
@@ -543,15 +649,21 @@ function Support() {
                         *
                       </Box>
                     </Box>
-                    <Tooltip placement='right-start' arrow
-                      title='Serial number can be found at the bottom of the rover base'>
+                    <Tooltip
+                      placement='right-start'
+                      arrow
+                      title='Serial number can be found at the bottom of the rover base'
+                    >
                       <Box>
-                        <Icon src='/src/assets/Icon_info.svg' width='27px' />
+                        <Icon
+                          src='/src/assets/Icon_info.svg'
+                          width='27px'
+                        />
                       </Box>
                     </Tooltip>
                   </label>
                   <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     error={formValidity.serial_input}
                     value={formData.serial_input}
                     onChange={handleInputChange}
@@ -560,8 +672,20 @@ function Support() {
                     id='serial_input'
                     placeholder='RX-3728HW-90TERRA'
                     variant='outlined'
-                    helperText={formValidity.serial_input &&
-                      <Stack gap={'6px'} direction='row'><Icon src='/src/assets/alert_sign.svg' width='28px' />Invalid serial number</Stack>}
+                    helperText={
+                      formValidity.serial_input && (
+                        <Stack
+                          gap={'6px'}
+                          direction='row'
+                        >
+                          <Icon
+                            src='/src/assets/alert_sign.svg'
+                            width='28px'
+                          />
+                          Invalid serial number
+                        </Stack>
+                      )
+                    }
                   />
                 </Stack>
               </Stack>
@@ -609,7 +733,7 @@ function Support() {
                     </Box>
                   </label>
                   <TextField
-                    autoComplete="off"
+                    autoComplete='off'
                     onChange={handleInputChange}
                     value={formData.date_input}
                     error={formValidity.date_input}
@@ -618,8 +742,20 @@ function Support() {
                     id='date_input'
                     placeholder='Enter approximate date'
                     variant='outlined'
-                    helperText={formValidity.date_input &&
-                      <Stack gap={'6px'} direction='row'><Icon src='/src/assets/alert_sign.svg' width='28px' />Invalid date</Stack>}
+                    helperText={
+                      formValidity.date_input && (
+                        <Stack
+                          gap={'6px'}
+                          direction='row'
+                        >
+                          <Icon
+                            src='/src/assets/alert_sign.svg'
+                            width='28px'
+                          />
+                          Invalid date
+                        </Stack>
+                      )
+                    }
                   />
                 </Stack>
               </Stack>
@@ -634,7 +770,7 @@ function Support() {
                   </Box>
                 </label>
                 <TextField
-                  autoComplete="off"
+                  autoComplete='off'
                   value={formData.issue_description_input}
                   onChange={handleInputChange}
                   name='issue_description_input'
@@ -650,7 +786,7 @@ function Support() {
                 <label htmlFor='file_upload_input'>File upload (if any)</label>
                 <Button
                   variant='contained'
-                  component="label"
+                  component='label'
                   role={undefined}
                   tabIndex={-1}
                   id='file_upload_input'
@@ -666,6 +802,7 @@ function Support() {
                     '&:hover': {
                       boxShadow: 'none',
                       backgroundColor: 'rgba(24, 7, 87, 1)',
+                      borderStyle: 'dashed',
                     },
                   }}
                 >
@@ -685,8 +822,94 @@ function Support() {
                     Or drag and drop files here
                   </Typography>
                 </Button>
+
+                {/* UPLOADING FILES */}
+                {loadingFiles.length > 0 || failedFiles.length > 0 &&
+                  <Typography variant='subheading2'>
+                    Uploading -{' '}
+                    {`${loadingFiles.length}/${formData.fileUploads.files.length}`}
+                  </Typography>}
+
+                {loadingFiles.map(file => (
+                  <Stack key={file.name} sx={{
+                    backgroundColor: 'rgba(255,255,255,0.1)', padding: '14px 24px',
+                    borderRadius: '10px', border: '1px solid #BCC5FF', gap: '16px'
+
+                  }}>
+                    <Stack
+                      direction={'row'}
+                      justifyContent={'space-between'}
+                      sx={{ width: '100%', alignItems: 'center' }}
+                    >
+                      <Typography>{file.name}</Typography>
+                      <IconButton onClick={() => handleRemoveUpload(file)}>
+                        <Icon
+                          src='/src/assets/Icon_delete.svg'
+                          height='24px'
+                        />
+                      </IconButton>
+                    </Stack>
+                    {file.loading && <LinearProgress />}
+                  </Stack>
+                ))}
+                {/* FAILED FILES */}
+                {failedFiles.map(file => (
+                  <Stack gap={'14px'}>
+                    <Stack key={file.name} sx={{
+                      backgroundColor: 'rgba(255,255,255,0.1)', padding: '14px 24px',
+                      borderRadius: '10px', border: '1px solid #FF3131'
+                    }}>
+                      <Stack
+                        direction={'row'}
+                        justifyContent={'space-between'}
+                        sx={{ width: '100%', alignItems: 'center' }}
+                      >
+                        <Typography>{file.name}</Typography>
+                        <IconButton onClick={() => handleRemoveUpload(file)} sx={{
+                          filter: 'brightness(0) saturate(100%) invert(39%) sepia(86%) saturate(4609%) hue-rotate(343deg) brightness(109%) contrast(108%)'
+                        }}>
+                          <Icon
+                            src='/src/assets/Icon_remove.svg'
+                            height='24px'
+                          />
+                        </IconButton>
+                      </Stack>
+                    </Stack>
+                    <Typography variant='body2' color='main.error'>{file.message}</Typography>
+                  </Stack>
+                ))}
+                {/* UPLOADED FILES */}
+                {uploadedFiles.length > 0 && <Typography variant='subheading2'>Uploaded - {`${uploadedFiles.length}/${formData.fileUploads.files.length}`}</Typography>}
+                {uploadedFiles.map((file) => {
+                  return (
+                    <Stack key={file.name} sx={{
+                      backgroundColor: 'rgba(255,255,255,0.1)', padding: '14px 24px',
+                      borderRadius: '10px', border: '1px solid #BCC5FF'
+                    }}>
+                      <Stack
+                        direction={'row'}
+                        justifyContent={'space-between'}
+                        sx={{ width: '100%', alignItems: 'center' }}
+                      >
+                        <Typography>{file.name}</Typography>
+                        <IconButton onClick={() => handleRemoveUpload(file)}>
+                          <Icon
+                            src='/src/assets/Icon_delete.svg'
+                            height='24px'
+                          />
+                        </IconButton>
+                      </Stack>
+                    </Stack>
+                  );
+                })}
+
               </Stack>
-              <Button variant='contained' onClick={handleSubmit}>Submit the form</Button>
+              <Button
+                variant='contained'
+                onClick={handleSubmit}
+              >
+                Submit the form
+              </Button>
             </Stack>
           </FormControl>
         </Box>
@@ -794,10 +1017,9 @@ function Support() {
               GPSR (General Product Safety Regulation)
             </Typography>
             <Button
-              component="label"
+              component='label'
               tabIndex={-1}
               role={undefined}
-
               onClick={() => handleDownload('GPSR')}
               variant='contained'
               size='small'

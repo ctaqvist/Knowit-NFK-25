@@ -124,7 +124,10 @@ export interface SupportForm {
   issue_category_input: string,
   issue_description_input: string,
   date_input: string
-  fileUploads: File[]
+  fileUploads: {
+    loading: boolean,
+    files: CustomFile[]
+  }
 }
 
 
@@ -138,3 +141,8 @@ export interface SupportFormValidity {
   date_input: undefined
 }
 
+export interface CustomFile extends File {
+  loading?: boolean,
+  success?: boolean,
+  message?: string
+}

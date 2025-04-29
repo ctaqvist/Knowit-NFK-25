@@ -354,5 +354,13 @@ export const theme = createTheme({
         }
       }
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          transition: 'backgroundColor 0s',
+          '&:hover': {backgroundColor: 'inherit'}
+        }
+      }
+    }
   },
 });
