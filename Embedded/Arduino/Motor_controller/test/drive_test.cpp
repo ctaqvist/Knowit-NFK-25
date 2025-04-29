@@ -93,9 +93,9 @@ TEST(DriveTest, AlgorithmPrintsForward) {
 
     // Anpassat för heltals‐utskrift + mock‐rad
     std::string expected =
-        "Left Speed: 1, Right Speed: 1\n"
+        "Left Speed: 255, Right Speed: 255\n"
         "State: GO FWD\n"
-        "Mock DriveForward: 1, 1\n";
+        "Mock DriveForward: 255, 255\n";
 
     EXPECT_EQ(output, expected)
         << "Expected:\n" << expected << "\nbut got:\n" << output;
@@ -110,9 +110,9 @@ TEST(DriveTest, AlgorithmPrintsBackward) {
 
     // Anpassat för heltals‐utskrift + mock‐rad
     std::string expected =
-        "Left Speed: -1, Right Speed: -1\n"
+        "Left Speed: -255, Right Speed: -255\n"
         "State: GO BWD\n"
-        "Mock DriveBackward: -1, -1\n";
+        "Mock DriveBackward: -255, -255\n";
 
     EXPECT_EQ(output, expected)
         << "Expected:\n" << expected << "\nbut got:\n" << output;
