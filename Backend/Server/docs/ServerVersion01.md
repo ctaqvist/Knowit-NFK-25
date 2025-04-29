@@ -1,6 +1,12 @@
 # Server documentation
 
+
 ## Version 01 (2025-04-29)
+
+## Authentication
+
+Authenticaion is implemented with JWT. There are no users however, meaning anyone get access to everything.
+You can bypass authentication by sending no token, then you will automatically be a "super admin user".
 
 ## Features
 
