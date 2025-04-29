@@ -1,5 +1,5 @@
 import json
-from RaspberryPI.communication.serial_helper import arduino
+from communication.serial_helper import arduino
 
 # Forward joystick data to the Arduino
 async def forward_joystick_to_arduino(steer_data):
@@ -17,7 +17,7 @@ async def forward_joystick_to_arduino(steer_data):
     except (KeyError, ValueError, TypeError):
         return  # Skip sending if data is invalid
 
-    await arduino.send(json.dumps({
+    arduino.send(json.dumps({
         "command": "steer",
         "x": round(x, 2),
         "y": round(y, 2)

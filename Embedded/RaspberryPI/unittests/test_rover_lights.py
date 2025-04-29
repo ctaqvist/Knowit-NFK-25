@@ -7,10 +7,10 @@ from RaspberryPI.commands.rover.lights import handle_light_command
 async def test_light_on_command():
     mock_websocket = AsyncMock()
 
-    with patch("RaspberryPI.communication.serial_helper.arduino.send") as mock_send:
+    with patch("RaspberryPI.commands.rover.lights.arduino.send", new_callable=AsyncMock) as mock_send:
         await handle_light_command("light_on", mock_websocket)
 
-        mock_send.assert_called_once_with(json.dumps({
+        mock_send.assert_awaited_once_with(json.dumps({
             "command": "light",
             "value": "on"
         }))
@@ -21,10 +21,10 @@ async def test_light_on_command():
 async def test_light_off_command():
     mock_websocket = AsyncMock()
 
-    with patch("RaspberryPI.communication.serial_helper.arduino.send") as mock_send:
+    with patch("RaspberryPI.commands.rover.lights.arduino.send", new_callable=AsyncMock) as mock_send:
         await handle_light_command("light_off", mock_websocket)
 
-        mock_send.assert_called_once_with(json.dumps({
+        mock_send.assert_awaited_once_with(json.dumps({
             "command": "light",
             "value": "off"
         }))
@@ -35,9 +35,9 @@ async def test_light_off_command():
 async def test_unknown_light_command():
     mock_websocket = AsyncMock()
 
-    with patch("RaspberryPI.communication.serial_helper.arduino.send") as mock_send:
+    with patch("RaspberryPI.commands.rover.lights.arduino.send", new_callable=AsyncMock) as mock_send:
         await handle_light_command("blink_blue", mock_websocket)
 
-        mock_send.assert_called_once_with("blink_blue")  
+        mock_send.assert_awaited_once_with("blink_blue")
         sent_response = json.loads(mock_websocket.send.call_args[0][0])
         assert sent_response["response"] == "Command sent: blink_blue"
