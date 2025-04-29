@@ -1,46 +1,49 @@
-import express from 'express'
+import express from 'express';
+import authCheck from "../authentication/routeAuthMiddleware.js";
 import path from 'path'
 import { fileURLToPath } from 'url';
-import fs from 'fs'
+import fs from 'fs';
+
+const router = express.Router();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const imagesStaticPath = path.join(__dirname, "../../img");
+const baseURL = 'https://terrax9.se/images/';
 
-const expressApp = express()
+router.get('/test', (req, res) => {
+    console.log("Hej!");
+    res.send("hej");
+});
 
-const imagesStaticPath = path.join(__dirname, "img")
-const baseURL = 'https://terrax9.se/images/'
-
-expressApp.get('/images', (req, res) => {
+router.get('/images', authCheck, (req, res) => {
     // Fetch a list of images
     fs.readdir(imagesStaticPath, (err, files) => {
         if (err) {
             console.error(err);
-            res.status(500).send("Error while getting images")
+            return res.status(500).send("Error while getting images.")
         }
+
         // Create url of each image
         const urls = files.map(imgName => {
             return new URL(imgName, baseURL);
         })
-        res.send(urls);
-    })
-})
+        return res.send(urls);
+    });
+});
 
-expressApp.get('/images/:imageName', (req, res) => {
+router.get('/images/:imageName', authCheck, (req, res) => {
     const { imageName } = req.params
     const filePath = path.join(imagesStaticPath, imageName);
+
     // Check if the file path exist
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
             console.error("File not found:", imageName);
-            return res.status(404).send("Image not found");
+            return res.status(404).send("Image not found.");
         }
-        res.sendFile(filePath);
+        return res.sendFile(filePath);
     });
-})
-expressApp.get('/', (req, res) => {
-    res.status(200).json({ message: "Hello, world!" })
-})
+});
 
-
-export default expressApp
+export default router;
