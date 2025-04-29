@@ -4,7 +4,7 @@
 const int SPOTLIGHTS_PIN = 12;
 
 //Funktion som sätter på SpotLights
-void TurnSpotlightOn ()
+void TurnSpotLightOn ()
 {
   digitalWrite(SPOTLIGHTS_PIN, HIGH);
 }
