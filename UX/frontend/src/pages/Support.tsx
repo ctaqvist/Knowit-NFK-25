@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   IconButton,
   MenuItem,
   Select,
@@ -32,7 +33,7 @@ const INITIAL_FORM_DATA = {
   s_name_input: '',
   email_input: '',
   serial_input: '',
-  issue_category_input: '',
+  issue_category_input: 'Select an option',
   issue_description_input: '',
   date_input: '',
   fileUploads: {
@@ -149,7 +150,11 @@ function Support() {
   const handleSubmit = () => {
     const VALIDITY = validateSupportForm(formData);
     setFormValidity(VALIDITY);
-    if (Object.values(VALIDITY).includes(true)) return;
+
+    // Make sure all fields are filled in before proceeding
+    for (const value of Object.values(VALIDITY)) {
+      if (value.length > 0) return;
+    }
     resetSupportForm();
     showAlert('Your support form has been sent!', 'success');
   };
@@ -396,7 +401,7 @@ function Support() {
               <Stack
                 direction={'row'}
                 sx={{
-                  '& > .MuiStack-root': { flex: 1, gap: '24px' },
+                  '& > .MuiStack-root': { flex: 1, gap: '16px' },
                   gap: '20px',
                 }}
               >
@@ -516,18 +521,24 @@ function Support() {
                       labelId='demo-simple-select-label'
                       value={formData.issue_category_input}
                       onChange={handleSelectChange}
+                      sx={{ '&:has([value="Select an option"]': { color: 'rgb(93 92 101)' } }}
                     >
+                      <MenuItem disabled value="Select an option" sx={{ display: 'none' }}>
+                        Select an option
+                      </MenuItem>
                       <MenuItem value='Wheels'>Wheels</MenuItem>
                       <MenuItem value='Base'>Base</MenuItem>
                       <MenuItem value='Battery'>Battery</MenuItem>
                       <MenuItem value='Camera'>Camera</MenuItem>
                       <MenuItem value='Claw Arm'>Claw Arm</MenuItem>
                     </Select>
+                    {formValidity.issue_category_input &&
+                      <FormHelperText>{formValidity.issue_category_input}</FormHelperText>}
                   </FormControl>
                 </Stack>
                 <Stack>
                   <Typography variant='h4' component='label' htmlFor='date_input'>
-                    Approximate date issue began
+                    Approximate date issue began{' '}
                     <Box
                       component='span'
                       color='main.error'

@@ -51,6 +51,7 @@ function Hero() {
             position: 'absolute',
             top: 479,
             right: 'clamp(5vw, 10vw, 321px)',
+            left: '11vw'
           }}
         >
           <Typography
