@@ -1,9 +1,10 @@
 import json
 from RaspberryPI.config.settings import ROVER_ID
 from RaspberryPI.Robotic_arm.servo_module.functions import move_arm, move_claw
+from RaspberryPI.config.settings import ROVER_ID
 
 # Forwards joystick x/y values to the robot arm
-async def forward_arm(arm_data, websocket):
+async def forward_arm(arm_data,websocket):
     try:
         x = float(arm_data["x"])
         y = float(arm_data["y"])
@@ -25,9 +26,8 @@ async def forward_arm(arm_data, websocket):
         "y": y
     }))
 
-
 # Forwards joystick value to the robot claw
-async def forward_claw(claw_data, websocket):
+async def forward_claw(claw_data,websocket):
     try:
         claw = float(claw_data["claw"])
     except (KeyError, ValueError, TypeError):

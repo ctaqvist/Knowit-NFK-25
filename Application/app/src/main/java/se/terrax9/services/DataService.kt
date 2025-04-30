@@ -1,7 +1,5 @@
 package se.terrax9.services
 
-import android.annotation.SuppressLint
-import androidx.lifecycle.viewModelScope
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.websocket.WebSockets
@@ -12,16 +10,13 @@ import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import se.terrax9.ui.screens.test.Commands
-import java.util.Locale
 import kotlin.math.absoluteValue
 
 val client = HttpClient {
@@ -124,7 +119,8 @@ class DataService(private val uri: String = "") {
 
         if (newExtremeValue || newValue) {
             // Send new data message
-            sendMessage(Commands.steer(x, y))
+            //sendMessage(Commands.steer(x, y))
+            sendMessage(Commands.arm(x, y))
 
             // Update last X and Y
             lastX = x

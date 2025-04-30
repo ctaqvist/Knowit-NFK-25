@@ -1,20 +1,24 @@
 import json
 from communication.serial_helper import arduino
 
+# Forward joystick data to the Arduino
 async def forward_joystick_to_arduino(steer_data):
     try:
-        x = float(steer_data["x"])
-        y = float(steer_data["y"])
-    except (KeyError, ValueError):
-        print("[ERROR] Invalid steer data:", steer_data)
-        return
+        x = steer_data["x"]
+        y = steer_data["y"]
 
-    # Pack joystick values in JSON and send to Arduino
-    serial_command = json.dumps({
+        # Validate that x and y are not None before conversion
+        if x is None or y is None:
+            raise ValueError("None is not a valid coordinate")
+
+        x = float(x)
+        y = float(y)
+
+    except (KeyError, ValueError, TypeError):
+        return  # Skip sending if data is invalid
+
+    arduino.send(json.dumps({
         "command": "steer",
         "x": round(x, 2),
         "y": round(y, 2)
-    })
-
-    arduino.send(serial_command)
-    print(f"[SENDING TO ARDUINO]: {serial_command}")
+    }))
