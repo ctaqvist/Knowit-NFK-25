@@ -40,7 +40,7 @@ export const theme = createTheme({
       fontFamily: 'Lexend Exa, sans-serif',
     },
     h4: {
-      fontSize: '1.25rem',
+      fontSize: 20,
       fontWeight: 500,
       fontFamily: 'Lexend Exa, sans-serif',
     },
@@ -310,7 +310,18 @@ export const theme = createTheme({
           backgroundColor: '#181724',
           border: '1px solid rgba(188, 197, 255, 1)',
           '&::placeholder': { color: 'rgb(93 92 101)' },
-        },
+          '& input': {
+            WebkitTextFillColor: '#fff',
+            transition: 'background-color 5000s ease-in-out 0s',
+          },
+    
+          '& input:-webkit-autofill': {
+            WebkitBoxShadow: '0 0 0 1000px #181724 inset',
+            WebkitTextFillColor: '#fff',
+            caretColor: '#fff',
+            transition: 'background-color 5000s ease-in-out 0s',
+          },
+        }
       },
     },
     MuiTooltip: {

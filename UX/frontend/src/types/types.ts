@@ -132,13 +132,13 @@ export interface SupportForm {
 
 
 export interface SupportFormValidity {
-  f_name_input: undefined | boolean,
-  s_name_input: undefined | boolean,
-  email_input: undefined | boolean,
-  serial_input: undefined | boolean,
-  issue_category_input: undefined | boolean,
-  issue_description_input: boolean
-  date_input: undefined
+  f_name_input: string,
+  s_name_input: string,
+  email_input: string,
+  serial_input: string,
+  issue_category_input: string,
+  issue_description_input: string
+  date_input: string
 }
 
 export interface CustomFile extends File {

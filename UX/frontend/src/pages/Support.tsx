@@ -56,13 +56,13 @@ function Support() {
   });
 
   const [formValidity, setFormValidity] = useState<SupportFormValidity>({
-    f_name_input: undefined,
-    s_name_input: undefined,
-    email_input: undefined,
-    serial_input: undefined,
-    issue_category_input: undefined,
-    issue_description_input: true,
-    date_input: undefined,
+    f_name_input: '',
+    s_name_input: '',
+    email_input: '',
+    serial_input: '',
+    issue_category_input: '',
+    issue_description_input: '',
+    date_input: '',
   });
 
   const handleDownload = async (file: DownloadableFiles) => {
@@ -83,14 +83,14 @@ function Support() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const isValid = validateInput(name, value) ? undefined : true;
+    const isValid = validateInput(name, value);
     setFormData({ ...formData, [name]: value as string });
     setFormValidity({ ...formValidity, [name]: isValid });
   };
 
   const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
-    const isValid = validateInput(name, value as string) ? undefined : true;
+    const isValid = validateInput(name, value as string)
     setFormData({ ...formData, [name]: value as string });
     setFormValidity({ ...formValidity, [name]: isValid });
   };
@@ -122,7 +122,6 @@ function Support() {
 
     try {
       file.loading = true;
-
       for (const uploadedFile of formData.fileUploads.files) {
         if (uploadedFile.name === file.name) {
           throw new Error(`A file with this name has already been uploaded`)
@@ -309,7 +308,7 @@ function Support() {
             <Stack
               sx={{
                 width: '100%',
-                gap: '56px',
+                gap: '40px',
                 '& > .MuiStack-root': { minHeight: 155 },
               }}
             >
@@ -321,7 +320,7 @@ function Support() {
                 }}
               >
                 <Stack>
-                  <label htmlFor='f_name_input'>
+                  <Typography htmlFor='f_name_input' variant='h4' component='label'>
                     Name{' '}
                     <Box
                       component='span'
@@ -329,10 +328,10 @@ function Support() {
                     >
                       *
                     </Box>
-                  </label>
+                  </Typography>
                   <TextField
                     autoComplete='off'
-                    error={formValidity.f_name_input}
+                    error={formValidity.f_name_input ? true : false}
                     value={formData.f_name_input}
                     onChange={handleInputChange}
                     name='f_name_input'
@@ -350,14 +349,14 @@ function Support() {
                             src='/src/assets/alert_sign.svg'
                             width='28px'
                           />
-                          Invalid name
+                          {formValidity.f_name_input}
                         </Stack>
                       )
                     }
                   />
                 </Stack>
                 <Stack>
-                  <label htmlFor='s_name_input'>
+                  <Typography htmlFor='s_name_input' variant='h4' component='label'>
                     Surname{' '}
                     <Box
                       component='span'
@@ -365,10 +364,10 @@ function Support() {
                     >
                       *
                     </Box>
-                  </label>
+                  </Typography>
                   <TextField
                     autoComplete='off'
-                    error={formValidity.s_name_input}
+                    error={formValidity.s_name_input ? true : false}
                     value={formData.s_name_input}
                     onChange={handleInputChange}
                     name='s_name_input'
@@ -387,7 +386,7 @@ function Support() {
                             src='/src/assets/alert_sign.svg'
                             width='28px'
                           />
-                          Invalid name
+                          {formValidity.s_name_input}
                         </Stack>
                       )
                     }
@@ -402,7 +401,7 @@ function Support() {
                 }}
               >
                 <Stack>
-                  <label htmlFor='email_input'>
+                  <Typography htmlFor='email_input' variant='h4' component='label'>
                     E-mail{' '}
                     <Box
                       component='span'
@@ -410,10 +409,10 @@ function Support() {
                     >
                       *
                     </Box>
-                  </label>
+                  </Typography>
                   <TextField
                     autoComplete='off'
-                    error={formValidity.email_input}
+                    error={formValidity.email_input ? true : false}
                     value={formData.email_input}
                     onChange={handleInputChange}
                     name='email_input'
@@ -432,14 +431,15 @@ function Support() {
                             src='/src/assets/alert_sign.svg'
                             width='28px'
                           />
-                          Invalid email
+                          {formValidity.email_input}
                         </Stack>
                       )
                     }
                   />
                 </Stack>
                 <Stack>
-                  <label
+                  <Typography
+                    component='label' variant='h4'
                     htmlFor='serial_input'
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
@@ -464,10 +464,10 @@ function Support() {
                         />
                       </Box>
                     </Tooltip>
-                  </label>
+                  </Typography>
                   <TextField
                     autoComplete='off'
-                    error={formValidity.serial_input}
+                    error={formValidity.serial_input ? true : false}
                     value={formData.serial_input}
                     onChange={handleInputChange}
                     name='serial_input'
@@ -485,7 +485,7 @@ function Support() {
                             src='/src/assets/alert_sign.svg'
                             width='28px'
                           />
-                          Invalid serial number
+                          {formValidity.serial_input}
                         </Stack>
                       )
                     }
@@ -500,7 +500,7 @@ function Support() {
                 }}
               >
                 <Stack>
-                  <label htmlFor='issue_category_input'>
+                  <Typography component='label' variant='h4' htmlFor='issue_category_input'>
                     Issue category{' '}
                     <Box
                       component='span'
@@ -508,7 +508,7 @@ function Support() {
                     >
                       *
                     </Box>
-                  </label>
+                  </Typography>
                   <FormControl fullWidth>
                     <Select
                       id='issue_category_input'
@@ -526,7 +526,7 @@ function Support() {
                   </FormControl>
                 </Stack>
                 <Stack>
-                  <label htmlFor='date_input'>
+                  <Typography variant='h4' component='label' htmlFor='date_input'>
                     Approximate date issue began
                     <Box
                       component='span'
@@ -534,12 +534,12 @@ function Support() {
                     >
                       *
                     </Box>
-                  </label>
+                  </Typography>
                   <TextField
                     autoComplete='off'
                     onChange={handleInputChange}
                     value={formData.date_input}
-                    error={formValidity.date_input}
+                    error={formValidity.date_input ? true : false}
                     name='date_input'
                     required
                     id='date_input'
@@ -555,7 +555,7 @@ function Support() {
                             src='/src/assets/alert_sign.svg'
                             width='28px'
                           />
-                          Invalid date
+                          {formValidity.date_input}
                         </Stack>
                       )
                     }
@@ -563,7 +563,7 @@ function Support() {
                 </Stack>
               </Stack>
               <Stack sx={{ gap: '24px' }}>
-                <label htmlFor='issue_description_input'>
+                <Typography variant='h4' component='label' htmlFor='issue_description_input'>
                   Describe the problem{' '}
                   <Box
                     component='span'
@@ -571,10 +571,11 @@ function Support() {
                   >
                     *
                   </Box>
-                </label>
+                </Typography>
                 <TextField
                   autoComplete='off'
                   value={formData.issue_description_input}
+                  error={formValidity.issue_description_input ? true : false}
                   onChange={handleInputChange}
                   name='issue_description_input'
                   multiline
@@ -583,10 +584,24 @@ function Support() {
                   id='issue_description_input'
                   placeholder=''
                   variant='outlined'
+                  helperText={
+                    formValidity.issue_description_input && (
+                      <Stack
+                        gap={'6px'}
+                        direction='row'
+                      >
+                        <Icon
+                          src='/src/assets/alert_sign.svg'
+                          width='28px'
+                        />
+                        {formValidity.issue_description_input}
+                      </Stack>
+                    )
+                  }
                 />
               </Stack>
               <Stack sx={{ gap: '24px' }}>
-                <label htmlFor='file_upload_input'>File upload (if any)</label>
+                <Typography component='label' variant='h4' htmlFor='file_upload_input'>File upload (if any)</Typography>
                 <Button
                   variant='contained'
                   component='label'
