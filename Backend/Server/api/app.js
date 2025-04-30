@@ -8,7 +8,7 @@ expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use(express.json());
 
 expressApp.use(userRouter);
-expressApp.use(imageRouter);
+expressApp.use('/images', imageRouter);
 
 expressApp.get('/', (req, res) => {
     res.status(200).json({ message: "Hello World! This is the Terrax9 API! :)" })

@@ -11,12 +11,9 @@ const __dirname = path.dirname(__filename);
 const imagesStaticPath = path.join(__dirname, "../../img");
 const baseURL = 'https://terrax9.se/images/';
 
-router.get('/test', (req, res) => {
-    console.log("Hej!");
-    res.send("hej");
-});
+router.use(authCheck);
 
-router.get('/images', authCheck, (req, res) => {
+router.get('/', (req, res) => {
     // Fetch a list of images
     fs.readdir(imagesStaticPath, (err, files) => {
         if (err) {
@@ -32,7 +29,7 @@ router.get('/images', authCheck, (req, res) => {
     });
 });
 
-router.get('/images/:imageName', authCheck, (req, res) => {
+router.get('/:imageName', (req, res) => {
     const { imageName } = req.params
     const filePath = path.join(imagesStaticPath, imageName);
 
