@@ -19,6 +19,7 @@ lgd-nfy0*
 .venv/
 env/
 venv/
+.env
 
 # VS Code
 .vscode/

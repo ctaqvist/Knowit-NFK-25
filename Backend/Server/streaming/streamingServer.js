@@ -1,13 +1,26 @@
 import { spawn } from 'child_process';
 import { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
+import wsAuthCheck from '../communication/helpers/webSocketAuthMiddleware.js';
 
 function startStreamingServer(ports) {
     const wss = new WebSocketServer({ port: ports.outputPort });
     const clients = new Set();
 
     // Output
-    wss.on('connection', (ws) => {
+    wss.on('connection', (ws, req) => {
+        // Authentication check
+        try{
+            const decoded = wsAuthCheck(req)
+            ws.token = decoded
+            console.log(`${decoded.username} is connected to streaming server`)
+        }
+        catch{
+            ws.close(4001, 'Invalid token!')
+            console.log('Invalid token')
+            return;
+        }
+        
         console.log('WebSocket client connected');
         clients.add(ws);
 
