@@ -54,15 +54,15 @@ void handleCommand(const String& cmd) {
             return;
         }
 
-        if (jsonCmd == "light_on") {
+        if (jsonCmd == "LIGHT_ON") {
             TurnSpotLightOn();
-            sendAck("light_on");
+            sendAck("LIGHT_ON");
             return;
         }
 
-        if (jsonCmd == "light_off") {
+        if (jsonCmd == "LIGHT_OFF") {
             TurnSpotLightOff();
-            sendAck("light_off");
+            sendAck("LIGHT_OFF");
             return;
         }
 
