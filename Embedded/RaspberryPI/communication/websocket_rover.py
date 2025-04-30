@@ -1,38 +1,44 @@
+import asyncio
 import json
 import websockets
 from config.settings import ROVER_ID, SERVER_URL
-from Embedded.RaspberryPI.commands.rover.handler import *
-from Embedded.RaspberryPI.commands.rover.forwarder import *
+from Embedded.RaspberryPI.commands.rover.handler import process_command
 
-# Main async function to listen to server commands
+RECONNECT_DELAY = 5
+
 async def listen_to_server():
-    async with websockets.connect(SERVER_URL) as websocket:
-        print("Connected to server")
+    while True:
+        try:
+            async with websockets.connect(SERVER_URL) as websocket:
+                print("Connected to server")
 
-        # Register the rover on the server
-        await websocket.send(json.dumps({
-            "type": "register",
-            "rover_id": ROVER_ID
-        }))
+                await websocket.send(json.dumps({
+                    "type": "register",
+                    "rover_id": ROVER_ID
+                }))
 
-        while True:
-            message = await websocket.recv()
-            print(f"[RAW] {message}")
+                while True:
+                    try:
+                        message = await websocket.recv()
+                        print(f"[RAW] {message}")
 
-            try:
-                data = json.loads(message)
-            except json.JSONDecodeError:
-                print("Invalid JSON")
-                continue
+                        data = json.loads(message)
+                        command = data.get("command")
+                        params = data
 
-            command = data.get("command")
-            params = data 
+                        if command is None:
+                            print("No command found – skipping message.")
+                            continue
 
-            if command is None:
-                print("No command found – skipping message.")
-                continue
+                        await process_command(websocket, command, params)
 
-            await process_command(websocket, command, params, arduino)
-            
-            
-            #hej
+                    except json.JSONDecodeError:
+                        print("[ERROR] Invalid JSON")
+                    except websockets.ConnectionClosed:
+                        print("[DISCONNECTED] Server closed connection.")
+                        break
+
+        except Exception as e:
+            print(f"[ERROR] Connection failed: {e}")
+            print(f"[RETRYING] in {RECONNECT_DELAY} seconds...")
+            await asyncio.sleep(RECONNECT_DELAY)
