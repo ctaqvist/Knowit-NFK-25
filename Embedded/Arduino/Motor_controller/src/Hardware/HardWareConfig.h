@@ -11,4 +11,5 @@ const int MOTOR_D = 8;
 const int PWM_AB = 3; 
 const int PWM_CD = 5;  
 
+const int SPOTLIGHTS_PIN = 12; 
 #endif
