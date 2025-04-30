@@ -465,7 +465,7 @@ function Support() {
                       <Box>
                         <Icon
                           src='/src/assets/Icon_info.svg'
-                          width='27px'
+                          width='24px'
                         />
                       </Box>
                     </Tooltip>

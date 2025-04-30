@@ -4,7 +4,7 @@ import { Marquee } from '@/components/magicui/marquee';
 import { ReviewCard } from '@/components/ReviewCard';
 
 function Hero() {
-  const { pages, reviews } = useContent();
+  const { reviews } = useContent();
 
   // Split reviews in two rows
   const firstRow = reviews?.slice(0, reviews?.length / 2);
