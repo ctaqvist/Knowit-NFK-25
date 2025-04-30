@@ -3,16 +3,17 @@ import { IconButton, LinearProgress, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Icon from './Icon';
 
-function File({ file, handleRemoveUpload }: {
+type FileProps = {
   file: CustomFile,
   handleRemoveUpload: (file: CustomFile) => void,
-}) {
+}
+
+function File({ file, handleRemoveUpload }: FileProps) {
   const [progress, setProgress] = useState(0);
-  const [success, setSuccess] = useState(false)
+
 
   async function checkFile(file: CustomFile) {
     const MAX_IMAGE_SIZE_IN_BYTES = 2 * 1024 * 1024;
-
     try {
       file.loading = true;
       if (!['image/png', 'image/jpeg'].includes(file.type)) {

@@ -1,7 +1,4 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Alert,
   Box,
   Button,
@@ -15,7 +12,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Icon from '@/components/Icon';
 import {
   CustomFile,
@@ -28,6 +24,8 @@ import React, { useState } from 'react';
 import { validateInput, validateSupportForm } from '@/utils/validate';
 import FileUpload from '@/components/FileUpload';
 import LinearProgress from '@mui/material/LinearProgress';
+import FAQ from '@/utils/data/supportFAQ';
+import Accordion from '@/components/CustomAccordion';
 
 const INITIAL_FORM_DATA = {
   f_name_input: '',
@@ -227,103 +225,7 @@ function Support() {
         {/* FAQ First section: Terra-X9 & Application */}
         <Box sx={{ mb: '70px' }}>
           <Typography variant='subheading'>Terra-X9 & Application</Typography>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel1-content'
-              id='panel1-header'
-            >
-              <Typography variant='body2'>
-                How do I control the Terra-X9 through the app?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                You can control the Terra-X9 through the application, which
-                provides a smooth steering and driving mode, and real-time
-                video-overview. It includes features such as light control for
-                night vision, image capturing and an image. Sapien vulputate
-                lorem facilisis scelerisque leo mauris id. Ornare semper
-                pharetra netus sodales bibendum. Ipsum orci amet sem egestas
-                porta nunc facilisi felis ornare. Id nulla nisl nibh eu proin
-                dignissim tincidunt. Arcu purus scelerisque amet vitae
-                adipiscing feugiat tristique a nibh. Non nisi eu donec sodales.
-                Sit sagittis lectus urna sit orci adipiscing enim est. Viverra
-                turpis leo cursus diam.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel2-content'
-              id='panel2-header'
-            >
-              <Typography variant='body2'>Can I name my rover?</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                Yes! You can personalize your rover by giving it a unique name,
-                unless you’d like to refer to it as its initial serial-number.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel3-content'
-              id='panel3-header'
-            >
-              <Typography variant='body2'>
-                Where can I find the serial number to my rover?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                When opening the settings in the application you will find the
-                serial number to the rover you are currently connected to. If
-                your user account has access to multiple rovers, the serial
-                number for all rovers can be found on the connection page of the
-                application.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel4-content'
-              id='panel5-header'
-            >
-              <Typography variant='body2'>
-                What kind of environments can the Terra-X9 handle?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                The Terra-X9 is designed for all terrain and surfaces, it can
-                withstand dust storms, extreme temperatures, and rocky
-                landscapes.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel6-content'
-              id='panel6-header'
-            >
-              <Typography variant='body2'>
-                Can I connect to multiple rovers?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                Yes, the app supports multi-rover management, allowing you to
-                control and monitor multiple rovers, though not at the same
-                time.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+          {FAQ.applicationFAQ.map(q => <Accordion key={q.summary} summary={q.summary} details={q.details} />)}
         </Box>
 
         {/* FAQ Second section: Purchase & Delivery */}
@@ -335,113 +237,7 @@ function Support() {
             {' '}
             Purchase & Delivery
           </Typography>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel7-content'
-              id='panel7-header'
-            >
-              <Typography variant='body2'>
-                Why do I need a consultation before purchasing?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                A consultation ensures the Terra-X9 is customized to your
-                company’s specific mission needs, ensuring that you make a
-                confident and informed purchase, fully aligned with your goals.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel8-content'
-              id='panel8-header'
-            >
-              <Typography variant='body2'>
-                How is the Terra-X9 delivered?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                The Terra-X9 is delivered via secure transport for
-                interplanetary missions and conditions.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel9-content'
-              id='panel9-header'
-            >
-              <Typography variant='body2'>
-                How long does it take to receive the rover after purchase?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                Delivery typically takes 6-12 weeks, depending on mission
-                requirements.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel10-content'
-              id='panel10-header'
-            >
-              <Typography variant='body2'>
-                What kind of support do I get after purchase?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                You can reach out to us anytime through our support page on the
-                product website, where we’re always ready to assist you.
-                Additionally, the rover’s instruction manual is available for
-                download on the same page whenever you need it.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel11-content'
-              id='panel11-header'
-            >
-              <Typography variant='body2'>
-                What is your order cancellation policy?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                The Terra-X9 comes with a standard 24-month warranty covering
-                hardware defects and software support. Extended warranties are
-                also available.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color='primary' />}
-              aria-controls='panel12-content'
-              id='panel12-header'
-            >
-              <Typography variant='body2'>
-                Is there a warranty included when I purchase a Terra-X9?
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography variant='body2'>
-                Yes, the Terra-X9 comes with a standard 24-month warranty
-                covering hardware defects and software support. Extended
-                warranties are also available.
-              </Typography>
-            </AccordionDetails>
-          </Accordion>
+          {FAQ.deliveryFAQ.map(q => <Accordion key={q.summary} summary={q.summary} details={q.details} />)}
         </Box>
         {/* Decorative: Background gradients + Design element */}
         <Box
@@ -961,7 +757,6 @@ function Support() {
       >
         <Box
           // Decorative element top
-          component={'button'}
           role='presentation'
           sx={{
             height: 151,

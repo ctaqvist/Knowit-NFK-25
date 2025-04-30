@@ -144,5 +144,5 @@ export interface SupportFormValidity {
 export interface CustomFile extends File {
   loading?: boolean,
   success?: boolean,
-  message?: string
+  message?: string,
 }
