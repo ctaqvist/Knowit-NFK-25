@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import android.graphics.drawable.Icon
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,7 +32,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import se.emilkronholm.terrax9.R
+import se.terrax9.R
 
 @Composable
 fun IconButton(

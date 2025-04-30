@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9
+package se.terrax9
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -12,7 +12,7 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Rule
-import se.emilkronholm.terrax9.ui.screens.controller.JoyStick
+import se.terrax9.ui.screens.controller.JoyStick
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -27,7 +27,7 @@ class JoyStickTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("se.emilkronholm.terrax9", appContext.packageName)
+        assertEquals("se.terrax9", appContext.packageName)
     }
 
     @get:Rule

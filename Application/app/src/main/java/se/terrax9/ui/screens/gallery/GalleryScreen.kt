@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import se.emilkronholm.terrax9.ui.screens.Gallery.GalleryViewModel
+import se.terrax9.ui.screens.Gallery.GalleryViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

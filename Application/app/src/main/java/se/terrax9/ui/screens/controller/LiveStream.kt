@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import android.annotation.SuppressLint
 import android.webkit.WebChromeClient

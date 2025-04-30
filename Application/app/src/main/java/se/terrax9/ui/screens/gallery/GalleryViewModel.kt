@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.Gallery
+package se.terrax9.ui.screens.Gallery
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import android.util.Log
-import se.emilkronholm.terrax9.services.APIService
+import se.terrax9.services.APIService
 
 class GalleryViewModel : ViewModel() {
     private val apiService = APIService()

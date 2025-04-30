@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -15,8 +15,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import se.emilkronholm.terrax9.R
-import se.emilkronholm.terrax9.Routes
+import se.terrax9.R
+import se.terrax9.Routes
 
 @Composable
 fun ControllerScreen(navController: NavController) {

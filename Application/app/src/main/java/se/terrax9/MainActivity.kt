@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9
+package se.terrax9
 
 import GalleryScreen
 import android.os.Bundle
@@ -15,7 +15,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import se.emilkronholm.terrax9.ui.theme.Terrax9Theme
+import se.terrax9.ui.screens.controller.ControllerScreen
+import se.terrax9.ui.theme.Terrax9Theme
 
 object Routes {
     val Dashboard = "dashboard"

@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.theme
+package se.terrax9.ui.theme
 
 import android.app.Activity
 import android.os.Build

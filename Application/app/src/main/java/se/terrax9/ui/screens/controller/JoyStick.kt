@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import se.emilkronholm.terrax9.R
+import se.terrax9.R
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.cos

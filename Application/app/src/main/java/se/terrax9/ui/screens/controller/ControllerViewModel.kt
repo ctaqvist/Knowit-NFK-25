@@ -1,4 +1,4 @@
-package se.emilkronholm.terrax9.ui.screens.controller
+package se.terrax9.ui.screens.controller
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,8 +6,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import se.emilkronholm.terrax9.services.DataService
-import se.emilkronholm.terrax9.services.Commands
+import se.terrax9.services.DataService
+import se.terrax9.ui.screens.test.Commands
 
 class ControllerViewModel() : ViewModel() {
     private val dataService = DataService("terrax9.se")
