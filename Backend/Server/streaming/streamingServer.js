@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import { WebSocket } from 'ws';
 import { WebSocketServer } from 'ws';
-import wsAuthCheck from './webSocketAuthMiddleware.js';
+import wsAuthCheck from '../communication/helpers/webSocketAuthMiddleware.js';
 
 function startStreamingServer(ports) {
     const wss = new WebSocketServer({ port: ports.outputPort });
