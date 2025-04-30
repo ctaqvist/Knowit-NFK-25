@@ -621,7 +621,7 @@ function Support() {
 
                 {/* UPLOADING FILES */}
                 {loadingFiles.length > 0 || failedFiles.length > 0 &&
-                  <Typography variant='subheading2'>
+                  <Typography mt={'12px'} variant='subheading2'>
                     Uploading -{' '}
                     {`${loadingFiles.length}/${formData.fileUploads.files.length}`}
                   </Typography>}
@@ -675,7 +675,7 @@ function Support() {
                   </Stack>
                 ))}
                 {/* UPLOADED FILES */}
-                {uploadedFiles.length > 0 && <Typography variant='subheading2'>Uploaded - {`${uploadedFiles.length}/${formData.fileUploads.files.length}`}</Typography>}
+                {uploadedFiles.length > 0 && <Typography variant='subheading2' mt={'12px'}>Uploaded - {`${uploadedFiles.length}/${formData.fileUploads.files.length}`}</Typography>}
                 {uploadedFiles.map((file) => {
                   return (
                     <Stack key={file.name} sx={{
