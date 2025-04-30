@@ -7,7 +7,7 @@ import Login from '../pages/Editor/Login';
 import Editor from '../pages/Editor/Editor';
 import { AuthRedirect } from '../pages/Editor/AuthRedirect';
 import Root from '../components/Root';
-
+import EditorRoot from '../pages/Editor/Root'
 
 export const router = createBrowserRouter([
   {
@@ -37,7 +37,11 @@ export const router = createBrowserRouter([
     },
     {
       path: '/editor',
-      element: <Editor />
+      element: <EditorRoot />,
+      children: [{
+        path: '/editor',
+        element: <Editor />,
+      }]
     }]
   },
 

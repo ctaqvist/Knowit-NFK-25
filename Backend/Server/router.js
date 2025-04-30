@@ -20,7 +20,7 @@ expressApp.use(bodyParser.urlencoded({ extended: true }));
 expressApp.use(bodyParser.json()); 
 
 const imagesStaticPath = path.join(__dirname, "img")
-const baseURL = 'http://test.lazyloops.se/images/'
+const baseURL = 'https://terrax9.se/images/'
 
 const SECRET_KEY = "HiThisIsSecretKey"
 
