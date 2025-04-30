@@ -1,9 +1,12 @@
 import { Box, Button, IconButton, Modal, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import { useContent } from '@/hooks/useContent';
 
 function Product() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalImg, setModalImg] = useState('')
+  const { pages } = useContent()
 
   const handleClose = () => setModalOpen(false)
 
@@ -111,7 +114,7 @@ function Product() {
           '& > .MuiBox-root': { borderRadius: '6px' }, maxWidth: 1064, height: 628, gap: '20px', alignSelf: 'center',
           gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(12, 1fr)', display: 'grid'
         }}>
-          <Button onClick={handleOpen} sx={{ gridColumn: 1, gridRow: '1 / span 4' }}>
+          <Button onClick={handleOpen} sx={{ gridColumn: 1, gridRow: '1 / span 4', p: 0 }}>
             <img src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/gallery/grid_1.png`} />
           </Button>
           <Box sx={{ gridColumn: 1, gridRow: '5 / span 4' }}>
@@ -145,21 +148,6 @@ function Product() {
             <img src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/gallery/grid_col_5_row_4_azri-hanafi-41Y5LWOiBR4-unsplash.png`} />
           </Box>
         </Box>
-
-        {/* MODAL: Shows enlarged image */}
-        <Modal
-          open={modalOpen}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={{ style }}>
-            <img src={modalImg} />
-            <IconButton>
-
-            </IconButton>
-          </Box>
-        </Modal>
 
 
         {/* Decorative element */}
@@ -260,6 +248,26 @@ function Product() {
             <Button variant='contained'>BOOK A CONSULTATION</Button>
           </Box>
         </Box>
+        {/* MODAL: Shows enlarged image */}
+        <Modal
+          open={modalOpen}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%'
+          }}
+        >
+          <Box sx={{ style }}>
+            <img src={modalImg} />
+            <IconButton>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Modal>
       </Box>
     </>
   )
