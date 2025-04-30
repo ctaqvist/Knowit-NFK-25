@@ -20,8 +20,10 @@ async def process_command(websocket, command, params):
         await handle_stop_stream_command(websocket)
         return
 
-    elif command in ("light_on", "light_off"):
+    elif command in ("LIGHT_ON", "LIGHT_OFF"):
         await handle_light_command(command, websocket)
         return
+    else :
+        print(f"UNKNOWN COMMAND: {command}")
+        return
 
-    print("No command or steer data found")
