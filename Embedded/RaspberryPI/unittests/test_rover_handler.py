@@ -35,12 +35,13 @@ async def test_process_command_stop_stream():
 async def test_process_command_light():
     websocket = MagicMock()
     with patch("RaspberryPI.commands.rover.handler.handle_light_command") as mock_light:
-        await process_command(websocket, "light_on", {})
-        mock_light.assert_awaited_once_with("light_on", websocket)
+        await process_command(websocket, "LIGHT_ON", {})
+        mock_light.assert_awaited_once_with("LIGHT_ON", websocket)
+
 
 @pytest.mark.asyncio
 async def test_process_command_noop(capfd):
     websocket = MagicMock()
     await process_command(websocket, "", {})
     out, _ = capfd.readouterr()
-    assert "No command or steer data found" in out
+    assert "UNKNOWN COMMAND" in out

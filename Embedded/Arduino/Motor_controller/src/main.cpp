@@ -8,7 +8,7 @@
 const int SPOTLIGHTS_PIN = 12; 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(SPOTLIGHTS_PIN, OUTPUT);
   
   commandHandler.init();  //  Initiera CommandHandler så Arduino är redo att ta emot JSON-kommandon
