@@ -99,9 +99,12 @@ describe('Terrax9 communication test', () => {
                 // Get the most recent image, convert it back to base64 and compare to the original. Should be the same.
                 const lastImage = getMostRecentImageBase64();
                 expect(lastImage).toBe(imagebase64);
+                client.close()
                 done();
             }, 100);
         });
+
+        client.on('close', () => { done() });
     });
 });
 
@@ -110,11 +113,17 @@ describe('api test again', () => {
         const response = await request(expressApp).get('/images');
         expect(response.statusCode).toBe(200);
         expect(response.body !== undefined).toBe(true);
-        
+
         for (const url of response.body) {
             const imageId = url.split('/images/')[1];
             const singleResponse = await request(expressApp).get(`/images/${imageId}`);
             expect(singleResponse.statusCode).toBe(200);
         }
+    });
+});
+
+afterAll((done) => {
+    websocketServer.close(() => {
+        server.close(done);
     });
 });
