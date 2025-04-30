@@ -27,7 +27,7 @@ class JoyStickTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("se.emilkronholm.terrax9", appContext.packageName)
+        assertEquals("se.terrax9", appContext.packageName)
     }
 
     @get:Rule
