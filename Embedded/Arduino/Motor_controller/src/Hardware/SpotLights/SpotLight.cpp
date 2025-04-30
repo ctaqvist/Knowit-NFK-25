@@ -1,7 +1,7 @@
 #include "SpotLight.h"
 #include <Arduino.h>
+#include "../HardWareConfig.h"
 
-const int SPOTLIGHTS_PIN = 12;
 
 //Funktion som sätter på SpotLights
 void TurnSpotLightOn ()
