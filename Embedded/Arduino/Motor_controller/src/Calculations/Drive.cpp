@@ -90,32 +90,32 @@ void Drive::ExecuteDriveLogic() {
     int leftSpeed = round(CalculateLeftSpeedFunc()* PWM_SCALE);
     int rightSpeed = round(CalculateRightSpeedFunc()* PWM_SCALE);
     DriveState dir = GetState();
-    Serial.print("Current Speed: ");
-    Serial.print(currentSpeed);
-    Serial.print(" Left Speed: ");
-    Serial.print(leftSpeed);
-    Serial.print(" Right Speed: ");
-    Serial.println(rightSpeed);
+    //Serial.print("Current Speed: ");
+    //Serial.print(currentSpeed);
+    //Serial.print(" Left Speed: ");
+    //Serial.print(leftSpeed);
+    //Serial.print(" Right Speed: ");
+    //Serial.println(rightSpeed);
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
         case FORWARD:
-            Serial.println("State: GO FWD");
+            //Serial.println("State: GO FWD");
             motorController.DriveForward(leftSpeed, rightSpeed);
             break;
         case BACKWARD:
-            Serial.println("State: GO BWD");
+            //Serial.println("State: GO BWD");
             motorController.DriveBackward(leftSpeed, rightSpeed);
             break;
         case TTR:
-            Serial.println("State: TTR");
+            //Serial.println("State: TTR");
             motorController.MakeTankTurnRight(currentSpeed);
             break;
         case TTL:
-            Serial.println("State: TTL");
+            //Serial.println("State: TTL");
             motorController.MakeTankTurnLeft(currentSpeed);
             break;
         default:
-            Serial.println("State: STOPPED");
+            //Serial.println("State: STOPPED");
             motorController.StopMotors();
             break;
     }
