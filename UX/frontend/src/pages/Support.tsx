@@ -102,6 +102,7 @@ function Support() {
     if (formData.fileUploads.files.length + files.length > 5)
       return showAlert('Maximum of 5 images allowed', 'error');
 
+
     setFormData({
       ...formData,
       ['fileUploads']: {
@@ -121,6 +122,12 @@ function Support() {
 
     try {
       file.loading = true;
+
+      for (const uploadedFile of formData.fileUploads.files) {
+        if (uploadedFile.name === file.name) {
+          throw new Error(`A file with this name has already been uploaded`)
+        }
+      }
 
       if (!['image/png', 'image/jpeg'].includes(file.type)) {
         throw new Error(
