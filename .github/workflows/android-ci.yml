@@ -9,7 +9,7 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-      - '**/*.py'
+      - '**/*.kt'
       - '.github/workflows/android-ci.yml'
 
 permissions:
