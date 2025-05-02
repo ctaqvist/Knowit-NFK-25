@@ -63,10 +63,23 @@ jobs:
       - name: Run instrumentation tests on emulator
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35              
-          target: google_apis         
-          arch: x86_64               
-          emulator-options: -no-window -gpu swiftshader_indirect
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: >
+            -no-window
+            -gpu host
+            -no-boot-anim
+            -no-snapshot
+            -wipe-data
+            -noaudio
+          working-directory: Application
           script: |
-            cd Application
+            # wait for adb to see the device
+            adb wait-for-device
+            until adb shell getprop sys.boot_completed | grep -m1 '1'; do
+              echo "Waiting for emulator to finish booting…"
+              sleep 5
+            done
             ./gradlew connectedAndroidTest --no-daemon
