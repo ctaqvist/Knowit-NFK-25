@@ -23,6 +23,12 @@ Here are the decided general GitHub standards for the entire project.
 - Commit name should be short and clear.  
 - If more information is needed, put it in the commit description.
 
+### Branch naming convention
+ - A branch should be linked to a ticket. Then the name must be: `id/name-of-ticket`
+	- It should always be lower caps
+ - In the special case when a branch is not linked to a ticket it follow the convetion: `tag/name-of-assignment`
+	- Where tag should be something fitting like `bug`, `extra`, `update`, `fix` 
+
 ### Pull request
 - The PR name must match the branch naming standard: `id/name-of-ticket`
 
