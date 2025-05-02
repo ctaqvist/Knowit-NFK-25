@@ -24,8 +24,8 @@ Here are the decided general GitHub standards for the entire project.
 - If more information is needed, put it in the commit description.
 
 ### Pull request
+- The PR name must match the branch naming standard: `id/name-of-ticket`
 
-- Squash all commits before opening PR.  
 - Before creating a pull request, check these points:  
 	- Is my code tested enough so that all cases are checked?  
 	- Does my code affect any other part of the project? If so, make sure that code changes don't break any other part of the project.  
@@ -39,7 +39,7 @@ Here are the decided general GitHub standards for the entire project.
 A pull request should not be merged if any of these are not fulfilled:  
 	- No one from my team has reviewed my pull request.  
 	- If definition of done is not met.
-
+- The PR merging commit message must match the branch naming standard: `id/name-of-ticket`
 ___
 
 ## Code
