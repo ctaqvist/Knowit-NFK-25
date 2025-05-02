@@ -1,4 +1,24 @@
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except ImportError:
+    # Kör utan riktigt GPIO – dummy-klass för att slippa fel
+    class _DummyPWM:
+        def start(self, duty): pass
+        def ChangeDutyCycle(self, dc): pass
+
+    class GPIO:
+        BCM = None
+        OUT = None
+        @staticmethod
+        def setwarnings(flag): pass
+        @staticmethod
+        def setmode(mode): pass
+        @staticmethod
+        def setup(pin, mode): pass
+        @staticmethod
+        def PWM(pin, freq):
+            return _DummyPWM()
+
 from time import sleep
 import math
 
