@@ -6,7 +6,7 @@
 // Forward declarations
 void sendAck(const String& cmd);
 void sendError(const String& msg);
-
+Drive drive (0.0f, 0.0f);
 // Global variables
 String inputString = "";
 bool stringComplete = false;
@@ -48,7 +48,7 @@ void handleCommand(const String& cmd) {
         if (jsonCmd == "steer" && doc.containsKey("x") && doc.containsKey("y")) {
             float x = doc["x"];
             float y = doc["y"];
-            Drive drive(x, y);
+            drive.SetXY(x, y);
             drive.ExecuteDriveLogic();
             sendAck("steer");
             return;

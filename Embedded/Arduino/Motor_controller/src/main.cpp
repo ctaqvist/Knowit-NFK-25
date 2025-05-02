@@ -9,12 +9,11 @@
 const int SPOTLIGHTS_PIN = 12; 
 
 
-Drive drive (0.0f, 0.0f); // Skapa en Drive-instans med x och y som 0.0f
+//Drive drive (0.0f, 0.0f); // Skapa en Drive-instans med x och y som 0.0f
 void setup() {
 
   Serial.begin(115200);
   pinMode(SPOTLIGHTS_PIN, OUTPUT);
-  
   commandHandler.init();  //  Initiera CommandHandler så Arduino är redo att ta emot JSON-kommandon
   //motorControl.init();   // (om du vill, motorinitiering kan vara kvar)
 }
@@ -22,13 +21,13 @@ void setup() {
 
 void loop() {
 
-  //commandHandler.listen();
-  //motorControl.update();
-  //delay(1000);
-  drive.SetXY(1.0f, 0.0f); // Sätt x och y till 0.0f och 1.0f
+  commandHandler.listen();
+
+
+  //drive.SetXY(1.0f, 0.0f); // Sätt x och y till 0.0f och 1.0f
   // att skapa en Drive-instans med x och y
-  drive.ExecuteDriveLogic(); // Anropa funktionen för att köra logiken
+  //drive.ExecuteDriveLogic(); // Anropa funktionen för att köra logiken
   
-  delay(1000); // Håll framåt i 1 sekund
+  //delay(1000); // Håll framåt i 1 sekund
 
 }
