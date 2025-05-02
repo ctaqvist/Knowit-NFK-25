@@ -1,14 +1,26 @@
-import { Injectable, Param } from '@nestjs/common';
+import { Inject, Injectable, Param } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
 import { ApiResponse, Page, Review, Pages } from 'src/types/types';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class PageService {
-  constructor(private readonly supabaseService: SupabaseService) {}
+  constructor(
+    private readonly supabaseService: SupabaseService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
 
   async getPages(): Promise<ApiResponse<Pages>> {
     try {
       const PAGES = ['hero', 'product', 'support'];
+      const CACHED_PAGES = await this.cacheManager.get('pages');
+      console.log('Cached pages: ', CACHED_PAGES)
+      if (CACHED_PAGES)
+        return {
+          data: CACHED_PAGES as Pages,
+          error: null,
+        };
 
       // Get all pages, assign them to ALLPAGES object
       const getAllPages = async () => {
@@ -24,11 +36,12 @@ export class PageService {
         pageDataArray.forEach(({ page, data }) => {
           ALLPAGES[page] = data;
         });
-
         return ALLPAGES;
       };
 
       const ALLPAGES = await getAllPages();
+      // Set cache expiration to an hour
+      await this.cacheManager.set('pages', ALLPAGES, 3600);
 
       return {
         data: ALLPAGES as Pages,
@@ -69,6 +82,12 @@ export class PageService {
 
   async getReviews(): Promise<ApiResponse<Review[]>> {
     try {
+      const CACHED_REVIEWS = await this.cacheManager.get('reviews');
+      console.log('Cached reviews: ', CACHED_REVIEWS)
+
+      if (CACHED_REVIEWS)
+        return { data: CACHED_REVIEWS as Review[], error: null };
+
       const CLIENT = this.supabaseService.supabase;
       const { data, error } = await CLIENT.from('reviews').select(`
         content,
@@ -83,6 +102,9 @@ export class PageService {
         content: review.content,
         client: review.clients['company_name'],
       }));
+
+      // Set cache expiration to an hour
+      await this.cacheManager.set('reviews', formattedReview, 3600)
 
       return {
         data: formattedReview,
