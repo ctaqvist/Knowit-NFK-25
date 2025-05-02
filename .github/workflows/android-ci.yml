@@ -46,7 +46,9 @@ jobs:
 
       # Run JVM unit tests
       - name: Run unit tests
-        run: ./Application/gradlew test --no-daemon
+        run: |
+          cd Application
+          ./gradlew test --no-daemon
 
       # Run intrumentation tests
       - name: Run instrumentation tests on emulator
@@ -56,4 +58,6 @@ jobs:
           target: google_apis         
           arch: x86_64               
           emulator-options: -no-window -gpu swiftshader_indirect
-          script: ./Application/gradlew connectedAndroidTest --no-daemon
+          script: |
+            cd Application
+            ./gradlew connectedAndroidTest --no-daemon
