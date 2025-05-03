@@ -31,17 +31,17 @@ jobs:
           cache: gradle
       
       - name: Grant execute permission for gradlew
-        run: cd Application |
-          chmod +x gradlew
+        working-directory: ./Application
+        run: chmod +x gradlew
       
       - name: Run unit tests
-        run: cd Application |
-          ./gradlew test
+        working-directory: ./Application
+        run: ./gradlew test
       
       - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 26
           disable-animations: true
-          script: cd Application |
-            ./gradlew connectedAndroidTest
+          working-directory: ./Application
+          script: ./gradlew connectedAndroidTest
