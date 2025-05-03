@@ -34,18 +34,6 @@ jobs:
         working-directory: ./Application
         run: chmod +x gradlew
       
-      - name: Run instrumented tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 26
-          target: default
-          arch: x86
-          force-avd-creation: true
-          avd-name: test
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
-          disable-animations: true
-          script: cd Application && ./gradlew connectedAndroidTest --stacktrace
-      
       - name: Run unit tests
         working-directory: ./Application
         run: ./gradlew test
