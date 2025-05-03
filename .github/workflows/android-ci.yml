@@ -17,69 +17,28 @@ permissions:
 
 jobs:
   android-tests:
-    name: Android Unit & Instrumentation Tests
-    runs-on: ubuntu-latest
-
+    runs-on: macos-latest
+    
     steps:
-      # Checkout your code
-      - uses: actions/checkout@v3
-
-      # Set up JDK (required for Gradle)
-      - name: Set up JDK 17
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up JDK 11
         uses: actions/setup-java@v3
         with:
-          distribution: temurin
-          java-version: '17'
-
-      # Cache Gradle artifacts
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-
-      # Make gradlew executable
+          distribution: 'temurin'
+          java-version: '11'
+          cache: gradle
+      
       - name: Grant execute permission for gradlew
-        run: chmod +x ./Application/gradlew
-
-      # Run JVM unit tests
+        run: chmod +x gradlew
+      
       - name: Run unit tests
-        run: |
-          cd Application
-          ./gradlew test --no-daemon
-
-      # Enable hardware acceleration
-      - name: Enable KVM for hardware acceleration
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
-            | sudo tee /etc/udev/rules.d/99-kvm.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-
-      # Run intrumentation tests
-      - name: Run instrumentation tests on emulator
+        run: ./gradlew test
+      
+      - name: Run instrumented tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
-          target: google_apis
-          arch: x86_64
+          api-level: 26
           disable-animations: true
-          emulator-options: >
-            -no-window
-            -gpu host
-            -no-boot-anim
-            -no-snapshot
-            -wipe-data
-            -noaudio
-          working-directory: Application
-          script: |
-            # wait for adb to see the device
-            adb wait-for-device
-            until adb shell getprop sys.boot_completed | grep -m1 '1'; do
-              echo "Waiting for emulator to finish booting…"
-              sleep 5
-            done
-            ./gradlew connectedAndroidTest --no-daemon
+          script: ./gradlew connectedAndroidTest
