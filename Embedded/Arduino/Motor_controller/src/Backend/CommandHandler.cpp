@@ -39,7 +39,7 @@ void CommandHandler::listen() {
 }
 
 void handleCommand(const String& cmd) {
-    StaticJsonDocument<200> doc;
+    StaticJsonDocument<256> doc;
     DeserializationError error = deserializeJson(doc, cmd);
 
     if (!error && doc.containsKey("command")) {
@@ -54,6 +54,28 @@ void handleCommand(const String& cmd) {
             return;
         }
 
+        if (jsonCmd == "BATTERY_LEVEL" && doc.containsKey("level")) {
+            float level = doc["level"];
+            Serial.print("Battery level: ");
+            Serial.println(level * 100);  // Visa i %
+            sendAck("BATTERY_LEVEL");
+            return;
+        }
+        
+        if (jsonCmd == "SLEEP_MODE" && doc.containsKey("trigger")) {
+            bool trigger = doc["trigger"];
+            Serial.println(trigger ? "Sleep mode ON" : "Sleep mode OFF");
+            sendAck("SLEEP_MODE");
+            return;
+        }
+        
+        if (jsonCmd == "LOW_BATTERY_WARNING" && doc.containsKey("trigger")) {
+            bool low = doc["trigger"];
+            Serial.println(low ? "LOW BATTERY!" : "Battery OK");
+            sendAck("LOW_BATTERY_WARNING");
+            return;
+        }
+        
         if (jsonCmd == "LIGHT_ON") {
             TurnSpotLightOn();
             sendAck("LIGHT_ON");
