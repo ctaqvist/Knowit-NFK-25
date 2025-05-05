@@ -1,7 +1,6 @@
-import { Inject, Injectable, Param } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
 import { ApiResponse, Page, Review, Pages } from 'src/types/types';
-import { DownloadableFiles } from 'src/controllers/files.controller';
 import { Response } from 'express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -122,11 +121,11 @@ export class PageService {
     }
   }
 
-  async getFile(file: string): Promise<Buffer> {
+  async getFile(path_to_folder: string, file: string): Promise<Buffer> {
     const { data, error } = await this.supabaseService.supabase
       .storage
-      .from('files')
-      .download(`${file}.pdf`);
+      .from(path_to_folder)
+      .download(file);
 
     if (error || !data) {
       throw new Error(`Error fetching ${file}: ${error}`);
