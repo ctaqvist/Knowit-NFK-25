@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(innerPadding)) {
                         NavHost(
                             navController = navController,
-                            startDestination = Routes.Dashboard
+                            startDestination = Routes.Login
                         ) {
                             composable(Routes.Dashboard) {
                                 ControllerScreen(navController)
