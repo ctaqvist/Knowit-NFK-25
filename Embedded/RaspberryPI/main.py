@@ -16,7 +16,6 @@ logging.basicConfig(
 
 logging.debug("=== Rover system is starting up ===")
 
-
 try:
     import asyncio
     from communication.websocket_rover import listen_to_server
