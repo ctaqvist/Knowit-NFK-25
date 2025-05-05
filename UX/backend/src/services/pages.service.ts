@@ -25,9 +25,7 @@ export class PageService {
 
       if (CACHED_PAGES && isCacheFresh(LAST_UPDATED, MAX_AGE))
         return {
-          data: CACHED_PAGES as Pages,
-          error: null,
-        };
+          data: CACHED_PAGES as Pages};
 
       // Get all pages, assign them to ALLPAGES object
       const getAllPages = async () => {
@@ -94,7 +92,7 @@ export class PageService {
       const MAX_AGE = 60 * 60 * 1000;
 
       if (CACHED_REVIEWS && isCacheFresh(LAST_UPDATED, MAX_AGE))
-        return { data: CACHED_REVIEWS as Review[], error: null };
+        return { data: CACHED_REVIEWS as Review[] };
 
       const CLIENT = this.supabaseService.supabase;
       const { data, error } = await CLIENT.from('reviews').select(`
