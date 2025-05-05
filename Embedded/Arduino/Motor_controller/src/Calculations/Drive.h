@@ -16,6 +16,7 @@ class Drive {
         float y;
 
     public:
+        void SetXY (float newX, float newY);
         Drive(float x, float y);
         float CalculateHypotenuse();
         float CalculateLeftSpeedFunc();
