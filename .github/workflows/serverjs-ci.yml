@@ -28,8 +28,10 @@ jobs:
       - name: Create .env file
         run: |
           cat <<EOF > Backend/Server/.env
-          USER=testuser
-          PASS=testpass
+          USER="testuser"
+          PASS="testpass"
+          PORT=8080
+          SECRET_KEY="hiimsecretkey"
           EOF
 
       # 3. Set up Node.js
