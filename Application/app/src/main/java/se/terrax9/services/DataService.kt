@@ -104,29 +104,6 @@ class DataService(private val uri: String = "") {
         }
     }
 
-    private var lastX = 0f
-    private var lastY = 0f
-    suspend fun sendSteer(x: Float, y: Float) = withContext(Dispatchers.IO) {
-
-        // If X or Y has a new extreme value it must always be updated
-        val newMaxValue = (x.absoluteValue == 1f && lastX.absoluteValue != 1f) || (y.absoluteValue == 1f && lastY.absoluteValue != 1f)
-        val newMinValue = (x == 0f && lastX != 0f) || (y == 0f && lastY != 0f)
-        val newExtremeValue = newMinValue || newMaxValue
-
-        // Only update X and Y if at least one of them has increased 0.02 since last transfer
-        val newValue = (lastX - x).absoluteValue > 0.02 || ((lastY - y).absoluteValue > 0.02)
-
-        if (newExtremeValue || newValue) {
-            // Send new data message
-            //sendMessage(Commands.steer(x, y))
-            sendMessage(Commands.arm(x, y))
-
-            // Update last X and Y
-            lastX = x
-            lastY = y
-        }
-    }
-
     suspend fun sendMessage(message: String) {
         ensureOpenConnection()
         try {
