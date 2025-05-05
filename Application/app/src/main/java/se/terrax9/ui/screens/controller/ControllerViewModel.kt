@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import se.terrax9.services.DataService
-import se.terrax9.ui.screens.test.Commands
+import se.terrax9.services.Commands
 
 class ControllerViewModel() : ViewModel() {
     private val dataService = DataService("terrax9.se")
