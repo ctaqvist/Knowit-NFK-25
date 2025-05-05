@@ -4,9 +4,9 @@
 #include "Hardware/SpotLights/SpotLight.h"
 
 // Forward declarations
-void sendAck(const String& cmd);
-void sendError(const String& msg);
-Drive drive (0.0f, 0.0f);
+void sendAck(const String &cmd);
+void sendError(const String &msg);
+Drive drive(0.0f, 0.0f);
 // Global variables
 String inputString = "";
 bool stringComplete = false;
@@ -14,23 +14,29 @@ bool stringComplete = false;
 // Create global CommandHandler instance
 CommandHandler commandHandler;
 
-void CommandHandler::init() {
+void CommandHandler::init()
+{
     inputString.reserve(200);
     Serial.println("READY");
 }
 
-void CommandHandler::listen() {
-    while (Serial.available()) {
+void CommandHandler::listen()
+{
+    while (Serial.available())
+    {
         char inChar = (char)Serial.read();
         inputString += inChar;
-        if (inChar == '\n') {
+        if (inChar == '\n')
+        {
             stringComplete = true;
         }
     }
 
-    if (stringComplete) {
+    if (stringComplete)
+    {
         inputString.trim();
-        if (inputString.length() > 0) {
+        if (inputString.length() > 0)
+        {
             handleCommand(inputString);
         }
         inputString = "";
@@ -38,14 +44,17 @@ void CommandHandler::listen() {
     }
 }
 
-void handleCommand(const String& cmd) {
+void handleCommand(const String &cmd)
+{
     StaticJsonDocument<200> doc;
     DeserializationError error = deserializeJson(doc, cmd);
 
-    if (!error && doc.containsKey("command")) {
+    if (!error && doc.containsKey("command"))
+    {
         String jsonCmd = doc["command"];
 
-        if (jsonCmd == "steer" && doc.containsKey("x") && doc.containsKey("y")) {
+        if (jsonCmd == "steer" && doc.containsKey("x") && doc.containsKey("y"))
+        {
             float x = doc["x"];
             float y = doc["y"];
             drive.SetXY(x, y);
@@ -54,13 +63,15 @@ void handleCommand(const String& cmd) {
             return;
         }
 
-        if (jsonCmd == "LIGHT_ON") {
+        if (jsonCmd == "LIGHT_ON")
+        {
             TurnSpotLightOn();
             sendAck("LIGHT_ON");
             return;
         }
 
-        if (jsonCmd == "LIGHT_OFF") {
+        if (jsonCmd == "LIGHT_OFF")
+        {
             TurnSpotLightOff();
             sendAck("LIGHT_OFF");
             return;
@@ -73,10 +84,12 @@ void handleCommand(const String& cmd) {
     sendError("invalid_json");
 }
 
-void sendAck(const String& cmd) {
+void sendAck(const String &cmd)
+{
     Serial.println("{\"ack\":\"" + cmd + "\"}");
 }
 
-void sendError(const String& msg) {
+void sendError(const String &msg)
+{
     Serial.println("{\"error\":\"" + msg + "\"}");
 }
