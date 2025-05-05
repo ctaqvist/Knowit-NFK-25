@@ -7,9 +7,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SupabaseService } from './services/supabase.service';
 import { AdminController } from './controllers/admin.controller';
 import { AdminService } from './services/admin.service';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [CacheModule.register(), ConfigModule.forRoot()],
   controllers: [AppController, PageController, AdminController],
   providers: [AppService, PageService, ConfigService, SupabaseService, AdminService],
 })
