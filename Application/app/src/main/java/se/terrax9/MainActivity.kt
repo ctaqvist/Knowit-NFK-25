@@ -16,11 +16,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import se.terrax9.ui.screens.controller.ControllerScreen
+import se.terrax9.ui.screens.login.LoginScreen
 import se.terrax9.ui.theme.Terrax9Theme
 
 object Routes {
-    val Dashboard = "dashboard"
-    val Gallery = "gallery"
+    const val Dashboard = "dashboard"
+    const val Gallery = "gallery"
+    const val Login = "login"
 }
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +44,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Routes.Gallery) {
                                 Text("hej")
+                            }
+                            composable(Routes.Login) {
+                                LoginScreen()
                             }
                         }
                     }
