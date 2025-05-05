@@ -24,18 +24,26 @@ jobs:
       # 1. Checkout the repo
       - uses: actions/checkout@v3
 
-      # 2. Set up Node.js
+      # 2. Create .env with test credentials
+      - name: Create .env file
+        run: |
+          cat <<EOF > Backend/Server/.env
+          USER=testuser
+          PASS=testpass
+          EOF
+
+      # 3. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
-      # 3. Install dependencies in Backend/Server
+      # 4. Install dependencies in Backend/Server
       - name: Install dependencies
         working-directory: Backend/Server
         run: npm install
 
-      # 4. Run your JS tests
+      # 5. Run JS tests
       - name: Run npm test
         working-directory: Backend/Server
         run: npm test
