@@ -16,11 +16,12 @@ The following commands are forceful and the sender fully controls the rovers res
 `PIC` - Takes a picture  
 `START-STREAM` - Connects to server and start the stream  
 `STOP-STREAM` - Stop streaming and close the connection to server  
-`TANKTURN` - Perform a tank turn  
-`HEADLIGHT_ON` - Turn on headlights  
-`HEADLIGHT_OFF` - Turn off headlights  
-`FWD` - Move the rover forward
-`STOP` - Stop all rover movement
+`LIGHT_ON` - Turn on headlights  
+`LIGHT_OFF` - Turn off headlights  
+`BATTERY_LEVEL` - Reports current battery level as a float (0.0 to 1.0) 
+`LOW_BATTERY_WARNING` - Indicates low battery state (true = low, false = OK)
+`SLEEP_MODE` - 	Initiates or cancels shutdown (true = shutdown, false = active)
+
 
 ## Reactive commands
 
