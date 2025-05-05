@@ -38,7 +38,7 @@ fun JoyStick(
     val baseSize = 240.dp
     val knobSize = 140.dp
 
-    // Visual offset defines the maximun distance the joystick can be dragged before being capped.
+    // Visual offset defines the maximum distance the joystick can be dragged before being capped.
     // This value is used to visually cap the movement of the joystick
     val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1f).toPx() }
 
