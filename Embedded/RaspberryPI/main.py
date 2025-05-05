@@ -1,33 +1,36 @@
-# RaspberryPI/main.py
-import asyncio
-import logging
-from communication.websocket_rover import listen_to_server
-from communication.serial_helper import arduino
 import sys
+import os
+import logging
 
-sys.path.append('/home/joakim/Desktop/Rama/Knowit-NFK-25/Embedded')
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append(PROJECT_ROOT)
 
+HOME = os.path.expanduser("~")
+LOG_FILE = os.path.join(HOME, "rover.log")
 
-# logging to a file
 logging.basicConfig(
-    filename='/home/joakim/rover.log',
     level=logging.DEBUG,
-    format='%(asctime)s [%(levelname)s] %(message)s'
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[logging.StreamHandler()] 
 )
 
-def run():
-    logging.debug("=== Rover system starting ===")
-    print("[MAIN] Connecting to Arduino and starting WebSocket listener...")
+logging.debug("=== Rover system is starting up ===")
 
-    try:
+
+try:
+    import asyncio
+    from communication.websocket_rover import listen_to_server
+    from communication.serial_helper import arduino
+
+    def run():
+        logging.debug("Running main() function")
         arduino.connect()
         logging.debug("Arduino connected.")
-        
         asyncio.run(listen_to_server())
         logging.debug("WebSocket server started.")
         
-    except Exception as e:
-        logging.exception("Fatal error in main.run()")
+    if __name__ == "__main__":
+        run()
 
-if __name__ == "__main__":
-    run()
+except Exception as e:
+    logging.exception("Exception occurred during import or run")
