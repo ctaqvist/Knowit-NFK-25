@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "se.emilkronholm.terrax9"
+    namespace = "se.terrax9"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "se.emilkronholm.terrax9"
+        applicationId = "se.terrax9"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
