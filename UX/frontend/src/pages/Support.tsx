@@ -292,7 +292,9 @@ function Support() {
       <Box
         component='section'
         id='contact-form'
-        sx={{ position: 'relative' }}
+        sx={{
+          position: 'relative',
+        }}
       >
         <Box
           sx={{
@@ -321,7 +323,7 @@ function Support() {
               <Stack
                 direction={'row'}
                 sx={{
-                  '& > .MuiStack-root': { flex: 1, gap: '24px' },
+                  '& > .MuiStack-root': { flex: 1, gap: '16px' },
                   gap: '20px',
                 }}
               >
@@ -504,7 +506,7 @@ function Support() {
               <Stack
                 direction={'row'}
                 sx={{
-                  '& > .MuiStack-root': { flex: 1, gap: '24px' },
+                  '& > .MuiStack-root': { flex: 1, gap: '16px' },
                   gap: '20px',
                 }}
               >
@@ -526,7 +528,9 @@ function Support() {
                       labelId='demo-simple-select-label'
                       value={formData.issue_category_input}
                       onChange={handleSelectChange}
-                      sx={{ '&:has([value="Select an option"]': { color: 'rgb(93 92 101)' } }}
+                      sx={{
+                        '&:has([value="Select an option"]': { color: 'rgb(93 92 101)' },
+                      }}
                     >
                       {formValidity.issue_category_input && <FormHelperText>{formValidity.issue_category_input}</FormHelperText>}
 
@@ -593,7 +597,7 @@ function Support() {
                   />
                 </Stack>
               </Stack>
-              <Stack sx={{ gap: '24px' }}>
+              <Stack sx={{ gap: '16px' }}>
                 <Typography variant='h4' component='label' htmlFor='issue_description_input'>
                   Describe the problem{' '}
                   <Box
@@ -632,7 +636,7 @@ function Support() {
                   }
                 />
               </Stack>
-              <Stack sx={{ gap: '24px' }}>
+              <Stack sx={{ gap: '16px' }}>
                 <Typography component='label' variant='h4' htmlFor='file_upload_input'>File upload (if any)</Typography>
                 <Button
                   variant='contained'
@@ -729,7 +733,7 @@ function Support() {
                   </Stack>
                 ))}
                 {/* UPLOADED FILES */}
-                {uploadedFiles.length > 0 && <Typography variant='subheading2' mt={'12px'}>Uploaded - {`${uploadedFiles.length}/${formData.fileUploads.files.length}`}</Typography>}
+                {uploadedFiles.length > 0 && <Typography variant='subheading2' mt={'20px'}>Uploaded - {`${uploadedFiles.length}/${formData.fileUploads.files.length}`}</Typography>}
                 {uploadedFiles.map((file) => {
                   return (
                     <Stack key={file.name} sx={{
