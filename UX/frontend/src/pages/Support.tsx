@@ -68,7 +68,7 @@ function Support() {
 
   const handleDownload = async (file: DownloadableFiles) => {
     try {
-      const response = await contentApi.getFile(file);
+      const response = await contentApi.getFile(`files`, file);
       const url = URL.createObjectURL(response);
       const a = document.createElement('a');
       a.href = url;
