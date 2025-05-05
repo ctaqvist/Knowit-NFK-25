@@ -1,4 +1,4 @@
-package se.terrax9.ui.screens.test
+package se.terrax9.services
 
 import java.util.Locale
 
@@ -16,6 +16,7 @@ object Commands {
     }
 
     private fun createArm(x: Float, y: Float): String {
+        println("Testar lite emil")
         return """{ "rover_id": "$roverId", "steer_arm": {"x": "${String.format(Locale.ROOT, "%.2f", x)}", 
             |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
     }
@@ -35,6 +36,7 @@ object Commands {
     fun closeHeadlights(): String = createCommand(Command.CLOSE_HEADLIGHTS)
     fun steer(x: Float, y: Float): String = createSteer(x, y)
     fun arm(x: Float, y: Float): String = createArm(x, y)
+    fun claw(x: Float, y: Float): String = createClaw(x, y)
 
     private enum class Command(val value: String) {
         // Used enums to prevent errors caused by typos or inconsistent string
