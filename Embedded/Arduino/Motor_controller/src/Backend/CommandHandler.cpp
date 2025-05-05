@@ -57,7 +57,8 @@ void handleCommand(const String& cmd) {
         if (jsonCmd == "BATTERY_LEVEL" && doc.containsKey("level")) {
             float level = doc["level"];
             Serial.print("Battery level: ");
-            Serial.println(level * 100);  // Visa i %
+            // Visa i %
+            Serial.println(level * 100);  
             sendAck("BATTERY_LEVEL");
             return;
         }

@@ -15,7 +15,7 @@ class ArduinoConnection:
         self.keep_alive = True
         self.watcher_thread = threading.Thread(target=self._watch_serial_connection, daemon=True)
         self.watcher_thread.start()
-
+    
     def find_arduino_port(self):
         if serial is None:
             return None
@@ -79,6 +79,19 @@ class ArduinoConnection:
         else:
             print("[Arduino] Not connected. Message not sent.")
             return False
+        
+    def read_ack(self) -> str:
+        if not self.serial:
+            return ""
+        try:
+            with self.lock:
+                if self.serial.in_waiting:
+                    response = self.serial.readline().decode("utf-8").strip()
+                    print(f"[Arduino] Received: {response}")
+                    return response
+        except (serial.SerialException, OSError) as e:
+            print(f"[Arduino] Error reading ACK: {e}")
+        return ""    
 
     def read_received_data(self) -> str:
         if not self.serial:

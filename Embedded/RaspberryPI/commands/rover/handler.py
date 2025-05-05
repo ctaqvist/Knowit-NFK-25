@@ -2,11 +2,17 @@ from ..camera.picture import *
 from ..camera.stream import *
 from .lights import *
 from .forwarder import *
-from .battery import send_battery_level, send_sleep_mode, send_low_battery_warning
+from .battery import handle_incoming_sleep_command, send_battery_level, send_sleep_mode, send_low_battery_warning
 
 async def process_command(websocket, command, params):
     if "steer" in params:
         await forward_joystick_to_arduino(params["steer"])
+        return
+    
+    if all(key in params for key in ("Battery_level", "Warning_signal", "Sleep_mode")):
+        await send_battery_level(params["Battery_level"], websocket)
+        await send_low_battery_warning(params["Warning_signal"], websocket)
+        await handle_incoming_sleep_command(params["Sleep_mode"], websocket)
         return
 
     if command == "PIC":
