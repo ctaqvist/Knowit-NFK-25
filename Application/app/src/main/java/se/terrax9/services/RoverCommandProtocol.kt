@@ -20,6 +20,11 @@ object Commands {
             |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
     }
 
+    private fun createClaw(x: Float, y: Float): String {
+        return """{ "rover_id": "$roverId", "steer_claw": {"x": "${String.format(Locale.ROOT, "%.2f", x)}", 
+            |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
+    }
+
     // Use these functions to create commands
     fun takePicture(): String = createCommand(Command.TAKE_PICTURE)
     fun startStream(): String = createCommand(Command.START_STREAM)
