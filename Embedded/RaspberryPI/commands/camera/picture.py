@@ -1,5 +1,5 @@
-from RaspberryPI.hardware.camera import *
-from RaspberryPI.config.settings import ROVER_ID
+from hardware.camera import *
+from config.settings import ROVER_ID
 import json
 
 # This function handles the "take picture" command from the WebSocket.

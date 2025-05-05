@@ -1,8 +1,10 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
 import { PageService } from 'src/services/pages.service';
 
 // These are the routes for the pages
 @Controller('pages')
+@UseInterceptors(CacheInterceptor)
 export class PageController {
   constructor(private readonly pageService: PageService) {}
 
