@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import se.terrax9.R
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
@@ -33,8 +34,11 @@ import kotlin.math.sin
 @Composable
 fun JoyStick(
     isFixed: Boolean = false,
-    onMove: (x: Float, y: Float) -> Unit = { _, _ -> }
+    getCommand: (Float, Float) -> String = { x, y -> "$x, $y" },
+    onMove: (String) -> Unit = { _ -> }
 ) {
+    val viewModel = JoyStickViewModel(getCommand, onMove)
+
     val baseSize = 240.dp
     val knobSize = 140.dp
 
@@ -66,7 +70,7 @@ fun JoyStick(
                     onDragEnd = {
                         joyStickOffset = Offset.Zero
                         rawOffset = Offset.Zero
-                        onMove(0f, 0f)
+                        viewModel.onMove(0f, 0f)
                     },
                     onDrag = { change, dragAmount ->
                         // Update fingerOffset
@@ -78,7 +82,9 @@ fun JoyStick(
 
                         // Update the offset of the joy stick from center
                         joyStickOffset = if (isFixed) {
-                            rawOffset.clampWithin(maxVisualOffset).fixToMainAxle()
+                            rawOffset
+                                .clampWithin(maxVisualOffset)
+                                .fixToMainAxle()
                         } else clampedVisualOffset
 
                         // Normalize offset and emit onMove
