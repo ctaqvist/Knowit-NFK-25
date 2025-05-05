@@ -91,8 +91,13 @@ fun JoyStick(
                         val normalizedOffset = clampedVisualOffset.normalize(maxActualOffset)
                         // If offset is less than deadzone, always send 0, 0
                         if (normalizedOffset.getDistance() > deadZoneOffset) {
-                            onMove(normalizedOffset.x, -normalizedOffset.y)
-                        } else onMove(0f, 0f)
+                            if (isFixed) {
+                                val offset = normalizedOffset.fixToMainAxle()
+                                viewModel.onMove(offset.x, -offset.y)
+                            } else {
+                                viewModel.onMove(normalizedOffset.x, -normalizedOffset.y)
+                            }
+                        } else viewModel.onMove(0f, 0f)
                     }
                 )
             },
