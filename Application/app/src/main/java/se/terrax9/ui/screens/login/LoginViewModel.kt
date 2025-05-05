@@ -14,12 +14,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
-data class FieldData(
-    val text: String = "",
-    val hasError: Boolean = false,
-    val errorText: String? = null
-    )
-
 class LoginViewModel() : ViewModel() {
 
     var failed by mutableStateOf(false)
