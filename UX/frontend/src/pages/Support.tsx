@@ -301,6 +301,7 @@ function Support() {
             mx: 'auto',
             position: 'relative',
             zIndex: 3,
+            '& .MuiFormHelperText-root': { mt: 0 }
           }}
         >
           <Typography
@@ -335,6 +336,7 @@ function Support() {
                     </Box>
                   </Typography>
                   <TextField
+                    sx={{ gap: '6px' }}
                     autoComplete='off'
                     error={formValidity.f_name_input ? true : false}
                     value={formData.f_name_input}
@@ -371,6 +373,7 @@ function Support() {
                     </Box>
                   </Typography>
                   <TextField
+                    sx={{ gap: '6px' }}
                     autoComplete='off'
                     error={formValidity.s_name_input ? true : false}
                     value={formData.s_name_input}
@@ -471,6 +474,7 @@ function Support() {
                     </Tooltip>
                   </Typography>
                   <TextField
+                    sx={{ gap: '6px' }}
                     autoComplete='off'
                     error={formValidity.serial_input ? true : false}
                     value={formData.serial_input}
@@ -514,8 +518,9 @@ function Support() {
                       *
                     </Box>
                   </Typography>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth sx={{ gap: '6px' }}>
                     <Select
+                      error={formValidity.issue_category_input ? true : false}
                       id='issue_category_input'
                       name='issue_category_input'
                       labelId='demo-simple-select-label'
@@ -523,6 +528,8 @@ function Support() {
                       onChange={handleSelectChange}
                       sx={{ '&:has([value="Select an option"]': { color: 'rgb(93 92 101)' } }}
                     >
+                      {formValidity.issue_category_input && <FormHelperText>{formValidity.issue_category_input}</FormHelperText>}
+
                       <MenuItem disabled value="Select an option" sx={{ display: 'none' }}>
                         Select an option
                       </MenuItem>
@@ -533,7 +540,19 @@ function Support() {
                       <MenuItem value='Claw Arm'>Claw Arm</MenuItem>
                     </Select>
                     {formValidity.issue_category_input &&
-                      <FormHelperText>{formValidity.issue_category_input}</FormHelperText>}
+                      <Stack
+                        gap={'6px'}
+                        direction='row' alignItems={'center'}
+                      >
+                        <Icon
+                          src='/src/assets/alert_sign.svg'
+                          width='28px'
+                        />
+                        <FormHelperText sx={{ color: '#FF3131' }}>
+                          {formValidity.issue_category_input}
+                        </FormHelperText>
+                      </Stack>
+                    }
                   </FormControl>
                 </Stack>
                 <Stack>
@@ -547,6 +566,7 @@ function Support() {
                     </Box>
                   </Typography>
                   <TextField
+                    sx={{ gap: '6px' }}
                     autoComplete='off'
                     onChange={handleInputChange}
                     value={formData.date_input}
@@ -595,6 +615,7 @@ function Support() {
                   id='issue_description_input'
                   placeholder=''
                   variant='outlined'
+                  sx={{ gap: '6px' }}
                   helperText={
                     formValidity.issue_description_input && (
                       <Stack
@@ -736,6 +757,7 @@ function Support() {
               <Button
                 variant='contained'
                 onClick={handleSubmit}
+                sx={{ mt: '40px' }}
               >
                 Submit the form
               </Button>

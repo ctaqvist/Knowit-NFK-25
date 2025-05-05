@@ -372,6 +372,6 @@ export const theme = createTheme({
           '&:hover': {backgroundColor: 'inherit'}
         }
       }
-    }
+    },
   },
 });

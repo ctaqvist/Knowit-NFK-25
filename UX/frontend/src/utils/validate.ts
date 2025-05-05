@@ -2,11 +2,11 @@ import { SupportForm, SupportFormValidity } from '@/types/types';
 
 // Email Regex
 // https://regex101.com/library/SOgUIV
-const emailRegex = /^[^@]+@[^@]+\.[^@]+$/gim
+const emailRegex = /^[^@]+@[^@]+$/;
 
 // Name Regex
 const nameRegex = /^[a-z ,.'-]+$/i
-// const serialRegex = /^[A-Z]{2}-\d{4}[A-Z]{2}-\d{2}[A-Z]{5}$/i
+const serialRegex = /^[A-Z]{2}-\d{4}[A-Z]{2}-\d{2}[A-Z]{5}$/i
 const issueCategories = ["Wheels", "Base", "Battery", "Camera", "Claw Arm"];
 
 // Returns TRUE if valid, FALSE if not
@@ -19,12 +19,16 @@ export const validateInput = (input: string, value: string): string => {
       return ''
     case 'email_input':
       if (value.trim().length < 1) return `Please provide an e-mail`
+      if (!emailRegex.test(value)) return `Please provide a valid e-mail`
       return ''
     case 'issue_category_input':
-      if (!issueCategories.includes(value)) return `Please provide an issue category`
+      console.log(value)
+      console.log(issueCategories.includes(value))
+      if (value === 'Select an option') return `Please provide an issue category`
       return '';
     case 'serial_input':
       if (value.trim().length < 1) return `Please provide a serial number`
+      if (!serialRegex.test(value)) return `Invalid serial number`
       return '';
     case 'date_input':
       if (value.trim().length < 1) return `Please provide an approximate date`
