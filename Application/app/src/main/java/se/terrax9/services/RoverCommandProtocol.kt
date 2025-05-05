@@ -43,7 +43,7 @@ object Commands {
         STOP_STREAM("END-STREAM"),
         TANK_TURN("TANKTURN"),
         PING("ping"),
-        START_HEADLIGHTS("HEADLIGHT_ON"),
-        CLOSE_HEADLIGHTS("HEADLIGHT_OFF")
+        START_HEADLIGHTS("LIGHTS_ON"),
+        CLOSE_HEADLIGHTS("LIGHTS_OFF")
     }
 }
