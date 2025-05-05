@@ -3,6 +3,7 @@ Welcome to Knowit NFK 2025 where we create an interplanetary rover!
 
 [![C++ CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/cpp-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/cpp-ci.yml)
 [![Python CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/python-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/python-ci.yml)
+[![ServerJS CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/serverjs-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/serverjs-ci.yml)
 
 ___  
 ## Workflow standard
