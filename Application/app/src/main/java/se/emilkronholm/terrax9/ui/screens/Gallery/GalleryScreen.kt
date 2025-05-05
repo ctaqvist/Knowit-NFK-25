@@ -104,7 +104,7 @@ fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     sortedImageGroups.forEach { group ->
-                        // full-width header
+                        // Full-width title
                         item(span = { GridItemSpan(maxLineSpan) }) {
                             Text(
                                 text = group.title,
@@ -114,7 +114,7 @@ fun GalleryScreen(viewModel: GalleryViewModel = viewModel()) {
                                     .padding(vertical = 8.dp)
                             )
                         }
-                        // then all the images in that group
+                        // Then all the images in that title-group
                         items(group.images) { url ->
                             HttpImage(
                                 url = url,
