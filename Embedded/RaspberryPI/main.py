@@ -5,7 +5,6 @@ from communication.websocket_rover import listen_to_server
 from communication.serial_helper import arduino
 import sys
 
-
 sys.path.append('/home/joakim/Desktop/Rama/Knowit-NFK-25/Embedded')
 
 
