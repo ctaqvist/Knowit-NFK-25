@@ -9,10 +9,10 @@ async def process_command(websocket, command, params):
         await forward_joystick_to_arduino(params["steer"])
         return
     
-    if all(key in params for key in ("Battery_level", "Warning_signal", "Sleep_mode")):
-        await send_battery_level(params["Battery_level"], websocket)
-        await send_low_battery_warning(params["Warning_signal"], websocket)
-        await handle_incoming_sleep_command(params["Sleep_mode"], websocket)
+    if all(key in params for key in ("battery_level", "low_battery_warning", "sleep_mode")):
+        await send_battery_level(params["battery_level"], websocket)
+        await send_low_battery_warning(params["low_battery_warning"], websocket)
+        await handle_incoming_sleep_command(params["sleep_mode"], websocket)
         return
 
     if command == "PIC":

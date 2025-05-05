@@ -5,7 +5,6 @@ from config.settings import ROVER_ID
 # Handles commands specific to the robot arm
 async def process_command(websocket, command, params):
     if "steer_arm" in params:
-
         await forward_arm(params["steer_arm"], websocket)
         return
 
