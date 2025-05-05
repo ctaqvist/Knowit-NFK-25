@@ -1,11 +1,10 @@
-
-
 // Here is where you can add custom Typography variants
 declare module '@mui/material/styles' {
   interface TypographyVariants {
     headerlink: React.CSSProperties;
     footerlabel: React.CSSProperties;
     body3: React.CSSProperties;
+    subheading: React.CSSProperties;
     subheading2: React.CSSProperties;
   }
 
@@ -13,6 +12,7 @@ declare module '@mui/material/styles' {
     headerlink?: React.CSSProperties;
     footerlabel?: React.CSSProperties;
     body3?: React.CSSProperties;
+    subheading?: React.CSSProperties;
     subheading2?: React.CSSProperties;
   }
 }
@@ -21,6 +21,7 @@ declare module '@mui/material/Typography' {
     headerlink: true;
     footerlabel: true;
     body3: true;
+    subheading: true;
     subheading2: true;
   }
 }

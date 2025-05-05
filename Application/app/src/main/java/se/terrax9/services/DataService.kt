@@ -24,7 +24,7 @@ val client = HttpClient {
     install(HttpTimeout) {
         requestTimeoutMillis = 5000
         connectTimeoutMillis = 5000
-        // 5 minutes (have not tested this)
+        // 5 minutes
         socketTimeoutMillis = 1000 * 60 * 5
     }
 }
