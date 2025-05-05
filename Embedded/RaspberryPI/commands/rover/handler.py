@@ -9,7 +9,7 @@ async def process_command(websocket, command, params):
         return
 
     if command == "PIC":
-        take_picture(websocket) 
+        take_picture() 
         return
 
     elif command == "START_STREAM":

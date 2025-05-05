@@ -15,7 +15,7 @@ async def test_process_command_pic():
     websocket = MagicMock()
     with patch("RaspberryPI.commands.rover.handler.take_picture") as mock_pic:
         await process_command(websocket, "PIC", {})
-        mock_pic.assert_called_once_with(websocket)   
+        mock_pic.assert_called_once_with()   
 
 @pytest.mark.asyncio
 async def test_process_command_start_stream():

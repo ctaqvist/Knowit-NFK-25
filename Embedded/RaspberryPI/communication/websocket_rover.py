@@ -2,7 +2,7 @@ import asyncio
 import json
 import websockets
 from config.settings import ROVER_ID, SERVER_URL
-from Embedded.RaspberryPI.commands.rover.handler import process_command
+from commands.rover.handler import process_command
 
 RECONNECT_DELAY = 5
 
