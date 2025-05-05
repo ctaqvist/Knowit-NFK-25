@@ -3,6 +3,7 @@ import { SupabaseService } from './supabase.service';
 import { ApiResponse, Page, Review, Pages } from 'src/types/types';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { isCacheFresh } from 'src/utils/calc';
 
 @Injectable()
 export class PageService {
@@ -15,8 +16,12 @@ export class PageService {
     try {
       const PAGES = ['hero', 'product', 'support'];
       const CACHED_PAGES = await this.cacheManager.get('pages');
-      console.log('Cached pages: ', CACHED_PAGES)
-      if (CACHED_PAGES)
+
+      // Check when last updated and if it's within the last hour
+      const LAST_UPDATED = await this.getLastUpdated('pages')
+      const MAX_AGE = 60 * 60 * 1000;
+
+      if (CACHED_PAGES && isCacheFresh(LAST_UPDATED, MAX_AGE))
         return {
           data: CACHED_PAGES as Pages,
           error: null,
@@ -40,6 +45,7 @@ export class PageService {
       };
 
       const ALLPAGES = await getAllPages();
+
       // Set cache expiration to an hour
       await this.cacheManager.set('pages', ALLPAGES, 3600);
 
@@ -63,7 +69,6 @@ export class PageService {
         .download(PAGEFILE);
 
       if (error) {
-        console.error('Error when fetching page: ', error);
         throw new Error(`Error when fetching ${page} page`);
       }
 
@@ -83,9 +88,12 @@ export class PageService {
   async getReviews(): Promise<ApiResponse<Review[]>> {
     try {
       const CACHED_REVIEWS = await this.cacheManager.get('reviews');
-      console.log('Cached reviews: ', CACHED_REVIEWS)
+      
+      // Check when last updated and if it's within the last hour
+      const LAST_UPDATED = await this.getLastUpdated('reviews');
+      const MAX_AGE = 60 * 60 * 1000;
 
-      if (CACHED_REVIEWS)
+      if (CACHED_REVIEWS && isCacheFresh(LAST_UPDATED, MAX_AGE))
         return { data: CACHED_REVIEWS as Review[], error: null };
 
       const CLIENT = this.supabaseService.supabase;
@@ -93,10 +101,7 @@ export class PageService {
         content,
         clients(company_name)`);
 
-      if (error) {
-        console.error('Error when fetching reviews: ', error);
-        throw new Error(`Error when fetching reviews`);
-      }
+      if (error) throw error
 
       const formattedReview = data?.map((review) => ({
         content: review.content,
@@ -104,7 +109,7 @@ export class PageService {
       }));
 
       // Set cache expiration to an hour
-      await this.cacheManager.set('reviews', formattedReview, 3600)
+      await this.cacheManager.set('reviews', formattedReview, 3600);
 
       return {
         data: formattedReview,
@@ -113,6 +118,23 @@ export class PageService {
     } catch (error) {
       console.error('Error when fetching reviews: ', error);
       throw new Error(`Error when fetching reviews`);
+    }
+  }
+
+  async getLastUpdated(table: string): Promise<string> {
+    try {
+      const CLIENT = this.supabaseService.supabase;
+      const { data, error } = await CLIENT.from(table)
+        .select(`updated_at`)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (error) throw error;
+      return data.updated_at;
+    } catch (error) {
+      console.log('Error when fetching last updated: ', error);
+      throw new Error(`Error when fetching last updated`);
     }
   }
 }
