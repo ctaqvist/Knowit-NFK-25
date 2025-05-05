@@ -31,7 +31,6 @@ export class AdminService {
       return {
         message: 'File was successfully uploaded!',
         data: data.path,
-        error: null
       };
 
     } catch (error) {

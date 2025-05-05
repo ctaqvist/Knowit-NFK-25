@@ -1,8 +1,11 @@
 // General structure of backend API response
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   data: T;
-  error: null | string;
   message?: string;
+} | {
+  data: null;
+  error: string;
+  message: string
 }
 
 export interface Review {
