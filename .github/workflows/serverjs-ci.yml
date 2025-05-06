@@ -1,0 +1,51 @@
+name: ServerJS CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'Backend/Server/**'
+      - '.github/workflows/serverjs-ci.yml'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'Backend/Server/**'
+      - '.github/workflows/serverjs-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  js-api-testing:
+    name: ServerJS Run Automated Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repo
+      - uses: actions/checkout@v3
+
+      # 2. Create .env with test credentials
+      - name: Create .env file
+        run: |
+          cat <<EOF > Backend/Server/.env
+          USER="testuser"
+          PASS="testpass"
+          PORT=8080
+          SECRET_KEY="hiimsecretkey"
+          EOF
+
+      # 3. Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # 4. Install dependencies in Backend/Server
+      - name: Install dependencies
+        working-directory: Backend/Server
+        run: npm install
+
+      # 5. Run JS tests
+      - name: Run npm test
+        working-directory: Backend/Server
+        run: npm test

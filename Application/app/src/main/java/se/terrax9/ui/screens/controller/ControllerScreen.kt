@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import se.terrax9.R
 import se.terrax9.Routes
+import se.terrax9.services.Commands
 
 @Composable
 fun ControllerScreen(navController: NavController) {
@@ -110,14 +111,25 @@ fun BottomDashboard(viewModel: ControllerViewModel) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            JoyStick(onMove = viewModel::onMovement)
+            JoyStick(
+                onMove = viewModel::sendCommand,
+                getCommand = Commands::steer
+            )
             IconButton(
                 text = "Take photo",
                 iconRes = R.drawable.camera,
                 onClick = viewModel::takePhoto
             )
-            JoyStick(onMove = viewModel::onMovement, isFixed = true)
-            JoyStick(onMove = viewModel::onMovement, isFixed = true)
+            JoyStick(
+                onMove = viewModel::sendCommand,
+                getCommand = Commands::arm,
+                isFixed = true
+            )
+            JoyStick(
+                onMove = viewModel::sendCommand,
+                getCommand = Commands::claw,
+                isFixed = true
+            )
         }
     }
 }

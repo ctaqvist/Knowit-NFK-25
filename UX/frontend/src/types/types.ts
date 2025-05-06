@@ -5,6 +5,8 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
+export type DownloadableFiles = 'GPSR' | 'Instruction_Manual'
+
 export interface Review {
   content: string;
   client: string;
@@ -112,4 +114,35 @@ export interface SupportPage {
       answer: string;
     }[];
   }[],
+}
+
+export interface SupportForm {
+  f_name_input: string,
+  s_name_input: string,
+  email_input: string,
+  serial_input: string,
+  issue_category_input: string,
+  issue_description_input: string,
+  date_input: string
+  fileUploads: {
+    loading: boolean,
+    files: CustomFile[]
+  }
+}
+
+
+export interface SupportFormValidity {
+  f_name_input: string,
+  s_name_input: string,
+  email_input: string,
+  serial_input: string,
+  issue_category_input: string,
+  issue_description_input: string
+  date_input: string
+}
+
+export interface CustomFile extends File {
+  loading?: boolean,
+  success?: boolean,
+  message?: string,
 }

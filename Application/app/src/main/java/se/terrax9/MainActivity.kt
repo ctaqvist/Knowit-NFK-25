@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                                 ControllerScreen(navController)
                             }
                             composable(Routes.Gallery) {
-                                Text("hej")
+                                GalleryScreen()
                             }
                         }
                     }

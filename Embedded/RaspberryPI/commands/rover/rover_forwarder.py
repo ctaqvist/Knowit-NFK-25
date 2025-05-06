@@ -17,7 +17,7 @@ async def forward_joystick_to_arduino(steer_data):
     except (KeyError, ValueError, TypeError):
         return  # Skip sending if data is invalid
 
-    arduino.send(json.dumps({
+    await arduino.send(json.dumps({
         "command": "steer",
         "x": round(x, 2),
         "y": round(y, 2)

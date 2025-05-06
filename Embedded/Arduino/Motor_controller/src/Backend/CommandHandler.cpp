@@ -62,25 +62,21 @@ void handleCommand(const String &cmd)
             sendAck("steer");
             return;
         }
-
-        if (jsonCmd == "LIGHT_ON")
+        if (jsonCmd == "LIGHTS_ON") 
         {
             TurnSpotLightOn();
-            sendAck("LIGHT_ON");
+            sendAck("LIGHTS_ON");
             return;
         }
-
-        if (jsonCmd == "LIGHT_OFF")
+        if (jsonCmd == "LIGHTS_OFF") 
         {
             TurnSpotLightOff();
-            sendAck("LIGHT_OFF");
+            sendAck("LIGHTS_OFF");
             return;
         }
-
         sendError("unknown_command");
         return;
     }
-
     sendError("invalid_json");
 }
 

@@ -144,3 +144,9 @@
     transform: translateX(calc(-100% - var(--gap)));
   }
 }
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
