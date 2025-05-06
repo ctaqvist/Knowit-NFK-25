@@ -14,8 +14,6 @@ enum BatteryStatus
 
 // Hardware relaterade konstanter
 
-// Pin nummer för Buzzer
-constexpr int BUZZER_PIN = 13;
 
 // Resistor 1
 constexpr float R1 = 20000.0;
@@ -29,12 +27,19 @@ constexpr float VREF = 5.0;
 // 30 Sek, ska ge en varning varje 30 Sek. Används i lastSignal funktionen
 constexpr unsigned long WARNING_REMINDER = 30000;
 
+// 2 Sek, tiden mellan varje gång man uppdaterar batteri status
+constexpr unsigned long BATTERY_STATUS_UPDATE_INTERVAL = 2000;
 
 // Varnings nivåer för batteriet
+// Batteriets max spänning
+constexpr float BATTERY_MAX_VOLTAGE = 8.40f;
+
 // Första gränsen, dags att ladda
-constexpr float BATTERY_WARNING_LEVEL = 7.0; 
-// Nu ska allting stängas av
-constexpr float BATTERY_SHUTDOWN_LEVEL = 6.4;
+constexpr float BATTERY_WARNING_LEVEL = 7.00f; 
+
+// Batteriets lägsta spänning. Nu ska allting stängas av
+constexpr float BATTERY_MIN_VOLTAGE = 6.60f;
+
 /*
 * Funktion som läser av analoga värdet av batteriet för att ta reda på laddningen kvar
 * Vref- Reference voltage av kortet
@@ -61,5 +66,11 @@ void StartLastSignal();
 
 // Piper en kort stund 1 gång
 void TriggerLastSignal();
+
+// Returnerar ett värde 0.00 - 1.00 baserat på spänningen i batteriet 6.60 - 8.40
+float CalculateBatteryProcentage (float voltage);
+
+// Skickar Batteri status till servern med jämna intervall
+void SendBatteryStatusToServer();
 
 #endif
