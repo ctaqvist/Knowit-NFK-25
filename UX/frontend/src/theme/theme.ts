@@ -12,6 +12,9 @@ const themePalette = {
     secondary: '#05030C',
     light: '#BCC5FF',
   },
+  main: {
+    error: '#FF3131',
+  },
 };
 
 export const theme = createTheme({
@@ -21,13 +24,13 @@ export const theme = createTheme({
   typography: {
     fontFamily: "'Lexend Exa', 'Instrument Sans', sans-serif",
     h1: {
-      fontSize: 'clamp(40px, 3vw, 48px);',
+      fontSize: 36,
       fontWeight: 700,
       fontFamily: 'Lexend Exa, sans-serif',
       textWrap: 'balance',
     },
     h2: {
-      fontSize: '36px',
+      fontSize: 36,
       fontWeight: 700,
       fontFamily: 'Lexend Exa, sans-serif',
     },
@@ -37,7 +40,7 @@ export const theme = createTheme({
       fontFamily: 'Lexend Exa, sans-serif',
     },
     h4: {
-      fontSize: '1.25rem',
+      fontSize: 20,
       fontWeight: 500,
       fontFamily: 'Lexend Exa, sans-serif',
     },
@@ -52,18 +55,19 @@ export const theme = createTheme({
       fontFamily: 'Lexend Exa, sans-serif',
     },
     body1: {
-      fontSize: '20px',
+      fontSize: 20,
       fontWeight: 400,
       fontFamily: 'Instrument Sans, sans-serif',
       lineHeight: '30px',
     },
     body2: {
-      fontSize: '18px',
+      fontSize: 18,
       fontWeight: 400,
       fontFamily: 'Instrument Sans, sans-serif',
     },
     body3: {
       fontSize: '16px',
+      fontWeight: 400,
       fontFamily: 'Instrument Sans, sans-serif',
     },
     headerlink: {
@@ -78,11 +82,16 @@ export const theme = createTheme({
       letterSpacing: '2.88px',
       fontWeight: 700,
     },
+    subheading: {
+      fontSize: 28,
+      fontWeight: 500,
+      fontFamily: 'Lexend Exa, sans-serif',
+    },
     subheading2: {
       fontSize: 20,
       fontWeight: 500,
-      fontFamily: 'Lexend Exa, sans-serif'
-    }
+      fontFamily: 'Lexend Exa, sans-serif',
+    },
   },
   shadows: [
     'none',
@@ -181,13 +190,26 @@ export const theme = createTheme({
               },
             },
             {
-              props: { variant: 'text_contained'},
+              props: { variant: 'contained', size: 'small' },
+              style: {
+                padding: '14px 20px',
+                fontSize: 16,
+                fontWeight: 500,
+                gap: '10px',
+                borderRadius: '16px',
+                '&:hover': {
+                  boxShadow: '6px 6px 14px 0px rgba(255, 255, 255, 0.20)',
+                },
+              },
+            },
+            {
+              props: { variant: 'text_contained' },
               style: {
                 backgroundColor: '#5526FF',
                 color: '#FFF',
-                '&:hover': {backgroundColor: '#3C16C3'}
-              }
-            }
+                '&:hover': { backgroundColor: '#3C16C3' },
+              },
+            },
           ],
         },
       },
@@ -195,6 +217,62 @@ export const theme = createTheme({
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+          zIndex: 2,
+          '&::after': {
+            content: '""',
+            display: 'block',
+            height: '1px',
+            width: '100%',
+            background:
+              'linear-gradient(90deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.45) 29.81%, rgba(255, 255, 255, 0.50) 49.04%, rgba(255, 255, 255, 0.45) 68.27%, rgba(255, 255, 255, 0.10) 100%)',
+          },
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          fontSize: 30,
+          fill: '#FFF',
+          color: '#FFF',
+          variants: [
+            {
+              props: { color: 'primary' },
+              fill: '#FFF',
+              color: '#FFF',
+            },
+            {
+              props: { size: 'small' },
+              fontSize: 20,
+            },
+            {
+              props: { size: 'large' },
+              fontSize: 40,
+            },
+          ],
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          '& p': { fontWeight: 700 },
+          padding: 0,
+        },
+      },
+    },
+    MuiAccordionDetails: {
+      styleOverrides: {
+        root: {
+          padding: '0 0 2rem',
+        },
       },
     },
     MuiTab: {
@@ -213,14 +291,87 @@ export const theme = createTheme({
         },
       },
     },
+    MuiFormHelperText: {
+      defaultProps: {
+        component: 'span', // Prevent descendant error
+      },
+      styleOverrides: {
+        root: {
+          marginLeft: 0,
+          fontSize: 18,
+          fontFamily: 'Instrument Sans, sans-serif',
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
+          borderRadius: '10px',
           backgroundColor: '#181724',
           border: '1px solid rgba(188, 197, 255, 1)',
           '&::placeholder': { color: 'rgb(93 92 101)' },
+          '& input': {
+            WebkitTextFillColor: '#fff',
+            transition: 'background-color 5000s ease-in-out 0s',
+          },
+    
+          '& input:-webkit-autofill': {
+            WebkitBoxShadow: '0 0 0 1000px #181724 inset',
+            WebkitTextFillColor: '#fff',
+            caretColor: '#fff',
+            transition: 'background-color 5000s ease-in-out 0s',
+          },
+        }
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#FFF',
+          fontFamily: 'Instrument Sans, sans-serif',
+          color: 'rgba(5, 3, 12, 1)',
+          fontWeight: 400,
+          textAlign: 'center',
+          fontSize: 14,
+          padding: '6px 10px',
+          maxWidth: 170,
+           lineHeight: 'normal',
+          
+        },
+        arrow: {
+          '&:before': {
+            backgroundColor: '#FFF',
+          },
         },
       },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          zIndex: 4,
+          padding: '1rem 2rem',
+          backgroundColor: '#180757',
+          color: '#FFF',
+          alignItems: 'center',
+          gap: '10px',
+          position: 'fixed',
+          top: '6rem',
+          maxWidth: 846,
+          margin: '0 auto',
+          transition: 'opacity 500ms',
+          animationName: 'fadeOut',
+          animationDelay: '3000ms',
+          animationDuration: '1000ms',
+        }
+      }
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          transition: 'backgroundColor 0s',
+          '&:hover': {backgroundColor: 'inherit'}
+        }
+      }
     },
   },
 });
