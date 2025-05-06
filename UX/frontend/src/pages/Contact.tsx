@@ -90,7 +90,7 @@ function Contact() {
       <Stack
         sx={{
           '& > .MuiStack-root': { gap: '20px', flexDirection: 'row' },
-          '& > .MuiStack-root > .MuiStack-root': { gap: '16px', flex: 1 },
+          '& > .MuiStack-root > .MuiStack-root': { gap: '16px', flex: 1, zIndex: 5, position: 'relative' },
           gap: '56px',
           pb: '230px',
         }}
@@ -441,6 +441,7 @@ function Contact() {
         <Button
           variant='contained'
           size='small'
+          sx={{mt: '24px'}}
         >
           Submit the form
         </Button>

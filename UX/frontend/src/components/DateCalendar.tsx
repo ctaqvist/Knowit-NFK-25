@@ -40,13 +40,18 @@ export default function BasicDateCalendar({ setFormData, formData }: BasicDateCa
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
+      views={['day']}
         onChange={handleChange}
         shouldDisableDate={(date) => date.day() === 0 || date.day() === 6}
         slots={{ day: CustomDay, }}
         disableHighlightToday
 
         sx={{
-          backgroundColor: 'rgba(188, 197, 255, 0.1)', border: '1px solid rgba(188, 197, 255, 1)', borderRadius: '10px', padding: '41px 40px', m: 0, gap: '30px', maxHeight: '100%', height: '100%', maxWidth: 370, width: '100%',
+          backgroundColor: 'rgba(188, 197, 255, 0.1)', border: '1px solid rgba(188, 197, 255, 1)', borderRadius: '10px', padding: '41px 40px', m: 0, gap: '30px', maxHeight: '100%', height: '100%', maxWidth: 370, width: '100%', position: 'relative',
+
+          // Month/Year select
+          '& .MuiPickersCalendarHeader-labelContainer': {margin: 0, position: 'absolute', left: '50%', transform: 'translateX(-50%)'},
+          '& .MuiPickersArrowSwitcher-root': {width: '100%', justifyContent: 'space-between'},
 
           // Calendar header
           '& .MuiPickersCalendarHeader-root': { margin: 0, p: 0, overflow: 'hidden' },
