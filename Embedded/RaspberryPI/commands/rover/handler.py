@@ -13,8 +13,8 @@ async def process_command(websocket, data):
     elif "steer_arm" in data:
         await forward_arm(data["steer_arm"], websocket)
         return
-    elif "steer_claw" in data:
-        await forward_claw(data["steer_claw"], websocket)
+    elif "claw_data" in data:
+        await forward_claw(data["claw_data"], websocket)
         return
 
     if command is not None:
@@ -27,7 +27,7 @@ async def process_command(websocket, data):
         elif command == "STOP_STREAM":
             await handle_stop_stream_command(websocket)
             return
-        elif command in ("LIGHT_ON", "LIGHT_OFF"):
+        elif command in ("LIGHTS_ON", "LIGHTS_OFF"):
             await handle_light_command(command, websocket)
             return
         else:

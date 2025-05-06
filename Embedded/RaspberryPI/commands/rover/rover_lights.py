@@ -10,12 +10,12 @@ async def handle_light_command(command, websocket):
     }
 
     # Match exact commands
-    if command == "LIGHT_ON":
-        serial_command = json.dumps({ "command": "LIGHT_ON" })
+    if command == "LIGHTS_ON":
+        serial_command = json.dumps({ "command": "LIGHTS_ON" })
         websocket_response["response"] = "Light turned ON"
 
-    elif command == "LIGHT_OFF":
-        serial_command = json.dumps({ "command": "LIGHT_OFF" })
+    elif command == "LIGHTS_OFF":
+        serial_command = json.dumps({ "command": "LIGHTS_OFF" })
         websocket_response["response"] = "Light turned OFF"
 
     else:

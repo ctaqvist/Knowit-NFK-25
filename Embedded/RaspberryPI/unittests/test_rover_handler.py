@@ -35,8 +35,8 @@ async def test_process_command_stop_stream():
 async def test_process_command_light():
     websocket = MagicMock()
     with patch("commands.rover.handler.handle_light_command") as mock_light:
-        await process_command(websocket, "LIGHT_ON", {})
-        mock_light.assert_awaited_once_with("LIGHT_ON", websocket)
+        await process_command(websocket, "LIGHTS_ON", {})
+        mock_light.assert_awaited_once_with("LIGHTS_ON", websocket)
 
 
 @pytest.mark.asyncio
