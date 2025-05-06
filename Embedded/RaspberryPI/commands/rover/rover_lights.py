@@ -10,17 +10,12 @@ async def handle_light_command(command, websocket):
     }
 
     # Match exact commands
+    serial_command = json.dumps({ "command": command })
     if command == "LIGHTS_ON":
-        serial_command = json.dumps({ "command": "LIGHTS_ON" })
         websocket_response["response"] = "Light turned ON"
 
     elif command == "LIGHTS_OFF":
-        serial_command = json.dumps({ "command": "LIGHTS_OFF" })
         websocket_response["response"] = "Light turned OFF"
-
-    else:
-        # Fallback if command is unknown
-        serial_command = json.dumps({ "command": command })
 
     # Skicka kommandot till Arduino
     await arduino.send(serial_command)
