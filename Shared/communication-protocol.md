@@ -27,7 +27,7 @@ The following commands are reactive and the sender passes ownership to the rover
 
 ```
 {
-    "roverID": -roverID-,
+    "rover_id": -roverID-,
     "steer": {
         "x": -xValue-,
         "y": -yValue-
@@ -39,8 +39,8 @@ The following commands are reactive and the sender passes ownership to the rover
 
 ```
 {
-    "roverID": -roverID-,
-    "steer-arm": {
+    "rover_id": -roverID-,
+    "steer_arm": {
         "x": -xValue-,
         "y": -yValue-
     }
@@ -50,10 +50,9 @@ The following commands are reactive and the sender passes ownership to the rover
 ### Control the claw 
 ```
 {
-    "roverID": -roverID-,
+    "rover_id": -roverID-,
     "steer_claw": {
-        "x": -xValue-,
-        "y": -yValue-
+        "claw": -yValue-
     }
 }
 ```
