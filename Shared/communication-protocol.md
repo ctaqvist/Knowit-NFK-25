@@ -14,8 +14,8 @@ Each communication must specify the roverID for the `roverID` key. The standard 
 The following commands are forceful and the sender fully controls the rovers response.
 
 `PIC` - Takes a picture  
-`START-STREAM` - Connects to server and start the stream  
-`STOP-STREAM` - Stop streaming and close the connection to server  
+`START_STREAM` - Connects to server and start the stream  
+`STOP_STREAM` - Stop streaming and close the connection to server  
 `LIGHT_ON` - Turn on headlights  
 `LIGHT_OFF` - Turn off headlights  
 `BATTERY_LEVEL` - Reports current battery level as a float (0.0 to 1.0) 
