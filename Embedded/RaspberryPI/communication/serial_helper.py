@@ -23,6 +23,7 @@ class ArduinoConnection:
         ports = serial.tools.list_ports.comports()
         known_arduino_vid_pid = [
             (0x2341, 0x0069),  # Arduino Uno R4 Minima
+            (0x2341, 0x1002)
         ]
 
         for port in ports:
