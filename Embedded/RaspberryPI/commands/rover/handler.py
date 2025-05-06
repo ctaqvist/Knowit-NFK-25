@@ -17,24 +17,25 @@ async def process_command(websocket, data):
         await forward_claw(data["steer_claw"], websocket)
         return
 
-    if command == "PIC":
-        take_picture() 
-        return
-    elif command == "START_STREAM":
-        await handle_stream_command(websocket)
-        return
-    elif command == "STOP_STREAM":
-        await handle_stop_stream_command(websocket)
-        return
-    elif command in ("LIGHT_ON", "LIGHT_OFF"):
-        await handle_light_command(command, websocket)
-        return
-    else:
-        print(f"UNKNOWN COMMAND: {command}")
-        await websocket.send(json.dumps({
-            "rover_id": ROVER_ID,
-            "status": "error",
-            "message": "Unsupported command"
-        }))
-        return
+    if command is not None:
+        if command == "PIC":
+            take_picture() 
+            return
+        elif command == "START_STREAM":
+            await handle_stream_command(websocket)
+            return
+        elif command == "STOP_STREAM":
+            await handle_stop_stream_command(websocket)
+            return
+        elif command in ("LIGHT_ON", "LIGHT_OFF"):
+            await handle_light_command(command, websocket)
+            return
+        else:
+            print(f"UNKNOWN COMMAND: {command}")
+            await websocket.send(json.dumps({
+                "rover_id": ROVER_ID,
+                "status": "error",
+                "message": "Unsupported command"
+            }))
+            return
 
