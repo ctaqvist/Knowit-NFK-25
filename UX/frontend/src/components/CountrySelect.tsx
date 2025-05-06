@@ -1,6 +1,6 @@
 import { countries } from '@/utils/data/countries';
 import { Autocomplete, Box, TextField } from '@mui/material';
-import { SetStateAction, SyntheticEvent } from 'react';
+import { SetStateAction } from 'react';
 import { ContactForm } from '@/types/types';
 
 type CountrySelectProps = {
@@ -12,7 +12,7 @@ export default function CountrySelect({
     setFormData,
     formData,
 }: CountrySelectProps) {
-    const handleChange = (event: SyntheticEvent, value: any | null) => {
+    const handleChange = (value: any | null) => {
         if (!value) return;
 
         setFormData({
@@ -25,13 +25,20 @@ export default function CountrySelect({
     };
 
     const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData({
-        ...formData,
-        ['telephone']: {
-          ...formData.telephone,
-          ['number']: e.target.value,
-        },
-      });
+        const inputValue = e.target.value;
+
+        const countryCode = formData.telephone.phone;
+        let number = inputValue.startsWith(countryCode)
+            ? inputValue.slice(countryCode.length)
+            : inputValue;
+
+        setFormData({
+            ...formData,
+            telephone: {
+                ...formData.telephone,
+                number,
+            },
+        });
     };
 
     return (
@@ -39,7 +46,9 @@ export default function CountrySelect({
             sx={{
                 position: 'relative',
                 height: 64,
-                '& .MuiInputBase-root:not(:has(#number-input))': {backgroundColor: 'rgba(188, 197, 255, 0.3)'}
+                '& .MuiInputBase-root:not(:has(#number-input))': {
+                    backgroundColor: 'rgba(188, 197, 255, 0.3)',
+                },
             }}
             defaultValue={formData.telephone}
             value={formData.telephone}
@@ -52,8 +61,7 @@ export default function CountrySelect({
                 const { key, ...optionProps } = props;
                 return (
                     <Box
-                        value={option.code}
-                        key={key}
+                        key={option.code}
                         component='li'
                         sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
                         {...optionProps}
@@ -78,7 +86,10 @@ export default function CountrySelect({
                             top: '50%',
                             transform: 'translateY(-50%)',
                             left: '20px',
-                        }}
+                          }}
+                          onClick={(e) => {
+                            e.bubbles = true
+                          }}
                     >
                         <img
                             loading='lazy'
@@ -90,12 +101,12 @@ export default function CountrySelect({
                     </Box>
 
                     <TextField
-                      id='number-input'
+                        id='number-input'
                         onChange={handleNumberChange}
-                        value={formData.telephone.number}
+                        value={`${formData.telephone.phone}${formData.telephone.number}`}
                         onClick={(e) => {
                             e.stopPropagation();
-                            (e.target as HTMLButtonElement).focus()
+                            (e.target as HTMLButtonElement).focus();
                         }}
                         sx={{
                             position: 'absolute',
@@ -107,7 +118,7 @@ export default function CountrySelect({
                                 p: 0,
                                 borderTopLeftRadius: 0,
                                 borderBottomLeftRadius: 0,
-                            }
+                            },
                         }}
                     />
                     <TextField
@@ -121,9 +132,8 @@ export default function CountrySelect({
                             htmlInput: {
                                 ...params.inputProps,
                                 autoComplete: 'new-password',
-                                value: ''
+                                value: '',
                             },
-                            
                         }}
                     ></TextField>
                 </Box>
