@@ -16,14 +16,12 @@ object Commands {
     }
 
     private fun createArm(x: Float, y: Float): String {
-        println("Testar lite emil")
         return """{ "rover_id": "$roverId", "steer_arm": {"x": "${String.format(Locale.ROOT, "%.2f", x)}", 
             |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
     }
 
     private fun createClaw(x: Float, y: Float): String {
-        return """{ "rover_id": "$roverId", "steer_claw": {"x": "${String.format(Locale.ROOT, "%.2f", x)}", 
-            |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
+        return """{ "rover_id": "$roverId", "claw_data": { "claw": "${String.format(Locale.ROOT,"%.2f", y)}" }}""".trimMargin()
     }
 
     // Use these functions to create commands
