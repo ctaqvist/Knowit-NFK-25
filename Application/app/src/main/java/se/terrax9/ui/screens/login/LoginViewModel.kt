@@ -4,6 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.FormBody
@@ -14,12 +19,23 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 
+enum class LoginEvent {
+    LOGIN_SUCCESS,
+    BAD_CREDENTIALS,
+    NO_NETWORK,
+    UNKNOWN_ERROR
+}
+
 class LoginViewModel() : ViewModel() {
 
+    var success by mutableStateOf(false)
     var failed by mutableStateOf(false)
     var status by mutableStateOf("")
     var password by mutableStateOf("")
     var email by mutableStateOf("")
+
+    private val _events = MutableSharedFlow<LoginEvent>()
+    val events = _events.asSharedFlow()
 
     fun isEmailValid(email: String): Boolean {
         return Regex("^[A-Za-z0-9+_.%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}$").matches(email)
@@ -27,6 +43,16 @@ class LoginViewModel() : ViewModel() {
 
     fun login() {
         println("Will nog log in with E: $email and P: $password")
+
+        if (email == "wrong" || email == "right") {
+            status = if (email == "wrong") "failed" else "success"
+            failed = email == "wrong"
+            viewModelScope.launch {
+                _events.emit(if (email == "wrong") LoginEvent.BAD_CREDENTIALS else LoginEvent.LOGIN_SUCCESS)
+            }
+            return
+        }
+
         val client = OkHttpClient()
         val formBody = FormBody.Builder()
             .add("username", email)
@@ -41,6 +67,11 @@ class LoginViewModel() : ViewModel() {
                 override fun onFailure(call: Call, e: IOException) {
                     println("API - Login failed")
                     status = "Failed"
+
+                    viewModelScope.launch {
+                        _events.emit(LoginEvent.BAD_CREDENTIALS)
+                    }
+
                 }
 
                 override fun onResponse(call: Call, response: Response) {
@@ -51,6 +82,9 @@ class LoginViewModel() : ViewModel() {
                         println("Empty response!")
                         status = "Failed"
                         failed = true
+                        viewModelScope.launch {
+                            _events.emit(LoginEvent.UNKNOWN_ERROR)
+                        }
                         return
                     }
 
@@ -62,14 +96,24 @@ class LoginViewModel() : ViewModel() {
                         val token = json.getString("token")
                         println("Success! Token is $token")
                         status = "Success! See log for token"
+                        viewModelScope.launch {
+                            _events.emit(LoginEvent.LOGIN_SUCCESS)
+                        }
                         // store/use the token…
                     } catch (e: JSONException) {
                         println("Failed to parse JSON: ${e.message}")
                         failed = true
                         status = "Failed"
+                        viewModelScope.launch {
+                            _events.emit(LoginEvent.UNKNOWN_ERROR)
+                        }
                     }
                 }
 
             })
+    }
+
+    fun navigateNext() {
+        TODO("Not yet implemented")
     }
 }
