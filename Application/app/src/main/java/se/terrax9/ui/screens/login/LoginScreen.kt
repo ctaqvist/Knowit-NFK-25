@@ -3,6 +3,7 @@ package se.terrax9.ui.screens.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +20,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -35,17 +38,40 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import se.terrax9.R
+import se.terrax9.Routes
 import se.terrax9.ui.theme.AppColors
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
 
     val viewModel: LoginViewModel = viewModel()
-    var email = viewModel.email
-    var password = viewModel.password
-    var status = viewModel.status
-    var failed = viewModel.failed
+    var borderColor = AppColors.Primary
+    var errorMessage: String = ""
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            errorMessage = ""
+            when (event) {
+                LoginEvent.LOGIN_SUCCESS -> {
+                    borderColor = AppColors.Success
+                    navController.navigate(Routes.Dashboard)
+                }
+
+                LoginEvent.UNKNOWN_ERROR -> errorMessage = "Something went wrong. Try again later."
+                LoginEvent.NO_NETWORK -> errorMessage =
+                    "Failed to connect to server. Check your wifi or try later."
+
+                LoginEvent.BAD_CREDENTIALS -> errorMessage = "Wrong e-mail or password."
+
+                else -> {
+                    borderColor = AppColors.Error
+                    errorMessage = "Something went wrong. Try again later or contact support."
+                }
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -63,34 +89,12 @@ fun LoginScreen() {
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Text("Log In", style = MaterialTheme.typography.headlineMedium)
-        Text("DEVELOPER INFO: $status")
-        Input(
-            tag = "E-mail",
-            placeholder = "Enter your e-mail",
-            onChange = { email = it; failed = false },
-            isError = failed
-        )
 
-        Input(
-            tag = "Password",
-            placeholder = "Enter password",
-            onChange = { password = it; failed = false; },
-            isPassword = true,
-            isError = failed
-        )
+        InputFields(viewModel, borderColor)
 
         // Error message text
-        if (failed) {
-            Row (
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.error_icon),
-                    contentDescription = null
-                )
-                Text("E-mail or password is wrong", color = AppColors.Error, style = MaterialTheme.typography.bodyMedium)
-            }
+        if (viewModel.failed) {
+            ErrorMessage(errorMessage)
         }
 
         Button(
@@ -102,10 +106,52 @@ fun LoginScreen() {
             Text("LOG IN", style = MaterialTheme.typography.headlineSmall, fontSize = 18.sp)
         }
 
-
-
         Text("Don't have an account?")
-        Text("Sign Up")
+        Text("Sign Up", modifier = Modifier
+            .padding(40.dp)
+            .clickable {
+                println("Sign Up clicked")
+                navController.navigate(Routes.Signup)
+            }
+        )
+    }
+}
+
+@Composable
+fun InputFields(viewModel: LoginViewModel, borderColor: Color) {
+    Input(
+        tag = "E-mail",
+        placeholder = "Enter your e-mail",
+        onChange = { viewModel.email = it; viewModel.failed = false; },
+        isError = viewModel.failed,
+        borderColor = borderColor
+    )
+
+    Input(
+        tag = "Password",
+        placeholder = "Enter password",
+        onChange = { viewModel.password = it; viewModel.failed = false; },
+        isPassword = true,
+        isError = viewModel.failed,
+        borderColor = borderColor
+    )
+}
+
+@Composable
+fun ErrorMessage(errorMessage: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Image(
+            painter = painterResource(R.drawable.error_icon),
+            contentDescription = null
+        )
+        Text(
+            errorMessage,
+            color = AppColors.Error,
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
@@ -117,7 +163,8 @@ fun Input(
     modifier: Modifier = Modifier,
     isPassword: Boolean = false,
     isError: Boolean = true,
-    errorText: String = ""
+    errorText: String = "",
+    borderColor: Color = AppColors.Primary
 ) {
     var text by remember { mutableStateOf("") }
     var isShown by remember { mutableStateOf(false) }
@@ -127,11 +174,11 @@ fun Input(
         Spacer(modifier = Modifier.padding(horizontal = 8.dp))
         TextField(
             value = text,
-            onValueChange = { text = it },
+            onValueChange = { text = it; onChange(it) },
             modifier = modifier
                 .border(
                     width = 2.dp,
-                    color = if (isError) AppColors.Error else AppColors.Primary,
+                    color = borderColor,
                     shape = RoundedCornerShape(size = 10.dp)
                 )
                 .background(
