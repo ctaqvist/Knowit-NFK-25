@@ -9,6 +9,9 @@ ARM_PINS = [17, 13]
 CLAW_PIN = 27
 L1 = 8.0
 L2 = 8.0
+servo1 = None
+servo2 = None
+servo3 = None
 
 # Initierar servos och sätter PWM till 0
 def setup_pins():
@@ -20,8 +23,6 @@ def setup_pins():
     for s in servos:
         s.start(0)
     return servos
-
-servo1, servo2, servo3 = setup_pins()
 
 def angle_to_duty_cycle(angle):
     if not isinstance(angle, (int, float)):
@@ -47,10 +48,7 @@ def ik_planar(x, y):
     return math.degrees(theta1), math.degrees(theta2)
 
 def move_arm(x, y):
-    reach = L1 + L2
-    X = x * reach
-    Y = y * reach
-    theta1, theta2 = ik_planar(X, Y)
+    theta1, theta2 = ik_planar(x, y)
     # Clamp shoulder to [-90, 90]
     servo_shoulder_angle = max(-90, min(theta1, 90))
     # Map elbow [0,180] -> [-90,90] and clamp
