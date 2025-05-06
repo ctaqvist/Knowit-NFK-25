@@ -47,12 +47,13 @@ import se.terrax9.ui.theme.AppColors
 fun LoginScreen(navController: NavController) {
 
     val viewModel: LoginViewModel = viewModel()
-    var borderColor = AppColors.Primary
-    var errorMessage: String = ""
+    var errorMessage: String by remember { mutableStateOf("") }
+    var borderColor: Color by remember { mutableStateOf(AppColors.Primary) }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             errorMessage = ""
+            borderColor = AppColors.Error
             when (event) {
                 LoginEvent.LOGIN_SUCCESS -> {
                     borderColor = AppColors.Success
@@ -66,7 +67,6 @@ fun LoginScreen(navController: NavController) {
                 LoginEvent.BAD_CREDENTIALS -> errorMessage = "Wrong e-mail or password."
 
                 else -> {
-                    borderColor = AppColors.Error
                     errorMessage = "Something went wrong. Try again later or contact support."
                 }
             }
