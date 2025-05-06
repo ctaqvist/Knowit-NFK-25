@@ -1,5 +1,6 @@
 import threading
 import time
+import asyncio
 
 try:
     import serial
@@ -23,7 +24,8 @@ class ArduinoConnection:
         ports = serial.tools.list_ports.comports()
         known_arduino_vid_pid = [
             (0x2341, 0x0069),  # Arduino Uno R4 Minima
-            (0x2341, 0x1002)
+            (0x2341, 0x1002),
+            (0x2341, 0x0043)
         ]
 
         for port in ports:
@@ -61,25 +63,23 @@ class ArduinoConnection:
                 self.connect()
             time.sleep(2)
 
-    def send(self, message: str) -> bool:
+    def _send_sync(self, message: str) -> bool:
         if not message or not isinstance(message, str):
-            print(f"[Arduino] Invalid message – skipping: {message}")
             return False
-
         if self.serial:
             try:
                 with self.lock:
                     self.serial.write((message + "\n").encode())
-                print(f"[Arduino] Sent: {message}")
                 return True
-            except (serial.SerialException, OSError) as e:
-                print(f"[Arduino] Send error: {e}. Resetting connection...")
+            except (serial.SerialException, OSError):
                 with self.lock:
                     self.serial = None
                 return False
         else:
-            print("[Arduino] Not connected. Message not sent.")
             return False
+
+    async def send(self, message: str) -> bool:
+        return await asyncio.to_thread(self._send_sync, message)
 
     def read_received_data(self) -> str:
         if not self.serial:

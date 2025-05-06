@@ -6,7 +6,8 @@ from commands.arm.arm_forwarder import forward_arm, forward_claw
 
 async def process_command(websocket, data):
     command = data.get("command")
-
+    print(f"Received data: {data}")
+    print(f"Command: {command}")
     if "steer" in data:
         await forward_joystick_to_arduino(data["steer"])
         return
@@ -28,6 +29,7 @@ async def process_command(websocket, data):
             await handle_stop_stream_command(websocket)
             return
         elif command in ("LIGHTS_ON", "LIGHTS_OFF"):
+            print(f"Received command: {command}")
             await handle_light_command(command, websocket)
             return
         else:
