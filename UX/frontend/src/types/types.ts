@@ -1,3 +1,4 @@
+
 // General structure of backend API response
 export interface ApiResponse<T> {
   data: T;
@@ -145,4 +146,29 @@ export interface CustomFile extends File {
   loading?: boolean,
   success?: boolean,
   message?: string,
+}
+
+export interface ContactForm {
+  firstName: string,
+  surName: string,
+  companyName: string,
+  email: string,
+  telephone: Telephone,
+  businessField: string,
+  message: string,
+  booking: null | {
+    date: string,
+    time: string
+  }
+}
+
+type Telephone = CountryType & {
+  number: string
+}
+
+export interface CountryType {
+  code: string;
+  label: string;
+  phone: string;
+  suggested?: boolean;
 }
