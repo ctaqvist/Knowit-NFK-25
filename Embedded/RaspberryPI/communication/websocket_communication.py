@@ -2,7 +2,7 @@ import asyncio
 import json
 import websockets
 from config.settings import ROVER_ID, SERVER_URL
-from Embedded.RaspberryPI.commands.rover.handler import process_command
+from commands.rover.handler import process_command
 
 # Main async function that connects to the WebSocket server
 # and listens for commands directed to either the rover or the robot arm.
@@ -27,7 +27,7 @@ async def listen_to_server():
 
                         data = json.loads(message)
 
-                        process_command(websocket, data)
+                        await process_command(websocket, data)
 
                     except json.JSONDecodeError as e:
                         print(f"[ERROR] Invalid JSON received: {e}")
