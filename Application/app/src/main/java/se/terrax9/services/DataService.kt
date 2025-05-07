@@ -36,7 +36,7 @@ val client = HttpClient {
 class DataService(private val uri: String = "") {
     private var socket: WebSocketSession? = null
     private var receiveJob: Job? = null
-    private var incomingMessages = MutableList<String>(0)
+    private var incomingMessages: MutableList<String> = mutableListOf()
 
     init {
         runBlocking {

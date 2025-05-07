@@ -36,6 +36,14 @@ object Commands {
     fun arm(x: Float, y: Float): String = createArm(x, y)
     fun claw(x: Float, y: Float): String = createClaw(x, y)
 
+    // Takes in a message, and decodes what kind of information it is and what to do with it
+    enum class MessageTypes { BATTERY_INFO, PICTURE_INFO, CONNECTION_INFO }
+    fun decodeMessage(string: String) {
+        when (string) {
+            
+        }
+    }
+
     private enum class Command(val value: String) {
         // Used enums to prevent errors caused by typos or inconsistent string
         TAKE_PICTURE("PIC"),
