@@ -7,6 +7,7 @@ object UserData {
     var isLoggedIn: Boolean? = null
     var token: String? = null
     var email: String? = null
+    var selectedRoverID: String? = null
 
     fun login(email: String, token: String) {
         UserData.isLoggedIn = true
