@@ -24,7 +24,7 @@ async def process_command(websocket, data):
 
     if command is not None:
         if command == "PIC":
-            take_picture() 
+            await handle_pic_command(websocket) 
             return
         elif command == "START_STREAM":
             await handle_stream_command(websocket)
