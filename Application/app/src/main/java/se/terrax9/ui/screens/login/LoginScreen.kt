@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import se.terrax9.R
 import se.terrax9.Routes
+import se.terrax9.ui.shared.AppButton
 import se.terrax9.ui.theme.AppColors
 
 @Composable
@@ -88,7 +90,7 @@ fun LoginScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Text("Log In", style = MaterialTheme.typography.headlineMedium)
+        Text("Log In", style = MaterialTheme.typography.headlineMedium, fontSize = 35.sp)
 
         InputFields(viewModel, borderColor)
 
@@ -97,14 +99,10 @@ fun LoginScreen(navController: NavController) {
             ErrorMessage(errorMessage)
         }
 
-        Button(
-            onClick = viewModel::login,
-            modifier = Modifier
-                .background(color = Color(0xFF5526FF), shape = RoundedCornerShape(size = 16.dp))
-                .padding(15.dp)
-        ) {
-            Text("LOG IN", style = MaterialTheme.typography.headlineSmall, fontSize = 18.sp)
-        }
+        AppButton(
+            text = "LOG IN",
+            onClick = viewModel::login
+        )
 
         Text("Don't have an account?")
         Text("Sign Up", modifier = Modifier
@@ -167,26 +165,31 @@ fun Input(
     borderColor: Color = AppColors.Primary
 ) {
     var text by remember { mutableStateOf("") }
-    var isShown by remember { mutableStateOf(false) }
+    var isShown by remember { mutableStateOf(isPassword) }
 
     Column {
-        Text(tag, color = Color.White, style = MaterialTheme.typography.headlineSmall)
+        Text(
+            tag,
+            color = Color.White,
+            style = MaterialTheme.typography.headlineSmall,
+            fontSize = 16.8.sp
+        )
         Spacer(modifier = Modifier.padding(horizontal = 8.dp))
         TextField(
             value = text,
             onValueChange = { text = it; onChange(it) },
+            maxLines = 1,
             modifier = modifier
                 .border(
-                    width = 2.dp,
+                    width = 0.7.dp,
                     color = borderColor,
-                    shape = RoundedCornerShape(size = 10.dp)
+                    shape = RoundedCornerShape(size = 7.dp)
                 )
-                .background(
-                    color = Color(0x1ABCC5FF),
-                    shape = RoundedCornerShape(size = 10.dp)
-                )
-                .width(547.dp)
-                .padding(vertical = 5.dp),
+
+                .width(382.89999.dp)
+                .background(color = Color(0x1ABCC5FF), shape = RoundedCornerShape(size = 7.dp))
+
+                .padding(start = 16.8.dp, top = 16.8.dp, end = 16.8.dp, bottom = 16.8.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -194,8 +197,23 @@ fun Input(
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White
             ),
-            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
+            visualTransformation =
+            if (isShown) PasswordVisualTransformation() else VisualTransformation.None
         )
+
+        if (isPassword) {
+            Image(
+                painter = painterResource(if (isShown) R.drawable.eyes_off else R.drawable.eyes_on),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(alignment = Alignment.End)
+                    .offset(y = (-80).dp)
+                    .height(70.dp)
+                    .clickable {
+                        isShown = !isShown
+                    }
+            )
+        }
     }
 }
 
