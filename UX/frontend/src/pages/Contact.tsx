@@ -7,6 +7,7 @@ import { formatDate } from '@/utils/format';
 import {
   Box,
   Button,
+  Collapse,
   MenuItem,
   Select,
   SelectChangeEvent,
@@ -15,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 function Contact() {
   const [wantsToBook, setWantsToBook] = useState(false);
@@ -32,7 +33,7 @@ function Contact() {
     },
     businessField: '',
     message: '',
-    booking: null
+    booking: null,
   });
 
   useEffect(() => {
@@ -58,7 +59,7 @@ function Contact() {
     setFormData({
       ...formData,
       ['booking']: {
-        date: formData?.booking?.date ?? '',
+        date: formData?.booking?.date ?? null,
         time: (e.target as HTMLButtonElement).value,
       },
     });
@@ -68,8 +69,15 @@ function Contact() {
     setFormData({ ...formData, ['booking']: null });
   };
 
+  useEffect(() => {
+    if (wantsToBook) {
+      console.log('Date: ', formData.booking?.date);
+    }
+  }, [formData.booking?.date]);
+
   return (
     <Box
+      id='contact'
       sx={{
         maxWidth: 847,
         pt: '230px',
@@ -90,9 +98,16 @@ function Contact() {
       <Stack
         sx={{
           '& > .MuiStack-root': { gap: '20px', flexDirection: 'row' },
-          '& > .MuiStack-root > .MuiStack-root': { gap: '16px', flex: 1, zIndex: 5, position: 'relative' },
+          '& > .MuiStack-root > .MuiStack-root': {
+            gap: '16px',
+            flex: 1,
+            position: 'relative',
+            zIndex: 2
+          },
           gap: '56px',
           pb: '230px',
+
+          '.MuiTextField-root': { height: 64 },
         }}
       >
         <Stack>
@@ -137,6 +152,7 @@ function Contact() {
               </Box>
             </Typography>
             <TextField
+              onChange={handleInputChange}
               id='surName'
               placeholder='Enter your name'
               variant='outlined'
@@ -232,6 +248,9 @@ function Contact() {
             <Select
               defaultValue={'Select an option'}
               id='businessField'
+              IconComponent={KeyboardArrowDownRoundedIcon}
+              onChange={handleSelectChange}
+              name='businessField'
             >
               <MenuItem
                 disabled
@@ -280,20 +299,21 @@ function Contact() {
               onChange={handleInputChange}
               multiline
               rows={10}
+              sx={{ minHeight: '304px !important' }}
               id='firstName'
               placeholder='Enter your name'
               variant='outlined'
               required
               value={formData.message}
-              name='firstName'
+              name='message'
             />
           </Stack>
         </Stack>
 
-        <Stack sx={{ gap: '36px' }}>
+        <Stack sx={{ gap: '36px', position: 'relative', zIndex: 5 }}>
           <Stack
             direction={'row'}
-            sx={{ gap: '40px !important' }}
+            sx={{ gap: '40px !important', }}
           >
             <Button
               onClick={() => setWantsToBook(!wantsToBook)}
@@ -304,6 +324,8 @@ function Contact() {
                 padding: '20px',
                 backgroundColor: 'rgba(188, 197, 255, 0.10)',
                 borderRadius: '10px',
+                position: 'relative',
+                zIndex: 5
               }}
             >
               <Box
@@ -334,17 +356,22 @@ function Contact() {
           </Stack>
         </Stack>
 
-        {wantsToBook && (
+        <Collapse in={wantsToBook}>
           <Stack
-            sx={{ flexDirection: 'column !important', gap: '48px !important' }}
+            sx={{
+              flexDirection: 'column !important', gap: '48px !important',
+              transition: 'height 200ms',
+            }}
           >
             <Stack
               sx={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 gap: '42px !important',
+                transition: 'top 50ms',
+                opacity: wantsToBook ? 1 : 0,
                 // Container styling
-                '& > .MuiStack-root': { gap: '36px !important' },
+                '& > .MuiStack-root': { gap: '36px !important', zIndex: 2, position: 'relative' },
               }}
             >
               <Stack sx={{ width: 370 }}>
@@ -352,7 +379,10 @@ function Contact() {
                   <Typography variant='subheading2'>Select a date</Typography>
                   <Typography variant='body3'>Monday - Friday</Typography>
                 </Stack>
-                <BasicDateCalendar setFormData={setFormData} formData={formData} />
+                <BasicDateCalendar
+                  setFormData={setFormData}
+                  formData={formData}
+                />
               </Stack>
 
               <Stack sx={{ maxWidth: 434 }}>
@@ -390,7 +420,7 @@ function Contact() {
                         width: 197,
                         fontFamily: 'Instrument Sans, sans-serif',
                         fontSize: 18,
-                        fontWeight: 400
+                        fontWeight: 400,
                       }}
                     >
                       {slot}
@@ -400,9 +430,8 @@ function Contact() {
               </Stack>
             </Stack>
 
-            {formData.booking &&
-              formData.booking.date &&
-              formData.booking.time && (
+            <Collapse in={formData.booking?.date && formData.booking.time ? true : false}>
+              {formData.booking && formData.booking.date && formData.booking.time &&
                 <Stack sx={{ gap: '8px !important' }}>
                   <Typography variant='subheading2'>Selected slot:</Typography>
                   <Stack sx={{ flexDirection: 'row', gap: '10px' }}>
@@ -417,7 +446,7 @@ function Contact() {
                       >
                         Day:{' '}
                       </Typography>
-                      {formatDate(formData.booking.date)}
+                      {formatDate(formData?.booking?.date)}
                     </Typography>
                     <Typography
                       variant='body2'
@@ -434,19 +463,20 @@ function Contact() {
                     </Typography>
                   </Stack>
                 </Stack>
-              )}
+              }
+
+            </Collapse>
           </Stack>
-        )}
+        </Collapse>
 
         <Button
           variant='contained'
           size='small'
-          sx={{mt: '24px'}}
+          sx={{ mt: '24px' }}
         >
           Submit the form
         </Button>
       </Stack>
-
       {/* Decorative Elements */}
       <Box
         aria-hidden='true'
@@ -483,7 +513,7 @@ function Contact() {
           }}
         />
       </Box>
-    </Box>
+    </Box >
   );
 }
 

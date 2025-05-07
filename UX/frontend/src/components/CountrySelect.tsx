@@ -1,6 +1,6 @@
 import { countries } from '@/utils/data/countries';
 import { Autocomplete, Box, TextField } from '@mui/material';
-import { SetStateAction, SyntheticEvent, useState } from 'react';
+import { SetStateAction, SyntheticEvent, useEffect, useState } from 'react';
 import { ContactForm, CountryType } from '@/types/types';
 import Icon from './Icon';
 
@@ -17,31 +17,25 @@ export default function CountrySelect({
 
 
     const handleChange = (e: SyntheticEvent) => {
-        console.log('value', (e.target as HTMLLIElement).value)
-        const { value } = (e.target as HTMLLIElement)
-        if (!value) return;
-        // setFormData({
-        //     ...formData,
-        //     telephone: {
-        //         ...value,
-        //         number: formData.telephone.number,
-        //     },
-        // });
+        const { value } = (e.target as HTMLLIElement).dataset
+        const country = countries.find(c => c.code === value)
+        if (!country) return;
+        setFormData({
+            ...formData,
+            telephone: {
+                ...country,
+                number: formData.telephone.number,
+            },
+        });
+        setCountrySelectOpen(false)
     };
 
     const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value;
-
-        const countryCode = formData.telephone.phone;
-        let number = inputValue.startsWith(countryCode)
-            ? inputValue.slice(countryCode.length)
-            : inputValue;
-
         setFormData({
             ...formData,
             telephone: {
                 ...formData.telephone,
-                number,
+                number: e.target.value
             },
         });
     };
@@ -61,6 +55,12 @@ export default function CountrySelect({
         }
     };
 
+    useEffect(() => {
+        const el = document.querySelector(`[data-value="${formData.telephone.code}"]`)
+        if (!el) return
+        el.classList.add('selectedCountry')
+    }, [countrySelectOpen])
+
     return (
         <Autocomplete
             sx={{
@@ -69,15 +69,13 @@ export default function CountrySelect({
                 '& .MuiInputBase-root:not(:has(#number-input))': {
                     backgroundColor: 'rgba(188, 197, 255, 0.3)',
                 },
-                // Listbox
-                '& .MuiAutocomplete-paper, #country-select-listbox': { backgroundColor: 'red' }
             }}
             defaultValue={formData.telephone}
             value={formData.telephone}
-            onChange={handleChange}
             id='country-select'
             options={countries}
             autoHighlight
+            onChange={handleChange}
             getOptionLabel={(option) => option.label}
             renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
@@ -87,9 +85,11 @@ export default function CountrySelect({
                      */
                     <Box
                         key={option.code}
+                        data-value={option.code}
                         component='li'
                         sx={{
-                            '& > img': { mr: 2, flexShrink: 0 },
+                            gap: '9px', fontSize: 16,
+                            '& > img': { flexShrink: 0, width: 33, borderRadius: '2px' },
                         }}
                         {...optionProps}
                     >
@@ -129,6 +129,7 @@ export default function CountrySelect({
                             onClick={triggerAutocompleteDropdown}
                             borderRadius={'2px'}
                             loading='lazy'
+                            sx={{ marginRight: 0 }}
                             width='33px'
                             srcSet={`https://flagcdn.com/w40/${formData?.telephone?.code?.toLowerCase()}.png 2x`}
                             src={`https://flagcdn.com/w20/${formData?.telephone?.code?.toLowerCase()}.png`}
@@ -147,12 +148,13 @@ export default function CountrySelect({
                          */
                         id='number-input'
                         onChange={handleNumberChange}
-                        value={`${formData.telephone.phone}${formData.telephone.number}`}
+                        value={formData.telephone.number}
                         onClick={(e) => {
                             e.stopPropagation();
                             (e.target as HTMLButtonElement).focus();
                         }}
                         sx={{
+                            maxHeight: 64,
                             position: 'absolute',
                             width: 318.5,
                             right: 0,

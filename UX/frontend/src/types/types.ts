@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 
 // General structure of backend API response
 export interface ApiResponse<T> {
@@ -157,7 +158,7 @@ export interface ContactForm {
   businessField: string,
   message: string,
   booking: null | {
-    date: string,
+    date: Dayjs | null,
     time: string
   }
 }
