@@ -7,7 +7,7 @@ export function sendPong(ws) {
 // Already checked that parsed has connect command
 // Dictionary that contatins if a user is connected to a rover
 export function connectToRover(parsed, userRoverDict, ws, clients) {
-    const userId  = ws.token.userId;
+    const userId = ws.token.userId;
     const roverId = parsed.rover_id;
 
     // Check if the rover is connected to the server
@@ -42,7 +42,7 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     }
 
     // Check if the user is already connected to a rover
-    if(!userRoverDict[userId]) {
+    if (!userRoverDict[userId]) {
         userRoverDict[userId] = roverId;
         console.log("User with id ", userId, " is connected to rover: ", roverId)
         console.log(userRoverDict)
@@ -112,9 +112,9 @@ export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict)
                 return client.token && client.token.userId == userId
             });
             if (userClient && userClient.readyState === WebSocket.OPEN) {
-            userClient.send(JSON.stringify({
-                sender: '[ROVER]', ...parsed
-            }));
+                userClient.send(JSON.stringify({
+                    sender: '[ROVER]', ...parsed
+                }));
             }
         } else {
             console.log("No user mapped to this rover.");
@@ -161,7 +161,7 @@ export function removeConnectionFromUserRoverDict(ws, userRoverDict, clients) {
         const roverId = userRoverDict[userId];
         if (roverId) {
             const roverClient = [...clients].find(client => client.token && client.token.roverSerial === roverId);
-            
+
             if (roverClient && roverClient.readyState === WebSocket.OPEN) {
                 roverClient.send(JSON.stringify({
                     response: "disconnected",

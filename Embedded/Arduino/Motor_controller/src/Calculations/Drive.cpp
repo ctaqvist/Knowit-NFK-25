@@ -10,6 +10,9 @@
 
 using namespace std;
 
+// Konstant som används för att beräkna hastigheten till PWM
+const int PWM_SCALE = 255;
+
 
 // Hämtar globala instansen av MotorController
 extern MotorController motorController;
@@ -32,7 +35,7 @@ float Drive::CalculateLeftSpeedFunc() {
     // Ju mer till vänster man styr, desto saktare roterar vänster däck
     // if turn < 0 (styr vänster)
     // left_speed = speed * (1.0 - turn)
-    float leftSpeed = speed * (1.0f + (turn < 0 ? turn : 0));
+    float leftSpeed = speed * (1.0f + (turn < 0.0f ? turn : 0.0f));
     // Begränsar hastigheten till [-1, 1]
     leftSpeed = fmaxf(-1.0f, fminf(1.0f, leftSpeed));
     return leftSpeed;
@@ -45,29 +48,36 @@ float Drive::CalculateRightSpeedFunc() {
     // Ju mer till höger man styr, desto saktare roterar höger däck
     // if turn < 0 (styr höger)
     // right_speed = speed * (1.0 - turn)
-    float rightSpeed = speed * (1.0f - (turn > 0 ? turn : 0));
+    float rightSpeed = speed * (1.0f - (turn > 0.0f ? turn : 0.0f));
     // Begränsar hastigheten till [-1, 1]
     rightSpeed = fmaxf(-1.0f, fminf(1.0f, rightSpeed));
     return rightSpeed;
 }
 
+
 DriveState Drive::GetState() {
-    if (y > 0 && x == 0) {
+    if (y > 0.0f) {
         return FORWARD;
     }
-    else if (y < 0 && x == 0) {
+    else if (y < 0.0f) {
         return BACKWARD;
     }
-    else if (y == 0 && x > 0) {
+    else if (y == 0.0f && x > 0.0f) {
         return TTR;
     }
-    else if (y == 0 && x < 0) {
+    else if (y == 0.0f && x < 0.0f) {
         return TTL;
     }
     else {
         return STOPPED;
     }
 }
+
+void Drive::SetXY(float newX, float newY) {
+    x = newX;
+    y = newY;
+}
+
 
 /* Denna funktion kommer att kommunicera med MotorController för att styra Rovern 
    Olika funktioner kommer att anropas beroende på vilket state som returneras
@@ -76,31 +86,36 @@ DriveState Drive::GetState() {
    Om state är STOPPED, ska en annan funktion anropas som stoppar motorerna
 */
 void Drive::ExecuteDriveLogic() {
-    int currentSpeed = round(CalculateHypotenuse());
-    int leftSpeed = round(CalculateLeftSpeedFunc());
-    int rightSpeed = round(CalculateRightSpeedFunc());
+    int currentSpeed = round(CalculateHypotenuse()* PWM_SCALE);
+    int leftSpeed = round(CalculateLeftSpeedFunc()* PWM_SCALE);
+    int rightSpeed = round(CalculateRightSpeedFunc()* PWM_SCALE);
     DriveState dir = GetState();
-    printf("Left Speed: %d, Right Speed: %d\n", leftSpeed, rightSpeed);
+    //Serial.print("Current Speed: ");
+    //Serial.print(currentSpeed);
+    //Serial.print(" Left Speed: ");
+    //Serial.print(leftSpeed);
+    //Serial.print(" Right Speed: ");
+    //Serial.println(rightSpeed);
     // Skriver ut states, beroende på x och y (for testing)
     switch (dir) {
         case FORWARD:
-            printf("State: GO FWD\n");
+            //Serial.println("State: GO FWD");
             motorController.DriveForward(leftSpeed, rightSpeed);
             break;
         case BACKWARD:
-            printf("State: GO BWD\n");
+            //Serial.println("State: GO BWD");
             motorController.DriveBackward(leftSpeed, rightSpeed);
             break;
         case TTR:
-            printf("State: TTR\n");
+            //Serial.println("State: TTR");
             motorController.MakeTankTurnRight(currentSpeed);
             break;
         case TTL:
-            printf("State: TTL\n");
+            //Serial.println("State: TTL");
             motorController.MakeTankTurnLeft(currentSpeed);
             break;
         default:
-            printf("State: STOPPED\n");
+            //Serial.println("State: STOPPED");
             motorController.StopMotors();
             break;
     }

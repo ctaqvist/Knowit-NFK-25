@@ -3,6 +3,8 @@ Welcome to Knowit NFK 2025 where we create an interplanetary rover!
 
 [![C++ CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/cpp-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/cpp-ci.yml)
 [![Python CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/python-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/python-ci.yml)
+[![ServerJS CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/serverjs-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/serverjs-ci.yml)
+[![Android CI](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/android-ci.yml/badge.svg)](https://github.com/ctaqvist/Knowit-NFK-25/actions/workflows/android-ci.yml)
 
 ___  
 ## Workflow standard
@@ -23,9 +25,15 @@ Here are the decided general GitHub standards for the entire project.
 - Commit name should be short and clear.  
 - If more information is needed, put it in the commit description.
 
-### Pull request
+### Branch naming convention
+ - A branch should be linked to a ticket. Then the name must be: `id/name-of-ticket`
+	- It should always be lower caps
+ - In the special case when a branch is not linked to a ticket it follow the convetion: `tag/name-of-assignment`
+	- Where tag should be something fitting like `bug`, `extra`, `update`, `fix` 
 
-- Squash all commits before opening PR.  
+### Pull request
+- The PR name must match the branch naming standard: `id/name-of-ticket`
+
 - Before creating a pull request, check these points:  
 	- Is my code tested enough so that all cases are checked?  
 	- Does my code affect any other part of the project? If so, make sure that code changes don't break any other part of the project.  
@@ -39,7 +47,7 @@ Here are the decided general GitHub standards for the entire project.
 A pull request should not be merged if any of these are not fulfilled:  
 	- No one from my team has reviewed my pull request.  
 	- If definition of done is not met.
-
+- The PR merging commit message must match the branch naming standard: `id/name-of-ticket`
 ___
 
 ## Code

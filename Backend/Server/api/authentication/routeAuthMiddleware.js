@@ -4,7 +4,7 @@ dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 // This middleware checks whether a user is authorized to access a route on the server.
-function UserAuthCheck(req, res, next) {
+function authCheck(req, res, next) {
     // The token should be included as a query to the url
     const token = req.query.token;
         
@@ -23,6 +23,10 @@ function UserAuthCheck(req, res, next) {
 
         // Add userId to the request
         req.userId = decoded.userId;
+        jwt.verify(token, SECRET_KEY);
+
+        // Add userId to the request
+        req.userId = token.userId;
         next();
     }
     catch (error) {

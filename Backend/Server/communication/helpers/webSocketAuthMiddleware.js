@@ -1,8 +1,8 @@
 
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY;
 
 // This middleware checks whether the client is allowed to connect to web sockets on the server

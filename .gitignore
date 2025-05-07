@@ -17,11 +17,13 @@ __pycache__/
 *.py[cod]
 *.swp
 lgd-nfy0*
+*.coverage
 
 # Virtuella miljöer
 .venv/
 env/
 venv/
+.env
 
 # VS Code
 .vscode/

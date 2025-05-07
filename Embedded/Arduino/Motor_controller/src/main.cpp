@@ -1,26 +1,24 @@
-//#include "motorControl.h"
-//#include "CommandHandler.h"
 #include "Arduino.h"
+#include "Backend/CommandHandler.h"
 #include "Hardware/Battery/BatteryHealth.h"
 #include "Hardware/Motor/MotorController.h"
 #include "Calculations/Drive.h"
+#include "Hardware/SpotLights/SpotLight.h"
+#include "Hardware/HardWareConfig.h"
 
-// Pin for spotlights
-const int SPOTLIGHTS_PIN = 12; 
-
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   pinMode(SPOTLIGHTS_PIN, OUTPUT);
-  
-  //motorControl.init();
-  //commandHandler.init(); //används för att hantera kommandon
+  pinMode(BUZZER_PIN, OUTPUT);
+  pinMode(BATTERY_PIN, INPUT);
+  // Initiera CommandHandler så Arduino är redo att ta emot JSON-kommandon
+  commandHandler.init();
 }
 
-void loop() {
-  //commandHandler.listen();
-  //motorControl.update();
-  //CheckBatteryAndWarn ();
-  //delay(1000);
-
+void loop()
+{
+  commandHandler.listen();
+  CheckBatteryAndWarn();
+  SendBatteryStatusToServer();
 }
-
