@@ -5,13 +5,15 @@ import android.media.session.MediaSession.Token
 
 object UserData {
     var isLoggedIn: Boolean? = null
-    var token: Token? = null
+    var token: String? = null
     var email: String? = null
 
-    fun login(email: String, token: Token) {
+    fun login(email: String, token: String) {
         UserData.isLoggedIn = true
         UserData.token = token
         UserData.email = email
+
+        //TODO: Store token on drive to save login between app-restarts
     }
 
     fun logout() {

@@ -17,6 +17,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
+import se.terrax9.services.UserData
 import java.io.IOException
 
 enum class LoginEvent {
@@ -96,6 +97,10 @@ class LoginViewModel() : ViewModel() {
                         val token = json.getString("token")
                         println("Success! Token is $token")
                         status = "Success! See log for token"
+
+                        // Call login to add email and token
+                        UserData.login(email, token)
+
                         viewModelScope.launch {
                             _events.emit(LoginEvent.LOGIN_SUCCESS)
                         }
