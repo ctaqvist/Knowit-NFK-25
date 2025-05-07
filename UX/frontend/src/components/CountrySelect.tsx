@@ -1,7 +1,8 @@
 import { countries } from '@/utils/data/countries';
 import { Autocomplete, Box, TextField } from '@mui/material';
-import { SetStateAction } from 'react';
-import { ContactForm } from '@/types/types';
+import { SetStateAction, SyntheticEvent, useState } from 'react';
+import { ContactForm, CountryType } from '@/types/types';
+import Icon from './Icon';
 
 type CountrySelectProps = {
     formData: ContactForm;
@@ -12,16 +13,20 @@ export default function CountrySelect({
     setFormData,
     formData,
 }: CountrySelectProps) {
-    const handleChange = (value: any | null) => {
-        if (!value) return;
+    const [countrySelectOpen, setCountrySelectOpen] = useState(false);
 
-        setFormData({
-            ...formData,
-            telephone: {
-                ...value,
-                number: formData.telephone.number,
-            },
-        });
+
+    const handleChange = (e: SyntheticEvent) => {
+        console.log('value', (e.target as HTMLLIElement).value)
+        const { value } = (e.target as HTMLLIElement)
+        if (!value) return;
+        // setFormData({
+        //     ...formData,
+        //     telephone: {
+        //         ...value,
+        //         number: formData.telephone.number,
+        //     },
+        // });
     };
 
     const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +46,21 @@ export default function CountrySelect({
         });
     };
 
+    const triggerAutocompleteDropdown = () => {
+        const input = document.querySelector<HTMLInputElement>('#country-select');
+        if (input) {
+            input.focus();
+
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', {
+                    key: countrySelectOpen ? 'Escape' : 'ArrowDown',
+                    bubbles: true,
+                })
+            );
+            setCountrySelectOpen((prev) => !prev);
+        }
+    };
+
     return (
         <Autocomplete
             sx={{
@@ -49,6 +69,8 @@ export default function CountrySelect({
                 '& .MuiInputBase-root:not(:has(#number-input))': {
                     backgroundColor: 'rgba(188, 197, 255, 0.3)',
                 },
+                // Listbox
+                '& .MuiAutocomplete-paper, #country-select-listbox': { backgroundColor: 'red' }
             }}
             defaultValue={formData.telephone}
             value={formData.telephone}
@@ -60,10 +82,15 @@ export default function CountrySelect({
             renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
                 return (
+                    /**
+                     * Options
+                     */
                     <Box
                         key={option.code}
                         component='li'
-                        sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                        sx={{
+                            '& > img': { mr: 2, flexShrink: 0 },
+                        }}
                         {...optionProps}
                     >
                         <img
@@ -78,29 +105,46 @@ export default function CountrySelect({
                 );
             }}
             renderInput={(params) => (
+                /*
+                 * Visual "Select"
+                 */
                 <Box position={'relative'}>
                     <Box
                         sx={{
+                            width: '96px',
                             position: 'absolute',
                             zIndex: 2,
                             top: '50%',
                             transform: 'translateY(-50%)',
                             left: '20px',
-                          }}
-                          onClick={(e) => {
-                            e.bubbles = true
-                          }}
+                            display: 'flex',
+                            gap: '10px',
+                            alignItems: 'center',
+                            '&:hover': { cursor: 'pointer' },
+                        }}
+                        onClick={triggerAutocompleteDropdown}
                     >
-                        <img
+                        <Box
+                            component='img'
+                            onClick={triggerAutocompleteDropdown}
+                            borderRadius={'2px'}
                             loading='lazy'
-                            width='33'
+                            width='33px'
                             srcSet={`https://flagcdn.com/w40/${formData?.telephone?.code?.toLowerCase()}.png 2x`}
                             src={`https://flagcdn.com/w20/${formData?.telephone?.code?.toLowerCase()}.png`}
                             alt=''
                         />
+                        <Icon
+                            src='/src/assets/Icon_arrow_down.svg'
+                            width='18px'
+                            height='14px'
+                        />
                     </Box>
 
                     <TextField
+                        /**
+                         * Phone number input
+                         */
                         id='number-input'
                         onChange={handleNumberChange}
                         value={`${formData.telephone.phone}${formData.telephone.number}`}
@@ -110,7 +154,7 @@ export default function CountrySelect({
                         }}
                         sx={{
                             position: 'absolute',
-
+                            width: 318.5,
                             right: 0,
                             zIndex: 5,
                             height: 64,
@@ -122,10 +166,16 @@ export default function CountrySelect({
                         }}
                     />
                     <TextField
+                        /**
+                         * Select for countries
+                         */
                         sx={{
                             caretColor: 'transparent',
                             height: 64,
-                            '& ': { height: '100%' },
+                            '&:hover, .MuiInputBase-root:hover, input:hover': {
+                                cursor: 'pointer',
+                            },
+
                         }}
                         {...params}
                         slotProps={{
