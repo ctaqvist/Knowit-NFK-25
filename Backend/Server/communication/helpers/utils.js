@@ -1,4 +1,5 @@
 import WebSocket from 'ws';
+
 // Client is passed as paramter
 export function sendPong(ws) {
     ws.send(JSON.stringify({ response: "pong" }));
@@ -10,7 +11,7 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     const userId = ws.token.userId;
     const roverId = parsed.rover_id;
 
-    // Check if the rover is connected to the server
+    // 1. Check if the rover is connected to the server (otherwise send error and throw return)
     if (!isRoverConnected(roverId, clients)) {
         ws.send(JSON.stringify({
             response: "error",
@@ -18,7 +19,8 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
         }));
         return;
     }
-    // Check if the rover is already in use
+
+    // 2. Check if the rover is already in use (otherwise send error and throw return)
     if (isRoverInUse(roverId, userRoverDict)) {
         ws.send(JSON.stringify({
             response: "error",
@@ -28,7 +30,7 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
         return;
     }
 
-    // Check if user is already connected to a rover
+    //3. Check if user is already connected to a rover (otherwise send error and throw return)
     const userIsConncted = isUserConnectedToRover(userId, userRoverDict);
     console.log("user is connected: ", userIsConncted)
     if (isUserConnectedToRover(userId, userRoverDict)) {
@@ -82,7 +84,6 @@ export function forwardMessageToAllClients(parsed, clients, ws) {
 }
 
 // Send message to specific client which is specified in the message
-// I changed the response from (sender: ['CLEINT'] or ['SERVER']) to ([USER] or [ROVER])
 export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict) {
     // Determine sender type
     const senderIsUser = ws.token && ws.token.userId;
@@ -95,6 +96,8 @@ export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict)
             console.log("No rover mapped for this user.");
             return;
         }
+
+        
         const roverClient = [...clients].find(client => client.token && client.token.roverSerial === roverId);
         if (roverClient && roverClient.readyState === WebSocket.OPEN) {
             roverClient.send(JSON.stringify({

@@ -21,7 +21,7 @@ router.post('/rover/login', async (req, res) => {
 
         if (roverSerial === rover.rover_serial && password === rover.password) {
             const token = jwt.sign(
-                { 
+                {
                     roverId: rover.roverId,
                     roverSerial: rover.rover_serial,
                 },
@@ -40,7 +40,6 @@ router.post('/rover/login', async (req, res) => {
 // Get all rovers for a user
 router.get('/userrovers', authCheck, (req, res) => {
     const userId = req.userId;
-    console.log(userId)
     databaseQueries.getUserRovers(userId, (err, rows) => {
         if (err) {
             return res.status(500).json({ error: err.message });

@@ -17,10 +17,16 @@ function initializeWebSocketServer(server) {
 
     // Set up server
     wss.on('connection', (ws, req) => {
+        
+        // First, set up connection
         onConnection(ws, req);
+
+        // Create onMessage event
         ws.on('message', (msg) => {
             onMessage(msg, ws);
         })
+
+        // Set up onClose event
         ws.on('close', () => {
             console.log( "token is: ", ws.token);
             if (ws.token) {
