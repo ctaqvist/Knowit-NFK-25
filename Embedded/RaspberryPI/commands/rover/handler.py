@@ -2,7 +2,9 @@ from ..camera.picture import *
 from ..camera.stream import *
 from .rover_lights import *
 from .rover_forwarder import *
-from commands.arm.arm_forwarder import forward_arm, forward_claw
+from config.settings import IS_RPI
+if IS_RPI:
+    from commands.arm.arm_forwarder import forward_arm, forward_claw
 
 async def process_command(websocket, data):
     command = data.get("command")
@@ -12,10 +14,12 @@ async def process_command(websocket, data):
         await forward_joystick_to_arduino(data["steer"])
         return
     elif "steer_arm" in data:
-        await forward_arm(data["steer_arm"], websocket)
+        if IS_RPI:
+            await forward_arm(data["steer_arm"], websocket)
         return
     elif "claw_data" in data:
-        await forward_claw(data["claw_data"], websocket)
+        if IS_RPI:
+            await forward_claw(data["claw_data"], websocket)
         return
 
     if command is not None:
