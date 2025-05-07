@@ -9,7 +9,7 @@ expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use(express.json());
 
 expressApp.use(userRouter);
-expressApp.use(imageRouter);
+expressApp.use("/images", imageRouter);
 expressApp.use(roverRouter);
 
 expressApp.get('/', (req, res) => {

@@ -63,4 +63,4 @@ function roverAuthCheck(req, res, next) {
     }
 }
 
-export default UserAuthCheck
+export default authCheck

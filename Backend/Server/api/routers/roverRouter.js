@@ -1,5 +1,5 @@
 import express from 'express';
-import UserAuthCheck from "../authentication/routeAuthMiddleware.js";
+import authCheck from "../authentication/routeAuthMiddleware.js";
 import databaseQueries from '../../database/databaseQueries.js';
 import jwt from 'jsonwebtoken';
 
@@ -38,7 +38,7 @@ router.post('/rover/login', async (req, res) => {
 });
 
 // Get all rovers for a user
-router.get('/userrovers', UserAuthCheck, (req, res) => {
+router.get('/userrovers', authCheck, (req, res) => {
     const userId = req.userId;
     console.log(userId)
     databaseQueries.getUserRovers(userId, (err, rows) => {

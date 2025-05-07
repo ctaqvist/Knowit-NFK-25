@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 
-const queriesDir = path.join(path.dirname(new URL(import.meta.url).pathname), 'queries');
+const queriesDir = new URL('./queries/', import.meta.url);
 
 function loadQuery(filename) {
-    return fs.readFileSync(path.join(queriesDir, filename), 'utf8');
+    return fs.readFileSync(new URL(filename, queriesDir), 'utf8');
 }
 
 export const SQL_QUERIES = {

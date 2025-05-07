@@ -7,7 +7,7 @@ import { createTokenForUser, createTokenForRover } from '../tokenGenerator.js';
 
 let server;
 let wss;
-let port = 8080;
+let port = 8085;
 
 beforeAll((done) => {
     server = http.createServer(expressApp);
