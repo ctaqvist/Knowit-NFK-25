@@ -1,7 +1,9 @@
 import sys
 import os
 import logging
-import Robotic_arm.servo_module.functions as servo_module
+from config.settings import IS_RPI
+if IS_RPI:
+    import Robotic_arm.servo_module.functions as servo_module
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.append(PROJECT_ROOT)
@@ -24,9 +26,10 @@ try:
 
     def run():
         logging.debug("Running main() function")
-        servo_module.servo1, servo_module.servo2, servo_module.servo3 = (
-        servo_module.setup_pins()
-    )
+        if IS_RPI:
+            servo_module.servo1, servo_module.servo2, servo_module.servo3 = (
+                servo_module.setup_pins()
+            )
         arduino.connect()
         logging.debug("Arduino connected.")
         asyncio.run(listen_to_server())
