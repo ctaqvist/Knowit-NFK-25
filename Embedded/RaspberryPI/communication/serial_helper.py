@@ -9,12 +9,46 @@ except ImportError:
     serial = None
 
 class ArduinoConnection:
+    # Ny funktion för multitrådning
+    def _handle_obstacle_detected(self):
+        import requests
+        from config.settings import LOCAL_TEST
+
+        if LOCAL_TEST:
+            print("[LOCAL TEST] OBSTACLE_DETECTED signal received.")
+            return
+
+        try:
+            response = requests.post(
+                "https://terrax9.se/obstacle",  # eller ändra till rätt endpoint
+                json={"rover_id": "rover-001", "event": "OBSTACLE_DETECTED"},
+                timeout=5
+            )
+            print(f"[SERVER] Sent OBSTACLE_DETECTED. Response: {response.status_code}")
+        except Exception as e:
+            print(f"[SERVER ERROR] Failed to report obstacle: {e}")
+
+    
+    # Ny funktion för multitrådning
+    def _listen_for_messages(self):
+        while self.keep_alive:
+            message = self.read_received_data()
+            if message:
+                print(f"[Arduino -> Pi] Received: {message}")
+                if message == "OBSTACLE_DETECTED":
+                    self._handle_obstacle_detected()
+            time.sleep(0.1)  # avoid tight loop
+
     def __init__(self):
         self.baudrate = 115200
         self.serial = None
         self.lock = threading.Lock()
         self.keep_alive = True
         self.watcher_thread = threading.Thread(target=self._watch_serial_connection, daemon=True)
+        # Används för multitrådning
+        self.message_listener_thread = threading.Thread(target=self._listen_for_messages, daemon=True)
+        self.message_listener_thread.start()
+
         self.watcher_thread.start()
 
     def find_arduino_port(self):

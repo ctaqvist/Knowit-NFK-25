@@ -5,4 +5,4 @@ import platform
 
 # Raspberry Pi brukar vara en ARM-board på Linux
 IS_RPI = platform.system() == "Linux" and platform.machine().startswith("arm")
-LOCAL_TEST = False
+LOCAL_TEST = True
