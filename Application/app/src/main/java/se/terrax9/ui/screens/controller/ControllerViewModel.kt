@@ -16,6 +16,9 @@ class ControllerViewModel() : ViewModel() {
     private val _isLighted = MutableStateFlow(true)
     val isLighted: StateFlow<Boolean> = _isLighted
 
+    private val _batteryPercentage: MutableStateFlow<Float?> = MutableStateFlow(null)
+    val batteryPercentage: StateFlow<Float?> = _batteryPercentage
+
     fun sendCommand(command: String) {
         viewModelScope.launch {
             dataService.sendMessage(command)
