@@ -16,8 +16,21 @@ if LOCAL_TEST:
         return matches[state] if state < len(matches) else None
 
 RECONNECT_DELAY = 5  # sekunder
+
+active_steer = False
+
+async def _steer_runner(websocket, data):
+    global active_steer
+    try:
+        await process_command(websocket, data)
+    finally:
+        active_steer = False
+        print("BACKGROUND STEER DONE.")
+
 if LOCAL_TEST == False:
     async def listen_to_server():
+        global active_steer
+        
         while True:
             try:
                 async with websockets.connect(SERVER_URL) as websocket:
@@ -31,11 +44,22 @@ if LOCAL_TEST == False:
                     while True:
                         try:
                             message = await websocket.recv()
-                            print(f"[RAW] {message}") 
 
                             data = json.loads(message)
-
-                            await process_command(websocket, data)
+                            
+                            # If not a steer command, always process immediately
+                            if ("steer" not in message):
+                                print(f"Forceful command: {message}") 
+                                await process_command(websocket, data)
+                                continue
+                            
+                            # If no active steer is running, start a new active steer. Otherwise skip steer and do next message.                                
+                            if (active_steer == False):
+                                print(f"Time to steer {data}") 
+                                active_steer = True
+                                asyncio.create_task(_steer_runner(websocket, data))     
+                            else:
+                                print("SKIPPING STEER")
 
                         except json.JSONDecodeError as e:
                             print(f"[ERROR] Invalid JSON received: {e}")
