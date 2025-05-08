@@ -17,8 +17,8 @@ export const INITIAL_FORM_DATA = {
   telephone: {
     code: 'SE',
     label: 'Sweden',
-    phone: '+46',
-    number: '+46',
+    phone: '46',
+    number: '',
   },
   businessField: 'Select an option',
   message: '',
