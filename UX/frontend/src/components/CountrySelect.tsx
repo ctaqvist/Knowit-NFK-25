@@ -1,11 +1,10 @@
 import {
     INITIAL_COUNTRIES,
 } from '@/utils/data/countries';
-import { Box, Button, Menu, MenuItem, Popover, TextField } from '@mui/material';
+import { Box, Button, MenuItem, Popover, TextField } from '@mui/material';
 import {
     ChangeEvent,
     SetStateAction,
-    SyntheticEvent,
     useEffect,
     useRef,
     useState,
