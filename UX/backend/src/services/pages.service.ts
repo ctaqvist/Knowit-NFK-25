@@ -149,7 +149,7 @@ export class PageService {
       if (error) throw error;
       return data.updated_at;
     } catch (error) {
-      console.log('Error when fetching last updated: ', error);
+      console.error('Error when fetching last updated: ', error);
       throw new Error(`Error when fetching last updated`);
     }
   }

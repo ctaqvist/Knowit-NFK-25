@@ -33,7 +33,6 @@ export class PageController {
    createBooking(
     @Body() formData: ContactForm
    ) {
-    console.log('Contact form in controller: ', formData)
     return this.pageService.createBooking(formData)
    }
 }
