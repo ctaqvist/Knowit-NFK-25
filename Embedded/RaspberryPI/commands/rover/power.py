@@ -29,7 +29,6 @@ def handle_sleep_signal(trigger: bool, websocket):
         return websocket.send(json.dumps(data))
 
 def handle_low_battery_warning(trigger: bool, websocket):
-    
     #Tar emot bool för låg batterinivå och skickar vidare till appen.
     data = {
         "type": "low_battery_warning",
