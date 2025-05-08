@@ -22,7 +22,7 @@ import {
 } from '@/types/types';
 import { contentApi } from '@/api/contentApi';
 import React, { useState } from 'react';
-import { validateInput, validateSupportForm } from '@/utils/validate';
+import { validateSupportInput, validateSupportForm } from '@/utils/validate';
 import FileUpload from '@/components/FileUpload';
 import LinearProgress from '@mui/material/LinearProgress';
 import FAQ from '@/utils/data/supportFAQ';
@@ -84,14 +84,14 @@ function Support() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const isValid = validateInput(name, value);
+    const isValid = validateSupportInput(name, value);
     setFormData({ ...formData, [name]: value as string });
     setFormValidity({ ...formValidity, [name]: isValid });
   };
 
   const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
-    const isValid = validateInput(name, value as string)
+    const isValid = validateSupportInput(name, value as string)
     setFormData({ ...formData, [name]: value as string });
     setFormValidity({ ...formValidity, [name]: isValid });
   };

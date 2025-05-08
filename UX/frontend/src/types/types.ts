@@ -163,6 +163,8 @@ export interface ContactForm {
   }
 }
 
+
+
 type Telephone = CountryType & {
   number: string
 }
@@ -172,4 +174,5 @@ export interface CountryType {
   label: string;
   phone: string;
   suggested?: boolean;
+  isSearchField?: boolean
 }

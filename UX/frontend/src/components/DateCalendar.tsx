@@ -2,7 +2,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { SetStateAction, useEffect } from 'react';
+import { SetStateAction } from 'react';
 import { ContactForm } from '@/types/types';
 import dayjs, { Dayjs } from 'dayjs';
 
@@ -15,7 +15,6 @@ export default function BasicDateCalendar({ setFormData, formData }: BasicDateCa
 
   const handleChange = (date: Dayjs | null) => {
     const DAY_JS_DATE = dayjs(date)
-    console.log('DAYJSDATE', DAY_JS_DATE)
     if (!date) return;
     setFormData({
       ...formData,

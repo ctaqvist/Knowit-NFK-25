@@ -365,20 +365,31 @@ export const theme = createTheme({
     MuiAlert: {
       styleOverrides: {
         root: {
-          zIndex: 4,
           padding: '1rem 2rem',
-          backgroundColor: '#180757',
+          backgroundColor: 'rgba(24, 7, 87, 0.80)',
+          backdropFilter: 'blur(20px)',
           color: '#FFF',
           alignItems: 'center',
           gap: '10px',
           position: 'fixed',
-          top: '6rem',
-          maxWidth: 846,
+          top: 94.89,
+          left: '50&',
+          zIndex: 10,
           margin: '0 auto',
+          fontSize: 20,
+          fontWeight: 500,
+          fontFamily: 'Lexend Exa, sans-serif',
+          '& svg': {width: 50, height: 50},
+          height: 210,
+          minWidth: 513,
+          maxWidth: 850,
+          opacity: 0,
+          borderRadius: '0px 0px 20px 20px',
+
+          // Alert animation
           transition: 'opacity 500ms',
-          animationName: 'fadeOut',
-          animationDelay: '3000ms',
-          animationDuration: '1000ms',
+          animationName: 'fadeInOut',
+          animationDuration: '5000ms',
         },
       },
     },
@@ -424,6 +435,7 @@ export const theme = createTheme({
           '& .Mui-selected:hover': {background: 'linear-gradient(90deg, #05030C 0%, #180757 100%)'}
         }
       }
-    }
+    },
+
   },
 });
