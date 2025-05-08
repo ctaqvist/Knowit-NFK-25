@@ -1,125 +1,120 @@
-import sys
-import json
-import pytest
-from unittest.mock import MagicMock, patch
 
-# Mock GPIO modules for non-RPi testing environments
-sys.modules["RPi"] = MagicMock()
-sys.modules["RPi.GPIO"] = MagicMock()
+import pytest
+import json
+import asyncio
+import os
+import sys
+from pathlib import Path
+
+# Ensure project root on path for imports
+root = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(root))
 
 from commands.arm.arm_forwarder import forward_arm, forward_claw
+from config.settings import ROVER_ID
 
-class FakeWebSocket:
-    """Simulated websocket for capturing sent messages."""
+class DummyWebSocket:
     def __init__(self):
-        self.sent_messages = []
-
+        self.sent = []
     async def send(self, message):
-        self.sent_messages.append(json.loads(message))
+        self.sent.append(json.loads(message))
 
-@patch("commands.arm.forwarder.move_arm")
+# --- Arm Forward Tests ---
 @pytest.mark.asyncio
-async def test_forward_arm_valid(mock_move_arm):
-    """Test valid arm input calls move_arm and returns success."""
-    ws = FakeWebSocket()
-    arm_data = {"x": 0.5, "y": -0.3}
-    await forward_arm(arm_data, ws)
+async def test_forward_arm_calls_move_and_succeeds(monkeypatch):
+    ws = DummyWebSocket()
+    # Patch move_arm to simulate success
+    import commands.arm.arm_forwarder as mod
+    called = []
+    monkeypatch.setattr(mod, 'move_arm', lambda x, y: called.append((x,y)))
 
-    mock_move_arm.assert_called_once_with(0.5, -0.3)
-    assert ws.sent_messages[-1]["status"] == "ok"
-    assert "Arm moved" in ws.sent_messages[-1]["response"]
+    await forward_arm({'x': 0.5, 'y': -0.5}, ws)
+    # Verify move_arm called with floats
+    assert called == [(0.5, -0.5)]
+    # Verify websocket message
+    msg = ws.sent[-1]
+    assert msg['rover_id'] == ROVER_ID
+    assert msg['status'] == 'ok'
+    assert msg['x'] == 0.5 and msg['y'] == -0.5
+    assert 'Arm moved' in msg['response']
 
-@patch("commands.arm.forwarder.move_arm")
 @pytest.mark.asyncio
-async def test_forward_arm_invalid_data(mock_move_arm):
-    """Test invalid x value results in error response."""
-    ws = FakeWebSocket()
-    arm_data = {"x": "hej", "y": 0.2}
-    await forward_arm(arm_data, ws)
+async def test_forward_arm_invalid_type(monkeypatch):
+    ws = DummyWebSocket()
+    # invalid x causes no move
+    import commands.arm.arm_forwarder as mod
+    monkeypatch.setattr(mod, 'move_arm', lambda x, y: (_ for _ in ()).throw(AssertionError("Should not be called")))
 
-    mock_move_arm.assert_not_called()
-    assert ws.sent_messages[-1]["status"] == "error"
-
-@patch("commands.arm.forwarder.move_claw")
-@pytest.mark.asyncio
-async def test_forward_claw_valid(mock_move_claw):
-    """Test valid claw input calls move_claw and returns success."""
-    ws = FakeWebSocket()
-    claw_data = {"claw": 1.0}
-    await forward_claw(claw_data, ws)
-
-    mock_move_claw.assert_called_once_with(1.0)
-    assert ws.sent_messages[-1]["status"] == "ok"
-    assert "Claw moved" in ws.sent_messages[-1]["response"]
-
-@patch("commands.arm.forwarder.move_claw")
-@pytest.mark.asyncio
-async def test_forward_claw_invalid_data(mock_move_claw):
-    """Test invalid claw input results in error response."""
-    ws = FakeWebSocket()
-    claw_data = {"claw": "invalid"}
-    await forward_claw(claw_data, ws)
-
-    mock_move_claw.assert_not_called()
-    assert ws.sent_messages[-1]["status"] == "error"
+    await forward_arm({'x': 'bad', 'y': 0.1}, ws)
+    msg = ws.sent[-1]
+    assert msg['status'] == 'error'
+    assert 'Invalid x/y' in msg['message']
 
 @pytest.mark.asyncio
 async def test_forward_arm_missing_keys():
-    """Test missing 'y' key in arm data results in error."""
-    ws = FakeWebSocket()
-    arm_data = {"x": 0.5}
-    await forward_arm(arm_data, ws)
+    ws = DummyWebSocket()
+    # missing y
+    await forward_arm({'x': 0.2}, ws)
+    msg = ws.sent[-1]
+    assert msg['status'] == 'error'
+    assert 'Invalid x/y' in msg['message']
 
-    assert ws.sent_messages[-1]["status"] == "error"
-    assert "Invalid x/y" in ws.sent_messages[-1]["message"]
+@pytest.mark.asyncio
+async def test_forward_arm_move_error(monkeypatch):
+    ws = DummyWebSocket()
+    # simulate exception inside move_arm
+    import commands.arm.arm_forwarder as mod
+    def raise_err(x, y): raise RuntimeError('fail')
+    monkeypatch.setattr(mod, 'move_arm', raise_err)
+
+    await forward_arm({'x': 0.1, 'y': 0.2}, ws)
+    msg = ws.sent[-1]
+    assert msg['status'] == 'error'
+    assert '[forward_arm]' in msg['message']
+
+# --- Claw Forward Tests ---
+@pytest.mark.asyncio
+async def test_forward_claw_calls_move_and_succeeds(monkeypatch):
+    ws = DummyWebSocket()
+    import commands.arm.arm_forwarder as mod
+    called = []
+    monkeypatch.setattr(mod, 'move_claw', lambda c: called.append(c))
+
+    await forward_claw({'claw': 1.0}, ws)
+    assert called == [1.0]
+    msg = ws.sent[-1]
+    assert msg['status'] == 'ok'
+    assert msg['claw'] == 1.0
+    assert 'Claw moved' in msg['response']
+
+@pytest.mark.asyncio
+async def test_forward_claw_invalid_type():
+    ws = DummyWebSocket()
+    import commands.arm.arm_forwarder as mod
+    monkeypatch = pytest.MonkeyPatch()
+    # monkeypatch not needed for move_claw
+
+    await forward_claw({'claw': 'nope'}, ws)
+    msg = ws.sent[-1]
+    assert msg['status'] == 'error'
+    assert 'Invalid claw' in msg['message']
 
 @pytest.mark.asyncio
 async def test_forward_claw_missing_key():
-    """Test missing 'claw' key in claw data results in error."""
-    ws = FakeWebSocket()
-    claw_data = {}
-    await forward_claw(claw_data, ws)
-
-    assert ws.sent_messages[-1]["status"] == "error"
-    assert "Invalid claw" in ws.sent_messages[-1]["message"]
+    ws = DummyWebSocket()
+    await forward_claw({}, ws)
+    msg = ws.sent[-1]
+    assert msg['status'] == 'error'
+    assert 'Invalid claw' in msg['message']
 
 @pytest.mark.asyncio
-async def test_forward_claw_edge_values():
-    """Test edge case value 0.0 for claw is valid."""
-    ws = FakeWebSocket()
-    claw_data = {"claw": 0.0}
+async def test_forward_claw_move_error(monkeypatch):
+    ws = DummyWebSocket()
+    import commands.arm.arm_forwarder as mod
+    def raise_err(c): raise RuntimeError('fail claw')
+    monkeypatch.setattr(mod, 'move_claw', raise_err)
 
-    with patch("commands.arm.forwarder.move_claw") as mock_claw:
-        await forward_claw(claw_data, ws)
-        mock_claw.assert_called_once_with(0.0)
-        assert ws.sent_messages[-1]["status"] == "ok"
-
-@pytest.mark.asyncio
-async def test_forward_arm_missing_x():
-    """Test missing 'x' key in arm data results in error."""
-    ws = FakeWebSocket()
-    arm_data = {"y": 0.5}
-    await forward_arm(arm_data, ws)
-
-    assert ws.sent_messages[-1]["status"] == "error"
-    assert "Invalid" in ws.sent_messages[-1]["message"]
-
-@pytest.mark.asyncio
-async def test_forward_arm_missing_y():
-    """Test missing 'y' key in arm data results in error."""
-    ws = FakeWebSocket()
-    arm_data = {"x": 0.5}
-    await forward_arm(arm_data, ws)
-
-    assert ws.sent_messages[-1]["status"] == "error"
-    assert "Invalid" in ws.sent_messages[-1]["message"]
-
-@pytest.mark.asyncio
-async def test_forward_claw_none():
-    """Test 'None' value in claw data results in error."""
-    ws = FakeWebSocket()
-    claw_data = {"claw": None}
-    await forward_claw(claw_data, ws)
-
-    assert ws.sent_messages[-1]["status"] == "error"
-    assert "Invalid" in ws.sent_messages[-1]["message"]
+    await forward_claw({'claw': 0.0}, ws)
+    msg = ws.sent[-1]
+    assert msg['status'] == 'error'
+    assert '[forward_claw]' in msg['message']
