@@ -35,24 +35,17 @@ The following commands are reactive and the sender passes ownership to the rover
 }
 ```
 
-### Control the arm
+### Control the arm (shoulder, elbow and claw)
+The arm currently has 3 axis, each axis is controlled by a value in range [-1:1].
 
+For example: 
 ```
 {
     "rover_id": -roverID-,
     "steer_arm": {
-        "x": -xValue-,
-        "y": -yValue-
-    }
-}
-```
-
-### Control the claw 
-```
-{
-    "rover_id": -roverID-,
-    "steer_claw": {
-        "claw": -yValue-
+        "shoulder": -value-,
+        "axis": -value-,
+        "claw": -value-,
     }
 }
 ```
