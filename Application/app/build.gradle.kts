@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0")
+    implementation(libs.androidx.browser)
 
 
 

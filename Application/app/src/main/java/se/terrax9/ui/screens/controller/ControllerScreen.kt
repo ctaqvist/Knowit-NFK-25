@@ -95,6 +95,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
                 text = "Settings",
                 iconRes = R.drawable.settings
             ) {
+                navController.navigate(Routes.Settings)
             }
         }
     }
