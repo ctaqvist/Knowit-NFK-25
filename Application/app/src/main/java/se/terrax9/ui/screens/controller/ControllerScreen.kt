@@ -123,16 +123,11 @@ fun BottomDashboard(viewModel: ControllerViewModel) {
                 iconRes = R.drawable.camera,
                 onClick = viewModel::takePhoto
             )
-            JoyStick(
-                onMove = viewModel::sendCommand,
-                getCommand = Commands::arm,
-                isFixed = true
-            )
-            JoyStick(
-                onMove = viewModel::sendCommand,
-                getCommand = Commands::claw,
-                isFixed = true
-            )
+
+            SliderRow { x, y, z ->
+                viewModel.sendCommand(Commands.steerArm(x, y, z))
+            }
+
         }
     }
 }
