@@ -2,7 +2,6 @@ import os
 import json
 
 def handle_battery_level(level: float, websocket):
-    
     #Tar emot batterinivå som float (t.ex. 0.5 för 50%) och skickar vidare till appen.
     #Om batterinivå är under 20% skickas även en sleep signal till appen och Pi stängs av.
     #Om batterinivå är över 20% skickas en signal till appen att Pi inte ska stängas av.
