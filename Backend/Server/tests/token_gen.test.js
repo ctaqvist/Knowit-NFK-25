@@ -42,7 +42,8 @@ describe('login', () => {
         // Test to authenticate with token
         console.log("BOBOBAGONOSH")
         const response2 = await request(expressApp).get(`/auth?token=${response.body.token}`)
-        expect(response2).toBe(200);
+        expect(response2.statusCode).toBe(200);
+
 
     });
 })
