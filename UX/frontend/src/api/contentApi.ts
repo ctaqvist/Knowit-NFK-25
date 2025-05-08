@@ -1,3 +1,4 @@
+import { Tables } from '@/types/supabase.types';
 import { api } from './axios';
 import { Page, Review, ApiResponse, Pages, DownloadableFiles } from '@/types/types';
 
@@ -9,5 +10,7 @@ export const contentApi = {
   getFile: (file: DownloadableFiles): Promise<Blob> => api.get(`files/${file}`, {
     responseType: 'blob'
   }),
-  sendSupportForm: () => {}
+  getBookedTimes: (date: string): Promise<ApiResponse<Tables<'booked_times_public_view'>[]>> => api.get(`/pages/booked-times/${date}`),
+  sendSupportForm: () => {},
+  createBooking: () => {}
 }
