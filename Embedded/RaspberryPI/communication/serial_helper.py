@@ -15,7 +15,6 @@ class ArduinoConnection:
         self.keep_alive = True
         self.watcher_thread = threading.Thread(target=self._watch_serial_connection, daemon=True)
         self.watcher_thread.start()
-    
     def find_arduino_port(self):
         if serial is None:
             return None
