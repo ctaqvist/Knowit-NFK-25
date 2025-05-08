@@ -14,7 +14,6 @@ def handle_battery_level(level: float, websocket):
     return websocket.send(json.dumps(data))
 
 def handle_sleep_signal(trigger: bool, websocket):
-   
     #Tar emot signal för sleep mode. Om True → stänger av Pi. Skickas även vidare till appen.
     data = {
         "type": "sleep_mode",
