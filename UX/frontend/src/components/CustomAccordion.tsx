@@ -13,6 +13,7 @@ function Accordion({ summary, details }: CustomAccordionProps) {
         expandIcon={<ExpandMoreIcon color='primary' />}
         aria-controls={`panel`}
         id='panel1-header'
+        sx={{ '&:focus, :focus-within, :focus-visible': { border: '2px solid white' } }}
       >
         <Typography variant='body2'>
           {summary}

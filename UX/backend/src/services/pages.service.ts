@@ -1,11 +1,12 @@
 import { Inject, Injectable, Param } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
-import { ApiResponse, Page, Review, Pages } from 'src/types/types';
+import { ApiResponse, Page, Review, Pages, ContactForm } from 'src/types/types';
 import { DownloadableFiles } from 'src/controllers/files.controller';
 import { Response } from 'express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { isCacheFresh } from 'src/utils/calc';
+import { Tables } from 'src/types/supabase.types';
 
 @Injectable()
 export class PageService {
@@ -20,13 +21,12 @@ export class PageService {
       const CACHED_PAGES = await this.cacheManager.get('pages');
 
       // Check when last updated and if it's within the last hour
-      const LAST_UPDATED = await this.getLastUpdated('pages')
+      const LAST_UPDATED = await this.getLastUpdated('pages');
       const MAX_AGE = 60 * 60 * 1000;
 
       if (CACHED_PAGES && isCacheFresh(LAST_UPDATED, MAX_AGE))
         return {
           data: CACHED_PAGES as Pages,
-          error: null,
         };
 
       // Get all pages, assign them to ALLPAGES object
@@ -88,20 +88,20 @@ export class PageService {
   async getReviews(): Promise<ApiResponse<Review[]>> {
     try {
       const CACHED_REVIEWS = await this.cacheManager.get('reviews');
-      
+
       // Check when last updated and if it's within the last hour
       const LAST_UPDATED = await this.getLastUpdated('reviews');
       const MAX_AGE = 60 * 60 * 1000;
 
       if (CACHED_REVIEWS && isCacheFresh(LAST_UPDATED, MAX_AGE))
-        return { data: CACHED_REVIEWS as Review[], error: null };
+        return { data: CACHED_REVIEWS as Review[] };
 
       const CLIENT = this.supabaseService.supabase;
       const { data, error } = await CLIENT.from('reviews').select(`
         content,
         clients(company_name)`);
 
-      if (error) throw error
+      if (error) throw error;
 
       const formattedReview = data?.map((review) => ({
         content: review.content,
@@ -119,14 +119,13 @@ export class PageService {
       return {
         data: null,
         error: error,
-        message: 'Something went wrong when fetching reviews'
-      }
+        message: 'Something went wrong when fetching reviews',
+      };
     }
   }
 
   async getFile(file: string): Promise<Buffer> {
-    const { data, error } = await this.supabaseService.supabase
-      .storage
+    const { data, error } = await this.supabaseService.supabase.storage
       .from('files')
       .download(`${file}.pdf`);
 
@@ -150,8 +149,50 @@ export class PageService {
       if (error) throw error;
       return data.updated_at;
     } catch (error) {
-      console.log('Error when fetching last updated: ', error);
+      console.error('Error when fetching last updated: ', error);
       throw new Error(`Error when fetching last updated`);
+    }
+  }
+
+  /*
+  * Get booked times of a certain date
+  */
+  async getBookedTimes(
+    date: string,
+  ): Promise<ApiResponse<Tables<'booked_times_public_view'>[]>> {
+    try {
+      const CLIENT = this.supabaseService.supabase;
+      const { data, error } = await CLIENT.from('booked_times_public_view')
+        .select(`*`)
+        .eq('date', date);
+
+      if (error || !data) throw error;
+
+      return {
+        data: data,
+        message: `Successfully retrieved booked_times of date: ${date}`,
+      };
+    } catch (error) {
+      console.error(`Error when retrieving booked times: `, error);
+      return {
+        data: null,
+        error: error,
+        message: `Unable to retrieve booked times`,
+      };
+    }
+  }
+
+  async createBooking(formData: ContactForm) {
+    try {
+      const CLIENT = this.supabaseService.supabase;
+
+    } catch (error) {
+      console.error(`Error when retrieving booked times: `, error);
+      return {
+        data: null,
+        error: error,
+        message: `Unable to create new booking`,
+      }; 
     }
   }
 }

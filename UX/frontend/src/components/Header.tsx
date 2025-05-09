@@ -5,14 +5,14 @@ function Header() {
   return (
 
     <AppBar position="fixed">
-      <Link to={'/support'}>
-        <Typography variant="headerlink" component="div">
-          Tech Support
-        </Typography>
-      </Link>
       <Link to={'/product'}>
         <Typography variant="headerlink" component="div">
-          About
+          About rover
+        </Typography>
+      </Link>
+      <Link to={'/support'}>
+        <Typography variant="headerlink" component="div">
+          Support
         </Typography>
       </Link>
       <Link to='/' id='logo' style={{ flexShrink: 0 }}>
@@ -26,7 +26,7 @@ function Header() {
       </Link>
       <Link to={'/contact'}>
         <Typography variant="headerlink" component="div">
-          Contact
+          Contact to buy
         </Typography>
       </Link>
     </AppBar>

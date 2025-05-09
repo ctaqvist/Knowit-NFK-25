@@ -83,3 +83,27 @@ const deliveryFAQ = [
 const FAQ = { applicationFAQ, deliveryFAQ };
 
 export default FAQ;
+
+export const INITIAL_FORM_DATA = {
+  f_name_input: '',
+  s_name_input: '',
+  email_input: '',
+  serial_input: '',
+  issue_category_input: 'Select an option',
+  issue_description_input: '',
+  date_input: '',
+  fileUploads: {
+    loading: false,
+    files: [],
+  },
+};
+
+export const INITIAL_FORM_VALIDITY = {
+      f_name_input: '',
+      s_name_input: '',
+      email_input: '',
+      serial_input: '',
+      issue_category_input: '',
+      issue_description_input: '',
+      date_input: '',
+}
