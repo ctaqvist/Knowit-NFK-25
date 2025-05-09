@@ -91,7 +91,6 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Text("Log In", style = MaterialTheme.typography.headlineMedium, fontSize = 35.sp)
-
         InputFields(viewModel, borderColor)
 
         // Error message text

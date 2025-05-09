@@ -5,6 +5,8 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.http.HttpMethod
+import io.ktor.http.URLProtocol
+import io.ktor.http.path
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
@@ -57,13 +59,23 @@ class DataService(private val uri: String = "") {
             receiveJob?.cancel()
 
             println("Trying to connect to server...")
+            println("Usertoken is: ${UserData.token}")
             runBlocking {
-                socket = client.webSocketSession(
-                    method = HttpMethod.Get,
-                    host = uri,
-                    path = "/"
-                )
+                socket = client.webSocketSession {
+                    url {
+                        protocol = URLProtocol.WS
+                        host = uri
+                        path("/")
+                        port = 8081
+                        parameters.append("token", UserData.token!!) // Crash if no token provided
+                    }
+                }
+
+                socket!!.send("""{"rover_id": "rover-001", "command": "connect" }""")
             }
+            println("Emil")
+            println(socket == null)
+
 
             // Send initial message
             socket?.send("It is me i'm the problem it's me")
@@ -87,6 +99,7 @@ class DataService(private val uri: String = "") {
             println("Connected to server")
         } catch (e: Exception) {
             println("Error: ${e.localizedMessage}")
+            println("ErrorCause: ${e.cause}")
         }
     }
 

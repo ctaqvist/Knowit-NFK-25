@@ -32,8 +32,8 @@ class LoginViewModel() : ViewModel() {
     var success by mutableStateOf(false)
     var failed by mutableStateOf(false)
     var status by mutableStateOf("")
-    var password by mutableStateOf("")
-    var email by mutableStateOf("")
+    var password by mutableStateOf("1234")
+    var email by mutableStateOf("admin")
 
     private val _events = MutableSharedFlow<LoginEvent>()
     val events = _events.asSharedFlow()
@@ -59,14 +59,15 @@ class LoginViewModel() : ViewModel() {
             .add("username", email)
             .add("password", password)
             .build()
-        val request = Request.Builder().url("https://terrax9.se/login").post(formBody).build()
+        val request =
+            Request.Builder().url("http://13.60.235.253:8081/login").post(formBody).build()
 
         status = "Loading"
 
         client.newCall(request)
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    println("API - Login failed")
+                    println("API - Login failed: ${e.message}")
                     status = "Failed"
 
                     viewModelScope.launch {
@@ -116,9 +117,5 @@ class LoginViewModel() : ViewModel() {
                 }
 
             })
-    }
-
-    fun navigateNext() {
-        TODO("Not yet implemented")
     }
 }

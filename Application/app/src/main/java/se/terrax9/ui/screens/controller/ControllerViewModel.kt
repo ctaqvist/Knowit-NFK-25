@@ -10,7 +10,7 @@ import se.terrax9.services.DataService
 import se.terrax9.services.Commands
 
 class ControllerViewModel() : ViewModel() {
-    private val dataService = DataService("terrax9.se")
+    private val dataService = DataService("13.60.235.253")
     private var job: Job? = null
 
     private val _isLighted = MutableStateFlow(true)
