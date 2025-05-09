@@ -68,7 +68,7 @@ export default function CountrySelect({
 
     const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(e.target.value)
-        const filteredCountries = INITIAL_COUNTRIES.filter(c => c.label.toLowerCase().includes(e.target.value))
+        const filteredCountries = INITIAL_COUNTRIES.filter(c => c.label.toLowerCase().includes(e.target.value.toLowerCase()))
         setCountries(filteredCountries)
     }
 
@@ -165,7 +165,6 @@ export default function CountrySelect({
                                 value={searchTerm}
                                 onChange={handleSearch}
                                 slotProps={{ input: { disableUnderline: true } }}
-
                                 onKeyDown={(e) => {
                                     if (e.key === 'Tab') {
                                         e.preventDefault();
@@ -188,6 +187,12 @@ export default function CountrySelect({
                                         if (nextField instanceof HTMLElement) {
                                             setAnchorEl(null)
                                         }
+                                    } else if (e.key === 'ArrowUp') {
+                                        const next = e.currentTarget.previousElementSibling
+                                        if (next instanceof HTMLElement) next.focus()
+                                    } else if (e.key === 'ArrowDown') {
+                                        const prev = e.currentTarget.nextElementSibling
+                                        if (prev instanceof HTMLElement) prev.focus()
                                     }
                                 }}
                             >
