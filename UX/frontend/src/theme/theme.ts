@@ -346,6 +346,13 @@ export const theme = createTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '&:hover': {border:'none'}
+        }
+      }
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
@@ -478,5 +485,6 @@ export const theme = createTheme({
         },
       },
     },
+
   },
 });

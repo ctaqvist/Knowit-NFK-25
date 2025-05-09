@@ -1,6 +1,6 @@
 import { Tables } from '@/types/supabase.types';
 import { api } from './axios';
-import { Page, Review, ApiResponse, Pages, DownloadableFiles } from '@/types/types';
+import { Page, Review, ApiResponse, Pages, DownloadableFiles, ContactForm } from '@/types/types';
 
 // Api gets content from the backend
 export const contentApi = {
