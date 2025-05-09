@@ -94,6 +94,7 @@ function Contact() {
   const resetContactForm = () => {
     setFormData(INITIAL_FORM_DATA)
     setFormValidity(INITIAL_FORM_VALIDITY)
+    setWantsToBook(false)
   };
 
   const showAlert = (message: string, severity: 'success' | 'error') => {

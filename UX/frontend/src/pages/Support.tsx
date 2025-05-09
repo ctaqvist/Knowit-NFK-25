@@ -18,7 +18,6 @@ import {
   CustomFile,
   DownloadableFiles,
   SupportForm,
-  SupportFormValidity,
 } from '@/types/types';
 import { contentApi } from '@/api/contentApi';
 import React, { useState } from 'react';
