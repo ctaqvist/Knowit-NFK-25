@@ -4,12 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -20,9 +17,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import se.terrax9.R
-import se.terrax9.Routes
 import se.terrax9.ui.screens.Settings.SelectRoverButton
-import se.terrax9.ui.screens.controller.IconButton
+import se.terrax9.ui.shared.RightSideButtons
 
 
 @Composable
@@ -38,57 +34,24 @@ fun SettingsScreen(navController: NavController) {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
+            Row {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 70.dp)
+                        //.weight(1f)
+                    ,
+                    verticalArrangement = Arrangement.spacedBy(42.dp)
+                ) {
+                    RoverInfo(username = "Moji", roverSerial = "Rover1")
+                    SelectRoverButton()
+                    SettingsButtons(viewModel, context)
+                }
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier
-                    .padding(start = 70.dp)
-                    .weight(1f),
-                verticalArrangement = Arrangement.spacedBy(42.dp)
-            ) {
-                RoverInfo(username = "Moji", roverSerial = "Rover1")
-                SelectRoverButton()
-                SettingsButtons(viewModel, context)
+                RightSideButtons(navController = navController)
             }
-
-            RightSettingsColumn(navController = navController)
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(end = 70.dp, bottom = 21.dp),
-            contentAlignment = Alignment.BottomEnd
-        ) {
-            BackButton(navController = navController)
-        }
     }
 }
 
-@Composable
-fun RightSettingsColumn(navController: NavController) {
-    Column(
-        modifier = Modifier
-            .padding(end = 70.dp, top = 70.dp),
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Top
-    ) {
-        IconButton(
-            text = "Gallery",
-            iconRes = R.drawable.images
-        ) {
-            navController.navigate(Routes.Gallery)
-        }
-
-        Spacer(modifier = Modifier.padding(16.dp))
-
-        IconButton(
-            text = "Settings",
-            iconRes = R.drawable.settings
-        ) {
-            // Handle click on settings
-        }
-    }
-}
 
 @Composable
 fun SettingsButtons(viewModel: SettingsViewModel, context: Context) {
