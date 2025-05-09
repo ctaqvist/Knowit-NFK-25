@@ -1,6 +1,7 @@
 import sys
 import os
 import logging
+
 from config.settings import IS_RPI
 if IS_RPI:
     import Robotic_arm.servo_module.functions as servo_module
@@ -19,10 +20,12 @@ logging.basicConfig(
 
 logging.debug("=== Rover system is starting up ===")
 
+
 try:
     import asyncio
     from communication.websocket_communication import listen_to_server
     from communication.serial_helper import arduino
+
 
     def run():
         logging.debug("Running main() function")
