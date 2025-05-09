@@ -170,7 +170,6 @@ export default function CountrySelect({
                                     if (e.key === 'Tab') {
                                         e.preventDefault();
                                         const firstItem = document.querySelector('.MuiMenuItem-root')?.nextElementSibling;
-                                        console.log(firstItem)
                                         if (firstItem instanceof HTMLElement) {
                                             firstItem.focus();
                                         }
@@ -186,7 +185,6 @@ export default function CountrySelect({
                                     if (e.key === 'Tab') {
                                         e.preventDefault();
                                         const nextField = document.querySelector('#number-input');
-                                        console.log(nextField)
                                         if (nextField instanceof HTMLElement) {
                                             setAnchorEl(null)
                                         }
