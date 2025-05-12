@@ -17,9 +17,12 @@ async def forward_joystick_to_arduino(data):
 
     x = round(x, 2)
     y = round(y, 2)
+    # Skicka enligt nytt format med 'steer'-objekt
     payload = json.dumps({
-        "command": "steer",
-        "x": x,
-        "y": y
+        "steer": {
+            "x": x,
+            "y": y
+        }
     })
-    arduino.send(payload)
+    # Använd await så att vi verkligen växlar till thread för skrivning
+    await arduino.send(payload)

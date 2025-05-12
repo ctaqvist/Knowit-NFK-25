@@ -9,15 +9,13 @@ except ImportError:
 
 class ArduinoConnection:
     def __init__(self):
-        self.baudrate   = 115200
-        self.serial     = None
-        self.lock       = threading.Lock()
+        self.baudrate = 115200
+        self.serial = None
+        self.lock = threading.Lock()
         self.keep_alive = True
+        self.loop_queue: asyncio.Queue = None
 
-        # Nytt: en asyncio-vänlig kö där vi kan "put_nowait" inkommande rader
-        self.loop_queue = None  
-
-        # Starta watcher-tråden direkt
+        # Start watcher thread immediately
         self.watcher_thread = threading.Thread(
             target=self._watch_serial_connection,
             daemon=True
@@ -25,7 +23,7 @@ class ArduinoConnection:
         self.watcher_thread.start()
 
     def set_loop_queue(self, queue: asyncio.Queue):
-        """Anropa från din asyncio-loop för att koppla en kö."""
+        """Link an asyncio.Queue for incoming serial lines"""
         self.loop_queue = queue
 
     def find_arduino_port(self):
@@ -38,7 +36,6 @@ class ArduinoConnection:
             (0x2341, 0x1002),
             (0x2341, 0x0043),
         ]
-
         for port in ports:
             if (port.vid, port.pid) in known_arduino_vid_pid:
                 return port.device
@@ -53,9 +50,10 @@ class ArduinoConnection:
             if port:
                 try:
                     with self.lock:
-                        self.serial = serial.Serial(port, self.baudrate, timeout=1)
+                        # Use low timeout for non-blocking read
+                        self.serial = serial.Serial(port, self.baudrate, timeout=0.01)
                     print(f"[Arduino] Connected on {port}")
-                    time.sleep(2)  # låt porten stabilisera sig
+                    time.sleep(2)  # allow port to stabilize
                 except serial.SerialException as e:
                     print(f"[Arduino] Connection error: {e}")
             else:
@@ -63,26 +61,38 @@ class ArduinoConnection:
             time.sleep(2)
 
     def _watch_serial_connection(self):
-        # Se till att vi är uppkopplade direkt
+        # Ensure connection on start
         self.connect()
 
-        # Så fort vi har en öppen port, kör en tight loop för att läsa allt
         while self.keep_alive:
             if self.serial and self.serial.is_open:
-                raw = self.read_received_data()
-                if raw and self.loop_queue:
-                    # Stoppa in varje rad i asyncio-kön för asynkron hantering
-                    self.loop_queue.put_nowait(raw)
-                # kör tight för låg latens, lägger in kort paus så CPU inte spökar
-                time.sleep(0.01)
+                try:
+                    with self.lock:
+                        n = self.serial.in_waiting
+                        if n:
+                            chunk = self.serial.read(n).decode("utf-8", errors="ignore")
+                        else:
+                            chunk = ""
+                except Exception as e:
+                    print(f"[Arduino] Read error: {e}")
+                    with self.lock:
+                        self.serial = None
+                    continue
+
+                if chunk and self.loop_queue:
+                    for line in chunk.splitlines():
+                        if line.strip():
+                            self.loop_queue.put_nowait(line.strip())
+
+                # no blocking sleep needed when using in_waiting
             else:
-                # reconnect om porten stängts
+                # reconnect if port closed
                 with self.lock:
                     self.serial = None
                 self.connect()
 
     def _send_sync(self, message: str) -> bool:
-        """Synkront sändningsstöd, anropas via asyncio.to_thread."""
+        """Blocking send called via asyncio.to_thread."""
         if not message or not isinstance(message, str):
             return False
         if self.serial:
@@ -97,28 +107,11 @@ class ArduinoConnection:
         return False
 
     async def send(self, message: str) -> bool:
-     """
-     Skickar ett meddelande över seriellporten utan att blockera asyncio-loopen.
-
-     Den underliggande _send_sync-metoden är synkron och blockerande, 
-     så här kör vi den i en separat tråd via asyncio.to_thread(). 
-     På så sätt kan huvudloopen fortsätta hantera andra asynkrona 
-     uppgifter (t.ex. WebSocket-kommunikation) medan skrivningen 
-     mot Arduino sker i bakgrunden.
-    """
-     return await asyncio.to_thread(self._send_sync, message)
-
-    def read_received_data(self) -> str:
-        if not self.serial:
-            return ""
-        try:
-            with self.lock:
-                return self.serial.readline().decode("utf-8").strip()
-        except Exception as e:
-            print(f"[Arduino] Read error: {e}")
-            with self.lock:
-                self.serial = None
-            return ""
+        """
+        Send a message over serial without blocking the asyncio loop by
+        dispatching to a thread.
+        """
+        return await asyncio.to_thread(self._send_sync, message)
 
     def stop(self):
         self.keep_alive = False
@@ -126,5 +119,5 @@ class ArduinoConnection:
             with self.lock:
                 self.serial.close()
 
-# Global instans
+# Global instance
 arduino = ArduinoConnection()

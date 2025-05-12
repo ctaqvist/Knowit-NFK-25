@@ -10,10 +10,9 @@ from commands.rover.battery_handlers import (
     handle_low_battery_warning,
     handle_sleep_mode
 )
-if IS_RPI:  # RaspberryPI/commands/rover/handler.py
-    from .handler import process_command
+from .handler import process_command  # alltid importera denna
 
-async def process_command(websocket, data, args):
+async def process_command(websocket, data, args=None):
     """
     Tar emot JSON-data från antingen server_reader eller serial_reader
     och dispatchar till rätt handler.

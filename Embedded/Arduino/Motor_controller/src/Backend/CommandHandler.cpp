@@ -4,88 +4,90 @@
 #include "Hardware/SpotLights/SpotLight.h"
 
 // Forward declarations
-void sendAck(const String &cmd);
-void sendError(const String &msg);
+void sendAck(const char* type);
+void sendError(const char* msg);
+
+// Global objects and buffers
 Drive drive(0.0f, 0.0f);
-// Global variables
-String inputString = "";
-bool stringComplete = false;
+String inputBuffer;
+const size_t BUFFER_MAX = 200;
 
-// Create global CommandHandler instance
-CommandHandler commandHandler;
+// CommandHandler instance
+typedef struct {} CommandHandler; // placeholder if needed
 
-void CommandHandler::init()
-{
-    inputString.reserve(200);
-    Serial.println("READY");
+void CommandHandler::init() {
+    inputBuffer.reserve(BUFFER_MAX);
+    Serial.begin(115200);
+    Serial.println("{\"status\":\"READY\"}");
 }
 
-void CommandHandler::listen()
-{
-    while (Serial.available())
-    {
-        char inChar = (char)Serial.read();
-        inputString += inChar;
-        if (inChar == '\n')
-        {
-            stringComplete = true;
+void CommandHandler::listen() {
+    // Non-blocking read using in_waiting
+    while (Serial.available()) {
+        char c = Serial.read();
+        if (c == '\n') {
+            if (inputBuffer.length() > 0) {
+                handleCommand(inputBuffer);
+            }
+            inputBuffer = "";
+        } else {
+            inputBuffer += c;
+            if (inputBuffer.length() > BUFFER_MAX) {
+                inputBuffer = "";
+                sendError("buffer_overflow");
+            }
         }
-    }
-
-    if (stringComplete)
-    {
-        inputString.trim();
-        if (inputString.length() > 0)
-        {
-            handleCommand(inputString);
-        }
-        inputString = "";
-        stringComplete = false;
     }
 }
 
-void handleCommand(const String &cmd)
-{
-    StaticJsonDocument<200> doc;
-    DeserializationError error = deserializeJson(doc, cmd);
-
-    if (!error && doc.containsKey("command"))
-    {
-        String jsonCmd = doc["command"];
-
-        if (jsonCmd == "steer" && doc.containsKey("x") && doc.containsKey("y"))
-        {
-            float x = doc["x"];
-            float y = doc["y"];
+void handleCommand(const String &raw) {
+    StaticJsonDocument<256> doc;
+    DeserializationError err = deserializeJson(doc, raw);
+    if (err) {
+        sendError("invalid_json");
+        return;
+    }
+    // Steering commands now in object "steer"
+    if (doc.containsKey("steer")) {
+        JsonObject steer = doc["steer"].as<JsonObject>();
+        if (steer.containsKey("x") && steer.containsKey("y")) {
+            float x = steer["x"];
+            float y = steer["y"];
             drive.SetXY(x, y);
             drive.ExecuteDriveLogic();
             sendAck("steer");
             return;
         }
-        if (jsonCmd == "LIGHTS_ON") 
-        {
+    }
+    // Spot lights commands
+    if (doc.containsKey("command")) {
+        const char* cmd = doc["command"];
+        if (strcmp(cmd, "LIGHTS_ON") == 0) {
             TurnSpotLightOn();
             sendAck("LIGHTS_ON");
             return;
         }
-        if (jsonCmd == "LIGHTS_OFF") 
-        {
+        if (strcmp(cmd, "LIGHTS_OFF") == 0) {
             TurnSpotLightOff();
             sendAck("LIGHTS_OFF");
             return;
         }
-        sendError("unknown_command");
-        return;
     }
-    sendError("invalid_json");
+    sendError("unknown_command");
 }
 
-void sendAck(const String &cmd)
-{
-    Serial.println("{\"ack\":\"" + cmd + "\"}");
+void sendAck(const char* type) {
+    StaticJsonDocument<128> out;
+    out["ack"] = type;
+    out["ts"]  = millis();
+    serializeJson(out, Serial);
+    Serial.println();
 }
 
-void sendError(const String &msg)
-{
-    Serial.println("{\"error\":\"" + msg + "\"}");
+void sendError(const char* msg) {
+    StaticJsonDocument<128> out;
+    out["error"] = msg;
+    out["ts"]    = millis();
+    serializeJson(out, Serial);
+    Serial.println();
 }
