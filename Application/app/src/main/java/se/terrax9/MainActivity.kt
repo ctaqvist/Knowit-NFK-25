@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Terrax9Theme {
                 val navController: NavHostController = rememberNavController()
-                NavHandler(navController)
+
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
@@ -64,8 +64,10 @@ class MainActivity : ComponentActivity() {
                                 Text("Sign up page", style = MaterialTheme.typography.titleLarge)
                             }
                         }
+                        NavHandler(navController)
                     }
                 }
+
 
                 val isLoggedIn = UserData._isLoggedIn ?: false
                 val token = UserData.token
@@ -79,39 +81,35 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun StateHandler(state: UserState) {
+fun StateHandler(state: UserState, navController: NavController) {
+
+    println("New Event: $state")
     when (state) {
         UserState.NEEDS_AUTH -> {
-            // Read stored token.
-            // If good -> logged_in
-            // If bad -> signed_out
+            // For now:
+            UserData.logout()
         }
+
         UserState.SIGNED_OUT -> {
-            // Reset userdata (to be on the safe side)
-            // go to loginpage
+            // Reset userdata and navigate to Login
+            UserData.logout()
         }
+
         UserState.LOGGED_IN -> {
             // if on loginpage move to dashboard
             // Update userdata or make sure it is updated
             // Make sure to disable dashboard
+
         }
-        UserState.CONNECTED_TO_SERVER_WITHOUT_ROVER -> {
-            // Show in dashboard no connection to rover
-            // Activate dashboard
-        }
-        UserState.CONNECTED_TO_SERVER_AND_ROVER -> {
-            // Everything is working?
+
+        UserState.CONNECTED_TO_SERVER -> {
+
         }
     }
 }
 
 @Composable
 fun NavHandler(navController: NavController) {
-    LaunchedEffect(UserData._isLoggedIn)
-    {
-        if (!UserData.isLoggedIn()) {
-            UserData.logout()
-            navController.navigate(Routes.Login)
-        }
-    }
+    val state = UserData.status
+    StateHandler(state, navController)
 }

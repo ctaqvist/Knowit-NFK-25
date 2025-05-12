@@ -60,6 +60,9 @@ class LoginViewModel() : ViewModel() {
             .add("username", email)
             .add("password", password)
             .build()
+
+        println("Here is the url:")
+        println("--> ${BuildConfig.API_BASE_URL}")
         val request =
             Request.Builder().url("${BuildConfig.API_BASE_URL}/login").post(formBody).build()
 
@@ -74,7 +77,6 @@ class LoginViewModel() : ViewModel() {
                     viewModelScope.launch {
                         _events.emit(LoginEvent.BAD_CREDENTIALS)
                     }
-
                 }
 
                 override fun onResponse(call: Call, response: Response) {

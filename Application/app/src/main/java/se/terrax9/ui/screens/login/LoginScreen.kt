@@ -42,6 +42,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import se.terrax9.R
 import se.terrax9.Routes
+import se.terrax9.services.UserData
+import se.terrax9.services.UserState
 import se.terrax9.ui.shared.AppButton
 import se.terrax9.ui.theme.AppColors
 
@@ -51,6 +53,19 @@ fun LoginScreen(navController: NavController) {
     val viewModel: LoginViewModel = viewModel()
     var errorMessage: String by remember { mutableStateOf("") }
     var borderColor: Color by remember { mutableStateOf(AppColors.Primary) }
+
+    // NavController handler fuck my ass please
+    val userState = UserData.status
+    LaunchedEffect(userState) {
+        if (userState == UserState.LOGGED_IN) {
+            // Pop the fucking login ass
+            navController.popBackStack(
+                route = Routes.Login,
+                inclusive = true
+            )
+            navController.navigate(Routes.Dashboard)
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->

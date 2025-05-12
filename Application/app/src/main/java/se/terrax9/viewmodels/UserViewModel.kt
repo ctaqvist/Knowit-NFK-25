@@ -10,16 +10,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-// 1) Your sealed state
 sealed class UserState {
-    object NeedsAuth : UserState()
-    object SignedOut : UserState()
-    object LoggedIn : UserState()
-    object ConnectedNoRover : UserState()
-    object ConnectedWithRover : UserState()
+    data object NeedsAuth : UserState()
+    data object SignedOut : UserState()
+    data object LoggedIn : UserState()
+    data object ConnectedNoRover : UserState()
+    data object ConnectedWithRover : UserState()
 }
 
-// 2) ViewModel holding all user‐related state
 class UserViewModel(private val appContext: Context) : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(false)
     private val _token = MutableStateFlow<String?>(null)
@@ -40,7 +38,7 @@ class UserViewModel(private val appContext: Context) : ViewModel() {
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), UserState.NeedsAuth)
 
     fun checkAuth() {
-        // load from disk / secure storage
+        // Load from disk / secure storage
         val saved = TokenDatabase.loadToken(appContext)
         if (saved != null) {
             _token.value = saved

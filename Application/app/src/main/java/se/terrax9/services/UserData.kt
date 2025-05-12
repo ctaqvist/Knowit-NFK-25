@@ -9,8 +9,7 @@ enum class UserState {
     NEEDS_AUTH,
     SIGNED_OUT,
     LOGGED_IN,
-    CONNECTED_TO_SERVER_WITHOUT_ROVER,
-    CONNECTED_TO_SERVER_AND_ROVER
+    CONNECTED_TO_SERVER
 }
 
 object UserData {
@@ -18,13 +17,13 @@ object UserData {
     var token by mutableStateOf<String?>(null)
     var email by mutableStateOf<String?>(null)
     var selectedRoverID by mutableStateOf<String?>(null)
-
-    var status by mutableStateOf<UserState>(UserState.NEEDS_AUTH)
+    var status by mutableStateOf<UserState>(UserState.SIGNED_OUT)
 
     fun login(email: String, token: String) {
         UserData._isLoggedIn = true
         UserData.token = token
         UserData.email = email
+        status = UserState.LOGGED_IN
 
         //TODO: Store token on drive to save login between app-restarts
     }
@@ -34,6 +33,11 @@ object UserData {
         UserData._isLoggedIn = false
         UserData.token = null
         UserData.email = null
+        status = UserState.SIGNED_OUT
+    }
+
+    fun onConnectToServer() {
+        status = UserState.CONNECTED_TO_SERVER
     }
 
     fun isLoggedIn(): Boolean {
