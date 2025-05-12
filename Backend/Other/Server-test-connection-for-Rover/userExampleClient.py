@@ -5,9 +5,9 @@ import json
 import base64
 from datetime import datetime
 
-ROVER_TOKEN_WITH_INFINITE_TIME = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb3ZlcklkIjoxLCJyb3ZlclNlcmlhbCI6InJvdmVyLTAwMSIsImlhdCI6MTc0NjUxMzI2Mn0.7GJFXH6KjS3QPTchEq8eSwRE9oePc04jzHzNvh43eII"
+USER_TOKEN_WITH_INFINITE_TIME = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjUxNjA4MSwiZXhwIjoxNzQ2NTM3NjgxfQ.9F6HFSP8zKlJ0wlWzoP35O2DwEKZo6-kuh1gNTEDUUM"
 
-URI = f"ws://localhost:8080?token={ROVER_TOKEN_WITH_INFINITE_TIME}"
+URI = f'ws://localhost:8080?token={USER_TOKEN_WITH_INFINITE_TIME}'
 
 # Used to get messages from terminal
 
