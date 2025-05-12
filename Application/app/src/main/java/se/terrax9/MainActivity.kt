@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import se.terrax9.services.UserData
 import se.terrax9.ui.screens.controller.ControllerScreen
 import se.terrax9.ui.screens.login.LoginScreen
 import se.terrax9.ui.theme.Terrax9Theme
@@ -29,11 +33,13 @@ object Routes {
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Terrax9Theme {
                 val navController: NavHostController = rememberNavController()
+                NavHandler(navController)
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
@@ -57,6 +63,17 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun NavHandler(navController: NavController) {
+    LaunchedEffect(UserData.isLoggedIn)
+    {
+        if (!UserData.isLoggedIn()) {
+            UserData.logout()
+            navController.navigate(Routes.Login)
         }
     }
 }
