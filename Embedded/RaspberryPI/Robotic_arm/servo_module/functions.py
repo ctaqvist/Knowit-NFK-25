@@ -27,60 +27,89 @@ GPIO.setmode(GPIO.BCM)
 
 ARM_PINS = [17, 13]
 CLAW_PIN = 27
-L1 = 8.0
-L2 = 8.0
 servo1 = None
 servo2 = None
 servo3 = None
 
-# Initierar servos och sätter PWM till 0
+deadzone  = 0.05
+last_arm  = [0.0, 0.0]
+last_claw = 0.0
+
+arm_angle  = 0.0
+axis_angle = 0.0
+
 def setup_pins():
+    global servo1, servo2, servo3
+
     for p in ARM_PINS + [CLAW_PIN]:
         GPIO.setup(p, GPIO.OUT)
 
-    pins = ARM_PINS + [CLAW_PIN]
+    pins   = ARM_PINS + [CLAW_PIN]
     servos = [GPIO.PWM(p, 50) for p in pins]
     for s in servos:
         s.start(0)
+
+    # Assign to the globals
+    servo1, servo2, servo3 = servos
+    # Always drive to 0° on startup
+    set_servo_angle(servo1, 0.0, hold=0.2)
+    set_servo_angle(servo2, 0.0, hold=0.2)
+    set_servo_angle(servo3, 0.0, hold=0.2)
     return servos
 
-def angle_to_duty_cycle(angle):
-    if not isinstance(angle, (int, float)):
-        raise TypeError(f"Angle must be a number, got {type(angle).__name__}")
-    if angle < -90 or angle > 90:
-        raise ValueError(f"Angle {angle} out of range [-90, 90]")
-    return 2 + (angle + 90) * 10 / 180
-
-def set_servo_angle(servo, angle, hold=0.05):
-    duty = angle_to_duty_cycle(angle)
+def set_servo_angle(servo, angle, hold=0.02):
+    duty = 2 + (angle + 90) * 10/180
     servo.ChangeDutyCycle(duty)
     sleep(hold)
     servo.ChangeDutyCycle(0)
 
-def ik_planar(x, y):
-    d2 = x*x + y*y
-    c2 = (d2 - L1*L1 - L2*L2) / (2 * L1 * L2)
-    c2 = max(-1.0, min(1.0, c2))  # clamp
-    theta2 = math.acos(c2)
-    k1 = L1 + L2 * math.cos(theta2)
-    k2 = L2 * math.sin(theta2)
-    theta1 = math.atan2(y, x) - math.atan2(k2, k1)
-    return math.degrees(theta1), math.degrees(theta2)
+def move_arm(shoulder, axis, dt):
+    global arm_angle, axis_angle
 
-def move_arm(x, y):
-    theta1, theta2 = ik_planar(x, y)
-    # Clamp shoulder to [-90, 90]
-    servo_shoulder_angle = max(-90, min(theta1, 90))
-    # Map elbow [0,180] -> [-90,90] and clamp
-    servo_elbow_angle = max(-90, min(theta2 - 90, 90))
-    print(f"[DEBUG] move_arm, x={x:.2f}, y={y:.2f}, "
-          f"theta1={theta1:.1f}, theta2={theta2:.1f} => "
-          f"servo1={servo_shoulder_angle:.1f}, servo2={servo_elbow_angle:.1f}")
-    set_servo_angle(servo1, servo_shoulder_angle)
-    set_servo_angle(servo2, servo_elbow_angle)
+    max_speed = 90.0   # deg/sec
+    # shoulder control
+    if abs(shoulder) > deadzone:
+        arm_angle = max(-90.0, min(90.0, arm_angle + shoulder * max_speed * dt))
+    # axis control
+    if abs(axis) > deadzone:
+        axis_angle = max(-90.0, min(90.0, axis_angle + axis * max_speed * dt))
+
+    # only fire the servo when there’s a meaningful change
+    if abs(arm_angle  - last_arm[0]) > 0.5:
+        set_servo_angle(servo1, arm_angle)
+        last_arm[0] = arm_angle
+    if abs(axis_angle - last_arm[1]) > 0.5:
+        set_servo_angle(servo2, axis_angle)
+        last_arm[1] = axis_angle
+
 
 def move_claw(v):
-    angle = v * 90
-    angle = max(0, min(angle, 90))  # clamp
-    print(f"[DEBUG] move_claw, v={v:.2f}, angle={angle:.1f}")
-    set_servo_angle(servo3, angle)
+    """
+    v: joystick input in [-1.0…1.0]
+    maps to theta in [0°…90°] when |v| > deadzone,
+    otherwise holds the last position.
+    """
+    global last_claw
+
+    # ensure numeric
+    try:
+        raw = float(v)
+    except (TypeError, ValueError):
+        return  # ignore invalid inputs
+
+    # only update when outside deadzone
+    if abs(raw) > deadzone:
+        # map full forward to 90°, full backward to 0°
+        theta = max(0.0, min(90.0, (raw + 1) * 45.0))
+        # this maps raw=-1 → 0°, raw=0 → 45°, raw=+1 → 90°
+        # adjust formula if you want 0→90 rather than centering at 45°
+    else:
+        theta = last_claw
+
+    # if nothing changed, skip
+    if theta == last_claw:
+        return
+
+    last_claw = theta
+    # hold for 0.3 s so the claw actually moves
+    set_servo_angle(servo3, theta, hold=0.3)
