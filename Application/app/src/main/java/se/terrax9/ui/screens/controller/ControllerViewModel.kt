@@ -11,11 +11,27 @@ import se.terrax9.services.DataService
 import se.terrax9.services.Commands
 
 class ControllerViewModel() : ViewModel() {
+
+    enum class serverStatus {
+        CONNECTED,
+        DISCONNECTED
+    }
+
+    enum class roverStatus {
+        OK,
+        BAD,
+        DECENT,
+        HALFWAYDECENT,
+
+    }
+
     private val dataService = DataService(BuildConfig.WS_BASE_URL)
     private var job: Job? = null
 
     private val _isLighted = MutableStateFlow(true)
     val isLighted: StateFlow<Boolean> = _isLighted
+
+
 
     fun sendCommand(command: String) {
         viewModelScope.launch {
@@ -29,6 +45,7 @@ class ControllerViewModel() : ViewModel() {
     }
 
     // Helpers
+    fun connect() = sendCommand(Commands.connectToRover())
     fun takePhoto() = sendCommand(Commands.takePicture())
     fun toggleLights() {
         _isLighted.value = !_isLighted.value

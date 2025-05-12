@@ -14,7 +14,11 @@ import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -38,25 +42,41 @@ val client = HttpClient {
 // As of ticket 145, we will connect and suspend on the UI thread meaning that the UI freezes as we are connecting to the server.
 // This due to a bug where we connect many times and create duplicate listeners
 class DataService(private val uri: String = "") {
-    private var socket: WebSocketSession? = null
     private var receiveJob: Job? = null
+
+    private var socket: WebSocketSession? = null
+    private val _socketActive = MutableStateFlow(false)
+    val socketActiveFlow: StateFlow<Boolean> = _socketActive.asStateFlow()
 
     init {
         runBlocking {
             connect()
         }
+        updateIsActive()
     }
 
     fun close() {
         runBlocking {
+            println("Data service was closed now...")
             socket?.close()
             receiveJob?.cancel()
+            updateIsActive()
+        }
+    }
+
+    private fun updateIsActive() {
+        _socketActive.value = socket?.isActive ?: false
+        if (_socketActive.value) {
+            UserData.status = UserState.CONNECTED_TO_SERVER
+        } else {
+            UserData.fallBack()
         }
     }
 
     // Initialize a socket and create callbacks
     private suspend fun connect() {
         try {
+            updateIsActive()
             socket?.close()
             receiveJob?.cancel()
 
@@ -78,11 +98,9 @@ class DataService(private val uri: String = "") {
                         parameters.append("token", UserData.token!!) // Crash if no token provided
                     }
                 }
-
-                socket!!.send("""{"rover_id": "rover-001", "command": "connect" }""")
             }
-            println("Emil")
-            println(socket == null)
+            // If no failure, we have successfully opened a websocket and connected to server
+            updateIsActive()
 
             // Send initial message
             socket?.send("It is me i'm the problem it's me")
@@ -93,13 +111,17 @@ class DataService(private val uri: String = "") {
                 // the job isn't tied to any lifecycle.
                 // This may not be an ideal solution as it is easy to get leaks.
                 // In future this should be done in a different way.
-                receiveJob = kotlinx.coroutines.GlobalScope.launch {
-                    for (frame in session.incoming) {
-                        if (frame is Frame.Text) {
-                            //println("Received: ${frame.readText()}")
-                        } else {
-                            println("Received message that wasn't text.")
+                receiveJob = GlobalScope.launch {
+                    try {
+                        for (frame in session.incoming) {
+                            if (frame is Frame.Text) {
+                                println("Received: ${frame.readText()}")
+                            }
                         }
+                    } finally {
+                        println("Socket is super closed")
+                        socket?.close()
+                        updateIsActive()
                     }
                 }
             }
@@ -126,23 +148,16 @@ class DataService(private val uri: String = "") {
 
     fun handleIncomingMessage(payload: String) {
         val json = JSONObject(payload)
-        val state = json.optString("state")
-        val someOther = json.optString("otherKey")
+        val state = json.optString("response")
 
         when (state) {
-            "rover_not_connected" -> {
-                UserData.selectedRoverID = null
+            "error" -> {
+                println("Failed to connect to rover!")
             }
 
-            "rover_occupied" -> {
-            }
-
-            "rover_connected" -> {
-
-            }
-
-            "rover_disconnected" -> {
-
+            "success" -> {
+                // TODO: FIX HARDCODED VALUE
+                UserData.selectedRoverID = "rover-001"
             }
 
             else -> {

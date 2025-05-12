@@ -6,10 +6,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 enum class UserState {
-    NEEDS_AUTH,
     SIGNED_OUT,
-    LOGGED_IN,
-    CONNECTED_TO_SERVER
+    LOGGED_IN
+}
+
+enum class RoverState {
+    CONNECTION_3,
+    CONNECTION_2,
+    CONNECTION_1,
+    NO_CONNECTION
 }
 
 object UserData {
@@ -17,6 +22,7 @@ object UserData {
     var token by mutableStateOf<String?>(null)
     var email by mutableStateOf<String?>(null)
     var selectedRoverID by mutableStateOf<String?>(null)
+
     var status by mutableStateOf<UserState>(UserState.SIGNED_OUT)
 
     fun login(email: String, token: String) {
@@ -36,11 +42,15 @@ object UserData {
         status = UserState.SIGNED_OUT
     }
 
-    fun onConnectToServer() {
-        status = UserState.CONNECTED_TO_SERVER
-    }
-
     fun isLoggedIn(): Boolean {
         return _isLoggedIn ?: false
+    }
+
+    fun fallBack() {
+        if (isLoggedIn()) {
+            status = UserState.LOGGED_IN
+        } else {
+            status = UserState.SIGNED_OUT
+        }
     }
 }

@@ -22,8 +22,8 @@ import se.terrax9.services.Commands
 import se.terrax9.ui.theme.LexendExa
 
 @Composable
-fun ControllerScreen(navController: NavController) {
-    val viewModel: ControllerViewModel = viewModel()
+fun ControllerScreen(viewModel: ControllerViewModel, navController: NavController) {
+//    val viewModel: ControllerViewModel = viewModel()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -59,6 +59,12 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
         ) {
+            IconButton(
+                text = "Connect",
+                iconRes = R.drawable.gpsr,
+                onClick = viewModel::connect
+            )
+
             Text(if (isLighted) "ON" else "OFF")
             IconButton(
                 text = "Lights",

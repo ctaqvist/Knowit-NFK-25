@@ -17,7 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -26,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import se.terrax9.services.UserData
 import se.terrax9.services.UserState
 import se.terrax9.ui.screens.controller.ControllerScreen
+import se.terrax9.ui.screens.controller.ControllerViewModel
 import se.terrax9.ui.screens.login.LoginScreen
 import se.terrax9.ui.theme.Terrax9Theme
 
@@ -48,13 +51,14 @@ class MainActivity : ComponentActivity() {
 
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    val viewModel: ControllerViewModel = viewModel()
                     Box(modifier = Modifier.padding(innerPadding)) {
                         NavHost(
                             navController = navController,
                             startDestination = Routes.Login
                         ) {
                             composable(Routes.Dashboard) {
-                                ControllerScreen(navController)
+                                ControllerScreen(viewModel, navController)
                             }
                             composable(Routes.Gallery) {
                                 GalleryScreen(navController)
@@ -71,17 +75,29 @@ class MainActivity : ComponentActivity() {
                         }
                         NavHandler(navController)
                     }
+
+
+                    UserStatusScreen()
                 }
 
 
-                val isLoggedIn = UserData._isLoggedIn ?: false
-                val token = UserData.token
-                Column {
-                    Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 40.sp)
-                    Text("token: $token", color = Color.White, fontSize = 40.sp)
-                }
             }
         }
+    }
+}
+
+@Composable
+fun UserStatusScreen() {
+    val isLoggedIn = UserData._isLoggedIn
+    val token = UserData.token
+    val rover = UserData.roverStatus
+    val state = UserData.status
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 25.sp)
+        Text("token: $token", color = Color.White, fontSize = 16.sp)
+        Text("rover: $rover", color = Color.White, fontSize = 25.sp)
+        Text("state: $state", color = Color.White, fontSize = 25.sp)
     }
 }
 
