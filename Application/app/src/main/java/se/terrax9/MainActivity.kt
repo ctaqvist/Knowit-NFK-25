@@ -1,6 +1,7 @@
 package se.terrax9
 
 import GalleryScreen
+import SettingsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,6 +34,7 @@ object Routes {
     const val Gallery = "gallery"
     const val Login = "login"
     const val Signup = "singup"
+    const val Settings = "settings"
 }
 
 class MainActivity : ComponentActivity() {
@@ -55,7 +57,10 @@ class MainActivity : ComponentActivity() {
                                 ControllerScreen(navController)
                             }
                             composable(Routes.Gallery) {
-                                Text("hej")
+                                GalleryScreen()
+                            }
+                            composable(Routes.Settings) {
+                                SettingsScreen(navController)
                             }
                             composable(Routes.Login) {
                                 LoginScreen(navController)

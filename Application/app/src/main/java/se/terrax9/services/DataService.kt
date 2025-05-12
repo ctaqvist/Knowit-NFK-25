@@ -96,7 +96,7 @@ class DataService(private val uri: String = "") {
                 receiveJob = kotlinx.coroutines.GlobalScope.launch {
                     for (frame in session.incoming) {
                         if (frame is Frame.Text) {
-                            println("Received: ${frame.readText()}")
+                            //println("Received: ${frame.readText()}")
                         } else {
                             println("Received message that wasn't text.")
                         }
@@ -187,6 +187,7 @@ class DataService(private val uri: String = "") {
     suspend fun sendMessage(message: String) {
         ensureOpenConnection()
         try {
+            println("Sending a new message of: $message")
             socket?.send(message)
         } catch (e: Exception) {
             println("Failed to send message: ${e.localizedMessage}")

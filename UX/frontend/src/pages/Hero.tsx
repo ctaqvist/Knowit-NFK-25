@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { useContent } from '../hooks/useContent';
 import { Marquee } from '@/components/magicui/marquee';
 import { ReviewCard } from '@/components/ReviewCard';
@@ -27,6 +27,7 @@ function Hero() {
             style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
             src={`${import.meta.env.VITE_SUPABASE_URL
               }/storage/v1/object/public/images//hero_banner.png`}
+            alt=''
           />
           <Box
             aria-hidden='true'
@@ -75,7 +76,7 @@ function Hero() {
             rovers with 360° vision, smart object collection, and seamless
             wireless control—right from your device.
           </Typography>
-          <Button variant='contained'>Discover more</Button>
+          <Link variant='button' href='/product'>Discover more</Link>
         </Box>
       </Box>
       {/* Reviews section */}
@@ -264,7 +265,7 @@ function Hero() {
               the rover’s core technologies, mission capabilities, and how it
               fits into the future of space mobility.
             </Typography>
-            <Button variant='contained'>Get in touch</Button>
+            <Link variant='button' href='/contact'>Get in touch</Link>
           </Box>
         </Box>
       </Box>
