@@ -22,19 +22,6 @@ android {
     namespace = "se.terrax9"
     compileSdk = 35
 
-    defaultConfig {
-        applicationId = "se.terrax9"
-        minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "API_BASE_URL", "\"${env["API_BASE_URL"] ?: ""}\"")
-        buildConfigField("String", "WS_BASE_URL", "\"${env["WS_BASE_URL"] ?: ""}\"")
-        buildConfigField("String", "STREAM_BASE_URL", "\"${env["STREAM_BASE_URL"] ?: ""}\"")
-    }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -53,9 +40,21 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
+    defaultConfig {
+        applicationId = "se.terrax9"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_BASE_URL", "\"${env["API_BASE_URL"] ?: ""}\"")
+        buildConfigField("String", "WS_BASE_URL", "\"${env["WS_BASE_URL"] ?: ""}\"")
+        buildConfigField("String", "STREAM_BASE_URL", "\"${env["STREAM_BASE_URL"] ?: ""}\"")
+    }
 }
 
 dependencies {

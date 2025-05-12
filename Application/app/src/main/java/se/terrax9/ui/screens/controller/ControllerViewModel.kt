@@ -6,11 +6,12 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import se.terrax9.BuildConfig
 import se.terrax9.services.DataService
 import se.terrax9.services.Commands
 
 class ControllerViewModel() : ViewModel() {
-    private val dataService = DataService(BuildConfig.API_BASE_URL)
+    private val dataService = DataService(BuildConfig.WS_BASE_URL)
     private var job: Job? = null
 
     private val _isLighted = MutableStateFlow(true)

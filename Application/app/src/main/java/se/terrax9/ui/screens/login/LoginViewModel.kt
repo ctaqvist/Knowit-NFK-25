@@ -17,6 +17,7 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
+import se.terrax9.BuildConfig
 import se.terrax9.services.UserData
 import java.io.IOException
 
@@ -60,7 +61,7 @@ class LoginViewModel() : ViewModel() {
             .add("password", password)
             .build()
         val request =
-            Request.Builder().url("http://13.60.235.253:8081/login").post(formBody).build()
+            Request.Builder().url("${BuildConfig.API_BASE_URL}/login").post(formBody).build()
 
         status = "Loading"
 

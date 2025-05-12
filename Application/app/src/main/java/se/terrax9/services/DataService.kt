@@ -1,5 +1,6 @@
 package se.terrax9.services
 
+import android.util.Log
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.websocket.WebSockets
@@ -18,6 +19,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import kotlin.math.absoluteValue
 
 val client = HttpClient {
@@ -58,13 +60,19 @@ class DataService(private val uri: String = "") {
             socket?.close()
             receiveJob?.cancel()
 
+            if (UserData.token == null) {
+                Log.e("Fatal", "Tried to connect but there were no token.")
+                UserData.logout()
+                return
+            }
+
             println("Trying to connect to server...")
             println("Usertoken is: ${UserData.token}")
             runBlocking {
                 socket = client.webSocketSession {
                     url {
                         protocol = URLProtocol.WS
-                        host = uri
+                        host = "terrax9.se"
                         path("/")
                         port = 8081
                         parameters.append("token", UserData.token!!) // Crash if no token provided
@@ -75,7 +83,6 @@ class DataService(private val uri: String = "") {
             }
             println("Emil")
             println(socket == null)
-
 
             // Send initial message
             socket?.send("It is me i'm the problem it's me")
@@ -116,6 +123,43 @@ class DataService(private val uri: String = "") {
             println("We are already connected")
         }
     }
+
+    fun handleIncomingMessage(payload: String) {
+        val json = JSONObject(payload)
+        val state = json.optString("state")
+        val someOther = json.optString("otherKey")
+
+        when (state) {
+            "rover_not_connected" -> {
+                UserData.selectedRoverID = null
+            }
+
+            "rover_occupied" -> {
+            }
+
+            "rover_connected" -> {
+
+            }
+
+            "rover_disconnected" -> {
+
+            }
+
+            else -> {
+                println("Got other message")
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
     private var lastX = 0f
     private var lastY = 0f

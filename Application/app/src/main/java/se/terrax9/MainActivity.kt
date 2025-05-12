@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -14,12 +15,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import se.terrax9.services.UserData
+import se.terrax9.services.UserState
 import se.terrax9.ui.screens.controller.ControllerScreen
 import se.terrax9.ui.screens.login.LoginScreen
 import se.terrax9.ui.theme.Terrax9Theme
@@ -62,14 +66,48 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
+                val isLoggedIn = UserData._isLoggedIn ?: false
+                val token = UserData.token
+                Column {
+                    Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 40.sp)
+                    Text("token: $token", color = Color.White, fontSize = 40.sp)
+                }
             }
         }
     }
 }
 
 @Composable
+fun StateHandler(state: UserState) {
+    when (state) {
+        UserState.NEEDS_AUTH -> {
+            // Read stored token.
+            // If good -> logged_in
+            // If bad -> signed_out
+        }
+        UserState.SIGNED_OUT -> {
+            // Reset userdata (to be on the safe side)
+            // go to loginpage
+        }
+        UserState.LOGGED_IN -> {
+            // if on loginpage move to dashboard
+            // Update userdata or make sure it is updated
+            // Make sure to disable dashboard
+        }
+        UserState.CONNECTED_TO_SERVER_WITHOUT_ROVER -> {
+            // Show in dashboard no connection to rover
+            // Activate dashboard
+        }
+        UserState.CONNECTED_TO_SERVER_AND_ROVER -> {
+            // Everything is working?
+        }
+    }
+}
+
+@Composable
 fun NavHandler(navController: NavController) {
-    LaunchedEffect(UserData.isLoggedIn)
+    LaunchedEffect(UserData._isLoggedIn)
     {
         if (!UserData.isLoggedIn()) {
             UserData.logout()
