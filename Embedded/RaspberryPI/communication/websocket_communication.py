@@ -65,7 +65,8 @@ if LOCAL_TEST == False:
                             # NOTE: This could also be put in a async queue so steering won't stop working during normal commands
                             if "steer" not in message:
                                 print(f"Forceful command: {message}")
-                                await process_command(websocket, data)
+                                #await process_command(websocket, data)
+                                asyncio.create_task(process_command(websocket, data))
                                 continue
                             
                             # If a steer command (drive)
@@ -115,4 +116,5 @@ else:
                 params = {command:{"x":x,"y":y}}
             else:
                 params = {"command": command}
-            await process_command(websocket, params)
+            #await process_command(websocket, params)
+            asyncio.create_task(process_command(websocket, params))

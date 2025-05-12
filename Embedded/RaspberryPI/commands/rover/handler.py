@@ -5,8 +5,12 @@ from .rover_forwarder import *
 from config.settings import IS_RPI
 if IS_RPI:
     from commands.arm.arm_forwarder import forward_arm, forward_claw
+import asyncio
 
 async def process_command(websocket, data):
+    
+    # print(f"Will now process command: {data}")
+    # await asyncio.sleep(1)
     command = data.get("command")
     print(f"Received data: {data}")
     print(f"Command: {command}")
