@@ -1,3 +1,17 @@
+import java.util.Properties
+
+// Helper to load ENV variables
+fun loadEnvProperties(): Properties {
+    val props = Properties()
+    val envFile = rootProject.file(".env")
+    if (envFile.exists()) {
+        props.load(envFile.inputStream())
+    }
+    return props
+}
+
+val env = loadEnvProperties()
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -16,6 +30,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_BASE_URL", "\"${env["API_BASE_URL"] ?: ""}\"")
+        buildConfigField("String", "WS_BASE_URL", "\"${env["WS_BASE_URL"] ?: ""}\"")
+        buildConfigField("String", "STREAM_BASE_URL", "\"${env["STREAM_BASE_URL"] ?: ""}\"")
     }
 
     buildTypes {
@@ -37,6 +54,8 @@ android {
     buildFeatures {
         compose = true
     }
+
+
 }
 
 dependencies {
