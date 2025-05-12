@@ -12,12 +12,39 @@ Each communication must specify the roverID for the `roverID` key. The standard 
 
 ### Forceful commands
 The following commands are forceful and the sender fully controls the rovers response.
-
-`PIC` - Takes a picture  
 `START-STREAM` - Connects to server and start the stream  
 `STOP-STREAM` - Stop streaming and close the connection to server    
 `LIGHTS_ON` - Turn on headlights  
 `LIGHTS_OFF` - Turn off headlights  
+
+All commands should be sent in this format:
+```
+{
+  "rover_id": -roverID-,
+  "command": -command-
+}
+```
+
+## Take a picture
+`PIC` - Takes a pictures, sends a response in the following way:
+**Example response for `PIC` from Rasberry PI**:
+```
+{
+  "rover_id:" -roverID-,
+  "type": "pic-response",
+  "success": "true",
+  "image_data": -base64data-
+}
+```
+or
+```
+{
+  "rover_id:" -roverID-,
+  "type": "pic-response",
+  "success": "false"
+}
+```
+
 
 ## Reactive commands
 
