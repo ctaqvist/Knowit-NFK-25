@@ -7,7 +7,7 @@ from commands.rover.rover_lights import handle_light_command
 async def test_light_on_command():
     mock_websocket = AsyncMock()
 
-    with patch("commands.rover.lights.arduino.send", new_callable=AsyncMock) as mock_send:
+    with patch("commands.rover.rover_lights.arduino.send", new_callable=AsyncMock) as mock_send:
         await handle_light_command("LIGHTS_ON", mock_websocket)
 
         mock_send.assert_awaited_once_with(json.dumps({
@@ -20,7 +20,7 @@ async def test_light_on_command():
 async def test_light_off_command():
     mock_websocket = AsyncMock()
 
-    with patch("commands.rover.lights.arduino.send", new_callable=AsyncMock) as mock_send:
+    with patch("commands.rover.rover_lights.arduino.send", new_callable=AsyncMock) as mock_send:
         await handle_light_command("LIGHTS_OFF", mock_websocket)
 
         mock_send.assert_awaited_once_with(json.dumps({
@@ -33,7 +33,7 @@ async def test_light_off_command():
 async def test_unknown_light_command():
     mock_websocket = AsyncMock()
 
-    with patch("commands.rover.lights.arduino.send", new_callable=AsyncMock) as mock_send:
+    with patch("commands.rover.rover_lights.arduino.send", new_callable=AsyncMock) as mock_send:
         await handle_light_command("blink_blue", mock_websocket)
 
         mock_send.assert_awaited_once_with(json.dumps({

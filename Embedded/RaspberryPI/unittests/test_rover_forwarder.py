@@ -3,13 +3,11 @@ import pytest
 from unittest.mock import MagicMock, patch
 from commands.rover.rover_forwarder import forward_joystick_to_arduino
 
-
 # Helper to call forwarder with patched arduino.send
 async def run_and_capture_send(data):
-    with patch("RaspberryPI.commands.rover.forwarder.arduino.send", new_callable=MagicMock) as mock_send:
+    with patch("commands.rover.rover_forwarder.arduino.send", new_callable=MagicMock) as mock_send:
         await forward_joystick_to_arduino(data)
         return mock_send
-
 
 @pytest.mark.asyncio
 async def test_should_send_when_valid_data():
@@ -21,10 +19,9 @@ async def test_should_send_when_valid_data():
         "y": -4.57
     })
 
-    with patch("RaspberryPI.commands.rover.forwarder.arduino.send", new_callable=MagicMock) as mock_send:
+    with patch("commands.rover.rover_forwarder.arduino.send", new_callable=MagicMock) as mock_send:
         await forward_joystick_to_arduino(steer_data)
         mock_send.assert_called_once_with(expected_json)
-
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("data", [
@@ -38,7 +35,6 @@ async def test_should_not_send_when_invalid_data(data):
     mock_send = await run_and_capture_send(data)
     mock_send.assert_not_called()
 
-
 @pytest.mark.asyncio
 async def test_should_send_when_stringified_numbers():
     """Should send float values if x/y are valid strings."""
@@ -49,6 +45,6 @@ async def test_should_send_when_stringified_numbers():
         "y": 2.0
     })
 
-    with patch("RaspberryPI.commands.rover.forwarder.arduino.send", new_callable=MagicMock) as mock_send:
+    with patch("commands.rover.rover_forwarder.arduino.send", new_callable=MagicMock) as mock_send:
         await forward_joystick_to_arduino(data)
         mock_send.assert_called_once_with(expected_json)

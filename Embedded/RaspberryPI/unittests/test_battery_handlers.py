@@ -1,4 +1,3 @@
-# Embedded/RaspberryPI/unittests/test_websocket_serial_extended.py
 import pytest
 import asyncio
 import json
@@ -30,8 +29,7 @@ class DummyWebSocket:
 async def test_only_battery_level():
     ws = DummyWebSocket()
     data = {"Battery_level": 0.42}
-    monkey = pytest.MonkeyPatch()
-    monkey.setenv  # no shutdown
+    # no shutdown should be triggered
     await handle_serial_message(data, ws)
     assert len(ws.sent) == 1
     assert ws.sent[0] == {"type": "battery_level", "rover_id": ROVER_ID, "value": 0.42}
@@ -47,7 +45,6 @@ async def test_only_warning_signal():
 async def test_only_sleep_mode_false(monkeypatch):
     ws = DummyWebSocket(has_drain=True)
     data = {"Sleep_mode": False}
-    called = False
     monkeypatch.setattr(os, "system", lambda cmd: (_ for _ in ()).throw(AssertionError("shutdown not called")))
     await handle_serial_message(data, ws)
     assert ws.sent == [{"type": "sleep_mode", "rover_id": ROVER_ID, "value": False}]
@@ -92,8 +89,12 @@ async def test_combined_battery_and_warning():
 async def test_all_three_with_sleep(monkeypatch):
     ws = DummyWebSocket(has_drain=True)
     data = {"Battery_level": 0.88, "Warning_signal": False, "Sleep_mode": True}
-    shutdown = False
-    monkeypatch.setattr(os, "system", lambda cmd: nonlocal_set('shutdown_flag', True))
+    monkeypatch.setenv("DUMMY_ENV", "1")  # ensure safe env
+    shutdown_flag = False
+    def fake(cmd):
+        nonlocal shutdown_flag
+        shutdown_flag = True
+    monkeypatch.setattr(os, "system", fake)
     await handle_serial_message(data, ws)
     types = [m['type'] for m in ws.sent]
     assert types == ['battery_level', 'low_battery_warning', 'sleep_mode']

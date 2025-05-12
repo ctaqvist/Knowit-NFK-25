@@ -2,14 +2,19 @@ import json
 from communication.serial_helper import arduino
 from config.settings import ROVER_ID, LOCAL_TEST
 
-async def handle_light_command(command, websocket):
-    # Default to sending the raw command string
-    websocket_response = {
+async def handle_light_command(command: str, websocket):
+    # 1) skicka till Arduino
+    await arduino.send(json.dumps({"command": command}))
+
+    # 2) skicka bekräftelse till servern
+    if command == "LIGHTS_ON":
+        response_text = "Light turned ON"
+    elif command == "LIGHTS_OFF":
+        response_text = "Light turned OFF"
+    else:
+        response_text = f"Command sent: {command}"
+
+    await websocket.send(json.dumps({
         "rover_id": ROVER_ID,
-        "response": f"Command sent: {command}"
-    }
-    serial_command = json.dumps({ "command": command })
-    await arduino.send(serial_command)
-    if LOCAL_TEST == False:
-        # Skicka svar tillbaka till klienten
-        await websocket.send(json.dumps(websocket_response))
+        "response": response_text
+    }))

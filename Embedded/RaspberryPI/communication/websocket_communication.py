@@ -2,6 +2,7 @@ import os
 import asyncio
 import json
 import websockets
+from config.settings import *
 from config.settings import ROVER_ID, SERVER_URL, LOCAL_TEST
 from commands.rover.handler import process_command
 from communication.serial_helper import arduino
