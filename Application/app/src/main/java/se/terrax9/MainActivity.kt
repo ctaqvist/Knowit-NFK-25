@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                                 ControllerScreen(navController)
                             }
                             composable(Routes.Gallery) {
-                                GalleryScreen()
+                                GalleryScreen(navController)
                             }
                             composable(Routes.Settings) {
                                 SettingsScreen(navController)

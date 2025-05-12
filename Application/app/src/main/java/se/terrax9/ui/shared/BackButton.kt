@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import se.terrax9.R
+import se.terrax9.Routes
 
 @Composable
 fun BackButton(navController: NavController) {
@@ -37,7 +38,6 @@ fun BackButton(navController: NavController) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(16.dp)
     ) {
         Box(
             modifier = Modifier
@@ -54,7 +54,7 @@ fun BackButton(navController: NavController) {
                 )
                 .padding(16.dp)
                 .clickable {
-                    navController.popBackStack()
+                    navController.navigate(Routes.Dashboard)
                 }
         ) {
             Image(
