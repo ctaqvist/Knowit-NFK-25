@@ -2,6 +2,7 @@ package se.terrax9
 
 import GalleryScreen
 import SettingsScreen
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,10 +49,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Terrax9Theme {
+                // Load userdata
                 val navController: NavHostController = rememberNavController()
 
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
                     val viewModel: ControllerViewModel = viewModel()
                     Box(modifier = Modifier.padding(innerPadding)) {
                         NavHost(
@@ -90,14 +94,12 @@ class MainActivity : ComponentActivity() {
 fun UserStatusScreen() {
     val isLoggedIn = UserData._isLoggedIn
     val token = UserData.token
-    val rover = UserData.roverStatus
     val state = UserData.status
 
     Column(modifier = Modifier.padding(16.dp)) {
-        Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 25.sp)
+        Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 16.sp)
         Text("token: $token", color = Color.White, fontSize = 16.sp)
-        Text("rover: $rover", color = Color.White, fontSize = 25.sp)
-        Text("state: $state", color = Color.White, fontSize = 25.sp)
+        Text("state: $state", color = Color.White, fontSize = 16.sp)
     }
 }
 
@@ -106,26 +108,11 @@ fun StateHandler(state: UserState, navController: NavController) {
 
     println("New Event: $state")
     when (state) {
-        UserState.NEEDS_AUTH -> {
-            // For now:
-            UserData.logout()
+        UserState.AUTH_NEEDED -> {
+            
         }
-
-        UserState.SIGNED_OUT -> {
-            // Reset userdata and navigate to Login
-            UserData.logout()
-        }
-
-        UserState.LOGGED_IN -> {
-            // if on loginpage move to dashboard
-            // Update userdata or make sure it is updated
-            // Make sure to disable dashboard
-
-        }
-
-        UserState.CONNECTED_TO_SERVER -> {
-
-        }
+        UserState.SIGNED_OUT -> TODO()
+        UserState.LOGGED_IN -> TODO()
     }
 }
 

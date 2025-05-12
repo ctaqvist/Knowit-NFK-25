@@ -12,12 +12,12 @@ import se.terrax9.services.Commands
 
 class ControllerViewModel() : ViewModel() {
 
-    enum class serverStatus {
+    enum class ServerStatus {
         CONNECTED,
         DISCONNECTED
     }
 
-    enum class roverStatus {
+    enum class RoverStatus {
         OK,
         BAD,
         DECENT,
@@ -25,13 +25,19 @@ class ControllerViewModel() : ViewModel() {
 
     }
 
-    private val dataService = DataService(BuildConfig.WS_BASE_URL)
+    private val dataService = DataService(BuildConfig.WS_BASE_URL, { state ->
+        _serverStatus.value = if (state) ServerStatus.CONNECTED else ServerStatus.DISCONNECTED
+    })
     private var job: Job? = null
 
     private val _isLighted = MutableStateFlow(true)
     val isLighted: StateFlow<Boolean> = _isLighted
 
+    private val _serverStatus = MutableStateFlow(ServerStatus.DISCONNECTED)
+    val serverStatus: StateFlow<ServerStatus> = _serverStatus
 
+    private val _roverStatus = MutableStateFlow(RoverStatus.BAD)
+    val roverStatus: StateFlow<RoverStatus> = _roverStatus
 
     fun sendCommand(command: String) {
         viewModelScope.launch {

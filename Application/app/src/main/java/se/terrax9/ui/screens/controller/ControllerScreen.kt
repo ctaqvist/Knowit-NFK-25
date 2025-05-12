@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import se.terrax9.R
@@ -24,6 +25,9 @@ import se.terrax9.ui.theme.LexendExa
 @Composable
 fun ControllerScreen(viewModel: ControllerViewModel, navController: NavController) {
 //    val viewModel: ControllerViewModel = viewModel()
+
+    val serverStatus = viewModel.serverStatus.collectAsState()
+    val roverStatus = viewModel.roverStatus.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -39,6 +43,12 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
             UpperDashboard(viewModel, navController)
             BottomDashboard(viewModel)
         }
+    }
+
+    Column {
+        Spacer(modifier = Modifier.padding(vertical = 60.dp))
+        Text("serverStatus: ${serverStatus.value}", color = Color.White, fontSize = 16.sp)
+        Text("roverStatus: ${roverStatus.value}", color = Color.White, fontSize = 16.sp)
     }
 }
 

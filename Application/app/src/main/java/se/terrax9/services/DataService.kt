@@ -41,19 +41,12 @@ val client = HttpClient {
 // It acts as a domain layer and is not bound by android context
 // As of ticket 145, we will connect and suspend on the UI thread meaning that the UI freezes as we are connecting to the server.
 // This due to a bug where we connect many times and create duplicate listeners
-class DataService(private val uri: String = "") {
+class DataService(private val uri: String = "", val onServerStatusChange: (Boolean) -> Unit = {}) {
     private var receiveJob: Job? = null
 
     private var socket: WebSocketSession? = null
     private val _socketActive = MutableStateFlow(false)
     val socketActiveFlow: StateFlow<Boolean> = _socketActive.asStateFlow()
-
-    init {
-        runBlocking {
-            connect()
-        }
-        updateIsActive()
-    }
 
     fun close() {
         runBlocking {
@@ -66,11 +59,7 @@ class DataService(private val uri: String = "") {
 
     private fun updateIsActive() {
         _socketActive.value = socket?.isActive ?: false
-        if (_socketActive.value) {
-            UserData.status = UserState.CONNECTED_TO_SERVER
-        } else {
-            UserData.fallBack()
-        }
+        onServerStatusChange(_socketActive.value)
     }
 
     // Initialize a socket and create callbacks
@@ -121,6 +110,7 @@ class DataService(private val uri: String = "") {
                     } finally {
                         println("Socket is super closed")
                         socket?.close()
+                        _socketActive.value = false
                         updateIsActive()
                     }
                 }
