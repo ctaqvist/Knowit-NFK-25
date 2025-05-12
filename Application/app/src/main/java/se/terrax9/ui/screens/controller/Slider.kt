@@ -69,7 +69,7 @@ fun Slider(getCommand: (Float, Float) -> String = { x, y -> "$x, $y" },
 
                         // New offset after drag
                         val newOffset = joyStickOffset + dragAmount
-                        val joyStickOffset = newOffset.clampWithin(maxVisualOffset)
+                        joyStickOffset = newOffset.clampWithin(maxVisualOffset)
 
                         // Normalize offset and emit onMove
                         val normalizedOffset = joyStickOffset.normalize(maxActualOffset)
