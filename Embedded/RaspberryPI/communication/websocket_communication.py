@@ -17,19 +17,34 @@ if LOCAL_TEST:
 
 RECONNECT_DELAY = 5  # sekunder
 
-active_steer = False
+# These are two tasks for driving and steering arm
+steer_drive_task: asyncio.Task | None = None
+steer_arm_task: asyncio.Task | None = None
 
+# Helper to run an async task "blocking"
 async def _steer_runner(websocket, data):
-    global active_steer
     try:
         await process_command(websocket, data)
+    except asyncio.CancelledError:
+        print("Steer task was cancelled.")
+        raise
     finally:
-        active_steer = False
         print("BACKGROUND STEER DONE.")
 
+# Helper to cancel a task and block until it is cancelled
+async def cancelTask(task):
+    print("Cancels tasks...")
+    task.cancel()
+    try:
+        await task
+    except asyncio.CancelledError:
+        pass
+    print("Task cancels...")
+        
 if LOCAL_TEST == False:
     async def listen_to_server():
-        global active_steer
+        global steer_drive_task
+        global steer_arm_task
         
         while True:
             try:
@@ -44,22 +59,36 @@ if LOCAL_TEST == False:
                     while True:
                         try:
                             message = await websocket.recv()
-
                             data = json.loads(message)
-                            
-                            # If not a steer command, always process immediately
-                            if ("steer" not in message):
-                                print(f"Forceful command: {message}") 
+
+                            # If not a steer command, always process immediately and do it blocking
+                            # NOTE: This could also be put in a async queue so steering won't stop working during normal commands
+                            if "steer" not in message:
+                                print(f"Forceful command: {message}")
                                 await process_command(websocket, data)
                                 continue
                             
-                            # If no active steer is running, start a new active steer. Otherwise skip steer and do next message.                                
-                            if (active_steer == False):
-                                print(f"Time to steer {data}") 
-                                active_steer = True
-                                asyncio.create_task(_steer_runner(websocket, data))     
-                            else:
-                                print("SKIPPING STEER")
+                            # If a steer command (drive)
+                            if "steer" in message and "steer_arm" not in message:
+                                # Cancel any ongoing steer (drive) job
+                                if steer_drive_task is not None and not steer_drive_task.done():                                
+                                    await cancelTask(steer_drive_task) 
+                                
+                                # Start new task
+                                steer_drive_task = asyncio.create_task(_steer_runner(websocket, data))
+                                continue
+                                
+                            # If a steer_arm command
+                            if "steer_arm" in message:
+                                # Cancel any ongoing steer (drive) job
+                                if steer_arm_task is not None and not steer_arm_task.done():                                
+                                    await cancelTask(steer_arm_task)   
+                                
+                                # Start new task
+                                steer_arm_task = asyncio.create_task(_steer_runner(websocket, data))
+                                continue
+                            
+                            print("FATAL ERROR: No command found")
 
                         except json.JSONDecodeError as e:
                             print(f"[ERROR] Invalid JSON received: {e}")
