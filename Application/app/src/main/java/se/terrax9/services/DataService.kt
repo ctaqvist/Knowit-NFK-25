@@ -74,7 +74,7 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
                 return
             }
 
-            println("Trying to connect to server...")
+            println ("Trying to connect to server...")
             println("Usertoken is: ${UserData.token}")
             runBlocking {
                 socket = client.webSocketSession {

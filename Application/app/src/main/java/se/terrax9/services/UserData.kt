@@ -36,8 +36,6 @@ object UserData {
     }
 
     fun loadLogin(context: Context) {
-        
-
         return
         val sharedPrefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val savedToken = sharedPrefs.getString("token", null)

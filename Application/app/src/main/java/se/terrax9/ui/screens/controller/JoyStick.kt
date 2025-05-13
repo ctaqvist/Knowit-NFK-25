@@ -104,7 +104,7 @@ fun JoyStick(
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.joystickcenter),
+            painter = painterResource(id = R.drawable.joystick_ball),
             contentDescription = "Joystick center",
             modifier = Modifier
                 .offset { IntOffset(joyStickOffset.x.roundToInt(), joyStickOffset.y.roundToInt()) }
@@ -112,6 +112,15 @@ fun JoyStick(
                 .zIndex(10f)
         )
     }
+
+    Image(
+        painter = painterResource(id = R.drawable.joystick_base),
+        contentDescription = "Joystick center",
+        modifier = Modifier
+            .offset { IntOffset(joyStickOffset.x.roundToInt(), joyStickOffset.y.roundToInt()) }
+            .size(knobSize)
+            .zIndex(10f)
+    )
 }
 
 // Clamps the offset within maxDistance
