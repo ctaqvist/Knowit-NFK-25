@@ -93,7 +93,10 @@ export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict)
         // User is sending: find their mapped rover
         const roverId = userRoverDict[ws.token.userId];
         if (!roverId) {
-            console.log("No rover mapped for this user.");
+            console.log("User sent command for rover that they haven't connected to");
+            ws.send(JSON.stringify({
+                rover_status: "disconnected"
+            }));
             return;
         }
 
@@ -120,7 +123,11 @@ export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict)
                 }));
             }
         } else {
-            console.log("No user mapped to this rover.");
+            console.log("A rover tried to send data but no client has connected to it.");
+            ws.send(JSON.stringify({
+                status: "error",
+                reason: "No user is connected to you."
+            }))
         }
     } else {
         console.log("Sender is neither user nor rover.");

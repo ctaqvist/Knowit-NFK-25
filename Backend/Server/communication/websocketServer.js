@@ -17,7 +17,7 @@ function initializeWebSocketServer(server) {
 
     // Set up server
     wss.on('connection', (ws, req) => {
-        
+
         // First, set up connection
         onConnection(ws, req);
 
@@ -28,7 +28,7 @@ function initializeWebSocketServer(server) {
 
         // Set up onClose event
         ws.on('close', () => {
-            console.log( "token is: ", ws.token);
+            console.log("token is: ", ws.token);
             if (ws.token) {
                 console.log(`${ws.token} disconnected`);
             } else {
@@ -60,8 +60,24 @@ function initializeWebSocketServer(server) {
         }
 
         // Check if the message is a disconnect command and client is a user
-        if(message.command === "disconnect" && ws.token.userId) {
+        if (message.command === "disconnect" && ws.token.userId) {
             disconnectFromRover(ws, message, USER_ROVER_DICT);
+            return;
+        }
+
+        // Check if the message is a disconnect command and client is a user
+        if (message.command === "get_rover_status" && ws.token.userId) {
+            const roverId = userRoverDict[ws.token.userId];
+            if (!roverId) {
+                ws.send(JSON.stringify({
+                    rover_status: "disconnected"
+                }));
+            } else {
+                ws.send(JSON.stringify({
+                    rover_status: "connected",
+                    roverId
+                }));
+            }
             return;
         }
 
@@ -82,15 +98,15 @@ function initializeWebSocketServer(server) {
             // Attach the token to the ws 
             ws.token = decoded;
             console.log("Token is: ", ws.token)
-            if(decoded.username) {
+            if (decoded.username) {
                 console.log(`${decoded.username} is connected to web socket!`)
             }
             else if (decoded.roverId) {
                 console.log(`${decoded.roverSerial} is connected to web socket!`)
             }
             ws.send(JSON.stringify({
-            response: "success",
-            message: "You are connected to the server!"
+                response: "success",
+                message: "You are connected to the server!"
             }));
         }
         catch {
