@@ -8,14 +8,14 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { useContent } from '@/hooks/useContent';
 import Spinner from '@/components/Spinner';
+import { featureData } from '@/utils/data/product';
+import Icon from '@/components/Icon';
 
 function Product() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSrc, setModalSrc] = useState('');
   const [loading, setLoading] = useState(false)
-  const { pages } = useContent();
 
   const handleClose = () => setModalOpen(false);
 
@@ -44,6 +44,30 @@ function Product() {
 
   return (
     <>
+
+      {/* Feature section */}
+      <Stack
+        component={'section'}
+        sx={{
+          height: 1085,
+          backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images//feature_section.png")`, backgroundPositionX: 'center', backgroundSize: 'cover'
+        }}>
+
+        <Typography variant='h2' sx={{ top: 162, justifySelf: 'center', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Main features</Typography>
+
+        {featureData.map(feature => (
+          <Stack sx={{ position: 'absolute', minWidth: 150, textWrap: 'pretty', lineHeight: 'normal', gap: '6px', ...feature.style }}>
+            <Stack direction='row' alignItems={'center'} gap={'6px'}>
+              <Icon src={`/src/assets/${feature.icon}`} />
+              <Typography variant='subheading2'>{feature.title}</Typography>
+            </Stack>
+            <Typography variant='body3'>{feature.details}</Typography>
+          </Stack>
+        ))}
+
+      </Stack >
+
+      {/* Statistics Section */}
       <Stack
         component={'section'}
         sx={{
@@ -54,8 +78,17 @@ function Product() {
           backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
             }/storage/v1/object/public/images//ivana-cajina-asuyh-_ZX54-unsplash%20(1)%201-3%202.png")`,
           backgroundSize: 'contain',
+          position: 'relative',
         }}
       >
+        <Box role='presentation' sx={{
+          height: 196, width: '100%', position: 'absolute', bottom: 0,
+          background: 'linear-gradient(180deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)'
+        }} />
+        <Box role='presentation' sx={{
+          height: 196, width: '100%', position: 'absolute', top: 0,
+          background: 'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)'
+        }} />
         <Typography variant='h2'>Terra X9 in numbers</Typography>
 
         {/* Planets */}
@@ -342,7 +375,11 @@ function Product() {
           position: 'relative',
         }}
       >
-        <Typography variant='h2'>Gallery</Typography>
+        <Box role='presentation' sx={{
+          height: 196, width: '100%', position: 'absolute', top: 0,
+          background: 'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)'
+        }} />
+        <Typography variant='h2' sx={{ zIndex: 5, position: 'relative' }}>Gallery</Typography>
 
         <Box
           sx={{
