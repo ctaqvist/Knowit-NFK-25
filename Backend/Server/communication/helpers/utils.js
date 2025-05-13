@@ -37,6 +37,7 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
         console.log("User with id ", userId, " is already connected to rover: ", userRoverDict[userId])
         ws.send(JSON.stringify({
             response: "error",
+            rover_status: "disconnected",
             message: `User ${userId} is already connected to a rover.`
         }));
         console.log(`User ${userId} is already connected to a rover.`);
@@ -50,6 +51,7 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
         console.log(userRoverDict)
         ws.send(JSON.stringify({
             response: "success",
+            rover_status: "connected",
             message: `Connected to rover ${roverId}.`
         }));
     }
