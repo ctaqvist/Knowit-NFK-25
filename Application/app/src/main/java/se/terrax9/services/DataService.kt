@@ -140,16 +140,16 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
 
     fun handleIncomingMessage(payload: String) {
         val json = JSONObject(payload)
-        val state = json.optString("response")
+        val state = json.optString("rover_status")
 
         when (state) {
-            "error" -> {
+            "disconnected" -> {
                 println("Failed to connect to rover!")
                 UserData.selectedRoverID = null
                 onRoverStatusChange(false)
             }
 
-            "success" -> {
+            "connected" -> {
                 // TODO: FIX HARDCODED VALUE
                 UserData.selectedRoverID = "rover-001"
                 onRoverStatusChange(true)
