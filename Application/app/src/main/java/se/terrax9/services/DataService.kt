@@ -41,7 +41,7 @@ val client = HttpClient {
 // It acts as a domain layer and is not bound by android context
 // As of ticket 145, we will connect and suspend on the UI thread meaning that the UI freezes as we are connecting to the server.
 // This due to a bug where we connect many times and create duplicate listeners
-class DataService(private val uri: String = "", val onServerStatusChange: (Boolean) -> Unit = {}) {
+class DataService(private val uri: String = "", val onServerStatusChange: (Boolean) -> Unit = {}, val onRoverStatusChange: (Boolean) -> Unit ={}) {
     private var receiveJob: Job? = null
 
     private var socket: WebSocketSession? = null
@@ -104,14 +104,16 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
                     try {
                         for (frame in session.incoming) {
                             if (frame is Frame.Text) {
-                                println("Received: ${frame.readText()}")
+                                val s = frame.readText()
+                                println("Received: ${s}")
+                                handleIncomingMessage(s)
                             }
                         }
                     } finally {
                         println("Socket is super closed")
                         socket?.close()
                         _socketActive.value = false
-                        updateIsActive()
+                        onServerStatusChange(false)
                     }
                 }
             }
@@ -143,11 +145,14 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
         when (state) {
             "error" -> {
                 println("Failed to connect to rover!")
+                UserData.selectedRoverID = null
+                onRoverStatusChange(false)
             }
 
             "success" -> {
                 // TODO: FIX HARDCODED VALUE
                 UserData.selectedRoverID = "rover-001"
+                onRoverStatusChange(true)
             }
 
             else -> {
@@ -163,6 +168,15 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
             socket?.send(message)
         } catch (e: Exception) {
             println("Failed to send message: ${e.localizedMessage}")
+        }
+    }
+
+    fun disconnect() {
+        runBlocking {
+            receiveJob?.cancel()
+            socket?.close()
+            _socketActive.value = false
+            onServerStatusChange(false)
         }
     }
 }

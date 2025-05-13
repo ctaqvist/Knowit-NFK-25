@@ -27,6 +27,8 @@ class ControllerViewModel() : ViewModel() {
 
     private val dataService = DataService(BuildConfig.WS_BASE_URL, { state ->
         _serverStatus.value = if (state) ServerStatus.CONNECTED else ServerStatus.DISCONNECTED
+    }, { isGood ->
+        _roverStatus.value = if (isGood) RoverStatus.OK else RoverStatus.BAD
     })
     private var job: Job? = null
 
@@ -60,6 +62,14 @@ class ControllerViewModel() : ViewModel() {
             sendCommand(Commands.closeHeadlights())
         } else {
             sendCommand(Commands.startHeadlights())
+        }
+    }
+
+    fun toggleConnect() {
+        if (serverStatus.value == ServerStatus.CONNECTED) {
+            dataService.disconnect()
+        } else {
+            sendCommand(Commands.connectToRover())
         }
     }
 }

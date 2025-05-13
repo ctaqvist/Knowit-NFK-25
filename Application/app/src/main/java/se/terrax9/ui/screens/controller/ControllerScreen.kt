@@ -1,7 +1,9 @@
 package se.terrax9.ui.screens.controller
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ import androidx.navigation.NavController
 import se.terrax9.R
 import se.terrax9.Routes
 import se.terrax9.services.Commands
+import se.terrax9.ui.shared.AppButton
 import se.terrax9.ui.theme.LexendExa
 
 @Composable
@@ -55,6 +58,8 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
 @Composable
 fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController) {
     val isLighted by viewModel.isLighted.collectAsState()
+    val serverStatus = viewModel.serverStatus.collectAsState()
+    val roverStatus = viewModel.roverStatus.collectAsState()
 
     Row(
         modifier = Modifier
@@ -69,11 +74,10 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
         ) {
-            IconButton(
-                text = "Connect",
-                iconRes = R.drawable.gpsr,
-                onClick = viewModel::connect
-            )
+
+            AppButton(if (serverStatus.value == ControllerViewModel.ServerStatus.CONNECTED) "DISCONNECT" else "CONNECT") {
+                viewModel.toggleConnect()
+            }
 
             Text(if (isLighted) "ON" else "OFF")
             IconButton(
@@ -121,29 +125,46 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
 
 @Composable
 fun BottomDashboard(viewModel: ControllerViewModel) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Row(
+
+    val serverStatus = viewModel.serverStatus.collectAsState()
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Your main dashboard content
+        Column(
             modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.Bottom
         ) {
-            JoyStick(
-                onMove = viewModel::sendCommand,
-                getCommand = Commands::steer
-            )
-            IconButton(
-                text = "Take photo",
-                iconRes = R.drawable.camera,
-                onClick = viewModel::takePhoto
-            )
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                JoyStick(
+                    onMove = viewModel::sendCommand,
+                    getCommand = Commands::steer
+                )
+                IconButton(
+                    text = "Take photo",
+                    iconRes = R.drawable.camera,
+                    onClick = viewModel::takePhoto
+                )
 
-            SliderRow { x, y, z ->
-                viewModel.sendCommand(Commands.steerArm(x, y, z))
+                SliderRow { x, y, z ->
+                    viewModel.sendCommand(Commands.steerArm(x, y, z))
+                }
             }
+        }
 
+        // Semi-transparent overlay when disconnected
+        if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+                    .clickable {  }
+            )
         }
     }
+
+
+
 }
