@@ -12,12 +12,39 @@ Each communication must specify the roverID for the `roverID` key. The standard 
 
 ### Forceful commands
 The following commands are forceful and the sender fully controls the rovers response.
-
-`PIC` - Takes a picture  
 `START-STREAM` - Connects to server and start the stream  
 `STOP-STREAM` - Stop streaming and close the connection to server    
 `LIGHTS_ON` - Turn on headlights  
 `LIGHTS_OFF` - Turn off headlights  
+
+All commands should be sent in this format:
+```
+{
+  "rover_id": -roverID-,
+  "command": -command-
+}
+```
+
+## Take a picture
+`PIC` - Takes a pictures, sends a response in the following way:
+**Example response for `PIC` from Rasberry PI**:
+```
+{
+  "rover_id:" -roverID-,
+  "type": "pic-response",
+  "success": "true",
+  "image_data": -base64data-
+}
+```
+or
+```
+{
+  "rover_id:" -roverID-,
+  "type": "pic-response",
+  "success": "false"
+}
+```
+
 
 ## Reactive commands
 
@@ -35,24 +62,17 @@ The following commands are reactive and the sender passes ownership to the rover
 }
 ```
 
-### Control the arm
+### Control the arm (shoulder, elbow and claw)
+The arm currently has 3 axis, each axis is controlled by a value in range [-1:1].
 
+For example: 
 ```
 {
     "rover_id": -roverID-,
     "steer_arm": {
-        "x": -xValue-,
-        "y": -yValue-
-    }
-}
-```
-
-### Control the claw 
-```
-{
-    "rover_id": -roverID-,
-    "steer_claw": {
-        "claw": -yValue-
+        "shoulder": -value-,
+        "axis": -value-,
+        "claw": -value-,
     }
 }
 ```
