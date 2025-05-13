@@ -1,5 +1,6 @@
-import { Controller, Get, Header, Param, Res } from '@nestjs/common';
+import { Body, Controller, Get, Header, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
+import { File } from 'node:buffer';
 import { PageService } from 'src/services/pages.service';
 
 export type DownloadableFiles = 'GPSR' | 'Instruction_Manual'
@@ -16,5 +17,10 @@ export class FileController {
   async getFile(@Param('file') file: DownloadableFiles, @Res() res: Response) {
     const buffer = await this.pageService.getFile(file);
     res.send(buffer);  
+  }
+
+  @Post(':file')
+  async updateFile(@Param('file') fileName: DownloadableFiles, @Body() newFile: File) {
+    return this.pageService.updateFile(fileName, newFile)
   }
 }

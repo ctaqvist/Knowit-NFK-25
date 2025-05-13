@@ -1,6 +1,7 @@
 import { useEffect, useState, ReactNode } from 'react';
 import { ContentContext, ContentContextType } from './ContentContext';
 import { contentApi } from '../api/contentApi';
+import { Page } from '@/types/types';
 
 export function ContentProvider({ children }: { children: ReactNode }) {
   const [pages, setPages] = useState<ContentContextType['pages']>(null);
@@ -17,10 +18,16 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false))
   }, []);
 
+  function updatePage(page: string, content: Page) {
+    if (!pages) return
+    setPages({ ...pages, [page]: content })
+  }
+
   const value = {
     pages,
     loading,
-    reviews
+    reviews,
+    updatePage
   }
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>

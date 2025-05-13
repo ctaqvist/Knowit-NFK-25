@@ -33,3 +33,14 @@ declare module '@mui/material/Button' {
     text_contained: true;
   }
 }
+
+declare module '@mui/material/Button' {
+  export interface ButtonPropsColorOverrides {
+    grey: true;
+  }
+}
+declare module '@mui/material/Button' {
+  export interface ButtonPropsSizeOverrides  {
+    xsmall: true;
+  }
+}

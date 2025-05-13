@@ -7,6 +7,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { isCacheFresh } from 'src/utils/calc';
 import { Tables } from 'src/types/supabase.types';
+import { File } from 'node:buffer';
 
 @Injectable()
 export class PageService {
@@ -137,6 +138,53 @@ export class PageService {
     return Buffer.from(arrayBuffer);
   }
 
+  async updateFile(fileName: string, newFile: any): Promise<ApiResponse<null>> {
+    try {
+      const VALID_FILES = ['Instruction_Manual', 'GPSR'];
+      if (!VALID_FILES.includes(fileName))
+        throw new Error(
+          'Invalid file, new file must be either an Instruction Manual or GPSR pdf',
+        );
+
+      const CLIENT = this.supabaseService.supabase;
+
+      const { data, error } = await CLIENT.storage
+        .from('files')
+        .upload(`${fileName}.pdf`, newFile, {
+          upsert: true,
+        });
+
+      if (error || !data) throw error;
+
+      await this.updateLastUpdated('pages');
+
+      return {
+        message: 'Successfully updated file!',
+        data: null,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        message: 'Failed to update file',
+        error,
+        data: null,
+      };
+    }
+  }
+
+  async updateLastUpdated(table: string) {
+    try {
+      const CLIENT = this.supabaseService.supabase;
+      const now = new Date().toISOString().slice(0, 10);
+      const { error } = await CLIENT.from(table).update({ updated_at: now });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error when updating "Last updated": ', error);
+      throw new Error(`Error when updating ${table}`);
+    }
+  }
+
   async getLastUpdated(table: string): Promise<string> {
     try {
       const CLIENT = this.supabaseService.supabase;
@@ -155,8 +203,8 @@ export class PageService {
   }
 
   /*
-  * Get booked times of a certain date
-  */
+   * Get booked times of a certain date
+   */
   async getBookedTimes(
     date: string,
   ): Promise<ApiResponse<Tables<'booked_times_public_view'>[]>> {
@@ -185,14 +233,13 @@ export class PageService {
   async createBooking(formData: ContactForm) {
     try {
       const CLIENT = this.supabaseService.supabase;
-
     } catch (error) {
       console.error(`Error when retrieving booked times: `, error);
       return {
         data: null,
         error: error,
         message: `Unable to create new booking`,
-      }; 
+      };
     }
   }
 }

@@ -66,8 +66,8 @@
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.2px8 0.042 265.755);
+  --primary-foreground: pxoklch(0.984 0.003 247.858);
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: oklch(0.208 0.042 265.755);
   --muted: oklch(0.968 0.007 247.896);
@@ -328,4 +328,23 @@
     display: block;
     background-image: url('/src/assets/Icon_search.svg');
   }
+}
+
+.editor-custom-search {
+  & .MuiInputBase-root::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background-image: url('/src/assets/Icon_search.svg');
+    display: inline-block;
+    background-size: cover;
+    position: absolute;
+    z-index: 5;
+    left: 20px;
+    top: 18px;
+  }
+}
+
+.FAQ-selected {
+  background-color: rgba(188, 197, 255, 0.3) !important;
 }

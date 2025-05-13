@@ -1,0 +1,84 @@
+{
+  "manuals": {
+    "instructionManual": {
+      "label": "Instruction Manual",
+      "filePath": "https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/files//Instruction_Manual.pdf",
+      "input": "upload:document",
+      "size": "16.5kB"
+    },
+    "GPSR": {
+      "label": "General Product Safety Regulation",
+      "filePath": "https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/files//GPSR.pdf",
+      "input": "upload:document",
+      "size": "16kB"
+    }
+  },
+  "FAQ": [
+    {
+      "question": "Why do I need a consultation before purchasing?",
+      "answer": "A consultation ensures the Terra-X9 is customized to your company’s specific mission needs, ensuring that you make a confident and informed purchase, fully aligned with your goals.",
+      "id": "3456ce4f-4efb-40f4-b617-14af53185843",
+      "category": "deliveryFAQ"
+    },
+    {
+      "question": "How is the Terra-X9 delivered?",
+      "answer": "The Terra-X9 is delivered via secure transport for interplanetary missions and conditions.",
+      "id": "bb6ab5c0-134d-4712-9334-01a3749b1b5b",
+      "category": "deliveryFAQ"
+    },
+    {
+      "question": "How long does it take to receive the rover after purchase?",
+      "answer": "Delivery typically takes 6-12 weeks, depending on mission requirements.",
+      "id": "9031d461-3b86-450f-9964-35087ceb0bea",
+      "category": "deliveryFAQ"
+    },
+    {
+      "question": "What kind of support do I get after purchase?",
+      "answer": "You can reach out to us anytime through our support page on the product website, where we’re always ready to assist you. Additionally, the rover’s instruction manual is available for download on the same page whenever you need it.",
+      "id": "79b8e04e-fce2-4f83-859e-c5392fe70db5",
+      "category": "deliveryFAQ"
+    },
+    {
+      "question": "What is your order cancellation policy?",
+      "answer": "The Terra-X9 comes with a standard 24-month warranty covering hardware defects and software support. Extended warranties are also available.",
+      "id": "af3f4887-11cb-4e13-a1f6-c1bb7877de65",
+      "category": "deliveryFAQ"
+    },
+    {
+      "question": "Is there a warranty included when I purchase a Terra-X9?",
+      "answer": "Yes, the Terra-X9 comes with a standard 24-month warranty covering hardware defects and software support. Extended warranties are also available.",
+      "id": "24c60d1f-d471-4e9d-ba25-37fece1c80c4",
+      "category": "deliveryFAQ"
+    },
+    {
+      "question": "How do I control the Terra-X9 through the app?",
+      "answer": "You can control the Terra-X9 through the application, which provides a smooth steering and driving mode, and real-time video-overview. It includes features such as light control for night vision, image capturing and an image.",
+      "id": "0dc51296-ad46-4503-87ff-1d77e7e45d9f",
+      "category": "applicationFAQ"
+    },
+    {
+      "question": "Can I name my rover?",
+      "answer": "Yes! You can personalize your rover by giving it a unique name, unless you’d like to refer  it as its initial serial-number.",
+      "id": "7b66e12e-2b20-4c2e-a477-0ece83352f0e",
+      "category": "applicationFAQ"
+    },
+    {
+      "question": "Where can I find the serial number to my rover?",
+      "answer": "When opening the settings in the application you will find the serial number to the rover you are currently connected to. If your user account has access to multiple rovers, the serial number for all rovers can be found on the connection page of the application.",
+      "id": "ae9858c2-90e3-425a-b887-eaf0ab3cf028",
+      "category": "applicationFAQ"
+    },
+    {
+      "question": "What kind of environments can the Terra-X9 handle?",
+      "answer": "The Terra-X9 is designed for all terrain and surfaces, it can withstand dust storms, extreme temperatures, and rocky landscapes.",
+      "id": "bd674a66-1db1-4538-ae66-4868f194bbeb",
+      "category": "applicationFAQ"
+    },
+    {
+      "question": "Can I connect to multiple rovers?",
+      "answer": "Yes, the app supports multi-rover management, allowing you to control and monitor multiple rovers, though not at the same time.",
+      "id": "c1aa1c37-933d-4d25-a1f4-1d8b8c59f24a",
+      "category": "applicationFAQ"
+    }
+  ]
+}

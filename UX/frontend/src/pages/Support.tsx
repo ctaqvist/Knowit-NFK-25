@@ -24,11 +24,13 @@ import React, { useState } from 'react';
 import { validateSupportInput, validateSupportForm } from '@/utils/validate';
 import FileUpload from '@/components/FileUpload';
 import LinearProgress from '@mui/material/LinearProgress';
-import FAQ, { INITIAL_FORM_DATA, INITIAL_FORM_VALIDITY } from '@/utils/data/supportFAQ';
+import { INITIAL_FORM_DATA, INITIAL_FORM_VALIDITY } from '@/utils/data/supportFAQ';
 import Accordion from '@/components/CustomAccordion';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import { useContent } from '@/hooks/useContent';
 
 function Support() {
+  const { pages } = useContent()
   const [formData, setFormData] = useState<SupportForm>(INITIAL_FORM_DATA);
   const [alert, setAlert] = useState<{
     show: boolean;
@@ -41,7 +43,6 @@ function Support() {
     message: '',
     timeout: null,
   });
-
   const [formValidity, setFormValidity] = useState<Omit<typeof INITIAL_FORM_DATA, 'fileUploads'>>(INITIAL_FORM_VALIDITY);
 
   const handleDownload = async (file: DownloadableFiles) => {
@@ -177,6 +178,9 @@ function Support() {
     (file) => file.success
   );
 
+  const deliveryFAQ = pages?.support.FAQ.filter(q => q.category === 'deliveryFAQ')
+  const applicationFAQ = pages?.support.FAQ.filter(q => q.category === 'applicationFAQ')
+
   return (
     <Box
       sx={{
@@ -214,7 +218,7 @@ function Support() {
         {/* FAQ First section: Terra-X9 & Application */}
         <Box sx={{ mb: '70px' }}>
           <Typography variant='subheading'>Terra-X9 & Application</Typography>
-          {FAQ.applicationFAQ.map(q => <Accordion key={q.summary} summary={q.summary} details={q.details} />)}
+          {(applicationFAQ ?? []).map(q => <Accordion key={q.id} summary={q.question} details={q.answer} />)}
         </Box>
 
         {/* FAQ Second section: Purchase & Delivery */}
@@ -226,7 +230,7 @@ function Support() {
             {' '}
             Purchase & Delivery
           </Typography>
-          {FAQ.deliveryFAQ.map(q => <Accordion key={q.summary} summary={q.summary} details={q.details}
+          {(deliveryFAQ ?? []).map(q => <Accordion key={q.id} summary={q.question} details={q.answer}
           />)}
         </Box>
         {/* Decorative: Background gradients + Design element */}

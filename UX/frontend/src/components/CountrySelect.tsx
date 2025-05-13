@@ -130,9 +130,9 @@ export default function CountrySelect({
                 value={formData.telephone.number}
                 onChange={handleNumberChange}
                 inputProps={{
-                    autocomplete: 'new-password',
+                    autoComplete: 'new-password',
                     form: {
-                        autocomplete: 'off',
+                        autoComplete: 'off',
                     },
                 }}
                 id='number-input'

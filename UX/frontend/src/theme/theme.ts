@@ -187,6 +187,12 @@ export const theme = createTheme({
                   border: '1px solid rgba(255, 255, 255, 0.50)',
                   backgroundColor: '#5526FF',
                 },
+
+                '&.Mui-disabled': {
+                  backgroundColor: '#180757',
+                  color: 'rgba(255, 255, 255, 0.70)',
+                  '& img': { opacity: 0.7 },
+                },
               },
             },
             {
@@ -207,9 +213,32 @@ export const theme = createTheme({
               style: {
                 backgroundColor: '#5526FF',
                 color: '#FFF',
+
                 '&:hover': { backgroundColor: '#3C16C3' },
+                '&.Mui-disabled': {
+                  backgroundColor: 'rgba(24, 7, 87, 0.60)',
+                  color: 'rgba(255, 255, 255, 0.70)',
+                },
               },
             },
+            {
+              props: { color: 'grey' },
+              style: {
+                color: '#FFF',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                '&.Mui-disabled': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.10)',
+                  color: 'rgba(255, 255, 255, 0.50)',
+                },
+                '&:hover': { backgroundColor: 'rgba(188, 197, 255, 0.50)' },
+                '&:focus': { backgroundColor: 'rgba(188, 197, 255, 0.50)' },
+              },
+            },
+            { props: { variant: 'contained', size: 'xsmall' }, style: {
+              padding: '12px 16px', fontSize: 14,
+              '&:hover': {boxShadow: 'none'},
+              '&:focus': { boxShadow: 'none'}
+            } },
           ],
         },
       },
@@ -275,12 +304,44 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTabs: {
+      styleOverrides: {
+        root: {
+          maxWidth: 1280,
+          justifyContent: 'center',
+          m: 'auto',
+          backgroundColor: 'rgba(188, 197, 255, 0.10)',
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
+          overflow: 'visible !important',
+          gap: '20px',
+          borderBottom: '2px solid #5526FF',
+          height: 71,
+
+          '& .MuiTabs-list': { height: '100%', gap: '20px' },
+          '& .MuiTabs-scroller': { overflow: 'visible !important' },
+        },
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: {
+          fontFamily: 'Lexend Exa',
+          fontSize: 20,
+          fontStyle: 'normal',
+          fontWeight: 500,
+          lineHeight: 'normal',
+          textTransform: 'uppercase',
           maxWidth: '100%',
-          color: '#FFF',
+          color: 'rgba(255, 255, 255, 0.8)',
           flex: 1,
+          '&.Mui-selected': {
+            backgroundColor: '#5526FF',
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10,
+            color: 'white',
+            boxShadow: '0px 23px 41.3px 0px rgba(85, 38, 255, 0.40)',
+          },
         },
       },
     },
@@ -330,6 +391,7 @@ export const theme = createTheme({
             transition: 'background-color 5000s ease-in-out 0s',
           },
 
+          // Autofill
           '& input:-webkit-autofill': {
             WebkitBoxShadow: '0 0 0 1000px #181724 inset',
             WebkitTextFillColor: '#fff',
@@ -343,6 +405,14 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': { border: 'none' },
+
+          // Disabled
+          '&.Mui-disabled': {
+            backgroundColor: 'rgba(139, 139, 139, 0.05)',
+            border: '1px solid rgba(139, 139, 139, 0.40)',
+
+            '&:hover': { border: '1px solid rgba(139, 139, 139, 0.40)' },
+          },
         },
       },
     },
@@ -478,6 +548,5 @@ export const theme = createTheme({
         },
       },
     },
-
   },
 });
