@@ -1,7 +1,7 @@
 try:
     import RPi.GPIO as GPIO
 except ImportError:
-    # Kör utan riktigt GPIO – dummy-klass för att slippa fel
+    # Dummy GPIO for non-RPi environments
     class _DummyPWM:
         def start(self, duty): pass
         def ChangeDutyCycle(self, dc): pass
@@ -20,67 +20,128 @@ except ImportError:
             return _DummyPWM()
 
 from time import sleep
-import math
+import threading, time
 
+# GPIO setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 
+# Pin definitions
 ARM_PINS = [17, 13]
 CLAW_PIN = 27
-L1 = 8.0
-L2 = 8.0
+
+# Motion parameters
+deadzone        = 0.05
+ARM_MAX_SPEED   = 90.0   # deg/sec
+CLAW_MAX_SPEED  = 90.0   # deg/sec  # unused but kept for symmetry
+MAX_CLAW_ANGLE  = 180    # deg
+CLAW_CLOSED_DC = 2.0   # 0°
+CLAW_OPEN_DC   = 12.0  # 180°
+
+# State variables
+arm_angle    = 0.0
+axis_angle   = 0.0
+claw_angle   = 0.0  # tracking only for completeness, but not used
+last_arm   = [0.0, 0.0]
+
+# Input buffers for continuous control
+_input_shoulder = 0.0
+_input_axis     = 0.0
+_input_claw     = 0.0
+
+# Servo objects (will be set in setup_pins)
 servo1 = None
 servo2 = None
 servo3 = None
 
-# Initierar servos och sätter PWM till 0
+
 def setup_pins():
+    global servo1, servo2, servo3
+
+    # Initialize pins and PWM channels
     for p in ARM_PINS + [CLAW_PIN]:
         GPIO.setup(p, GPIO.OUT)
+    servos = [GPIO.PWM(p, 50) for p in ARM_PINS + [CLAW_PIN]]
+    for pwm in servos:
+        pwm.start(0)
+    servo1, servo2, servo3 = servos
 
-    pins = ARM_PINS + [CLAW_PIN]
-    servos = [GPIO.PWM(p, 50) for p in pins]
-    for s in servos:
-        s.start(0)
+    # Zero positions on startup
+    set_servo_angle(servo1, 0.0, hold=0.2)
+    set_servo_angle(servo2, 0.0, hold=0.2)
+    set_servo_angle(servo3, 0.0, hold=0.2)
+
+    # Start control loops
+    start_movement_loops()
     return servos
 
-def angle_to_duty_cycle(angle):
-    if not isinstance(angle, (int, float)):
-        raise TypeError(f"Angle must be a number, got {type(angle).__name__}")
-    if angle < -90 or angle > 90:
-        raise ValueError(f"Angle {angle} out of range [-90, 90]")
-    return 2 + (angle + 90) * 10 / 180
 
-def set_servo_angle(servo, angle, hold=0.05):
-    duty = angle_to_duty_cycle(angle)
+def set_servo_angle(servo, angle, hold=0.02):
+    """
+    Map a desired angle (in degrees) to PWM duty cycle and pulse it.
+    """
+    duty = 2 + (angle + 90) * 10.0 / 180.0
     servo.ChangeDutyCycle(duty)
     sleep(hold)
     servo.ChangeDutyCycle(0)
 
-def ik_planar(x, y):
-    d2 = x*x + y*y
-    c2 = (d2 - L1*L1 - L2*L2) / (2 * L1 * L2)
-    c2 = max(-1.0, min(1.0, c2))  # clamp
-    theta2 = math.acos(c2)
-    k1 = L1 + L2 * math.cos(theta2)
-    k2 = L2 * math.sin(theta2)
-    theta1 = math.atan2(y, x) - math.atan2(k2, k1)
-    return math.degrees(theta1), math.degrees(theta2)
 
-def move_arm(x, y):
-    theta1, theta2 = ik_planar(x, y)
-    # Clamp shoulder to [-90, 90]
-    servo_shoulder_angle = max(-90, min(theta1, 90))
-    # Map elbow [0,180] -> [-90,90] and clamp
-    servo_elbow_angle = max(-90, min(theta2 - 90, 90))
-    print(f"[DEBUG] move_arm, x={x:.2f}, y={y:.2f}, "
-          f"theta1={theta1:.1f}, theta2={theta2:.1f} => "
-          f"servo1={servo_shoulder_angle:.1f}, servo2={servo_elbow_angle:.1f}")
-    set_servo_angle(servo1, servo_shoulder_angle)
-    set_servo_angle(servo2, servo_elbow_angle)
+def move_arm(shoulder, axis, dt):
+    global arm_angle, axis_angle
 
-def move_claw(v):
-    angle = v * 90
-    angle = max(0, min(angle, 90))  # clamp
-    print(f"[DEBUG] move_claw, v={v:.2f}, angle={angle:.1f}")
-    set_servo_angle(servo3, angle)
+    # Continuous velocity-based control (inversion built-in if desired)
+    if abs(shoulder) > deadzone:
+        # subtract instead of add, and clamp between -90 and 0
+        arm_angle = max(-90.0, min(0.0, arm_angle - shoulder * ARM_MAX_SPEED * dt))
+    if abs(axis) > deadzone:
+        axis_angle = max(0, min(90.0, axis_angle + axis * ARM_MAX_SPEED * dt))
+
+    if abs(arm_angle  - last_arm[0]) > 0.5:
+        set_servo_angle(servo1, arm_angle)
+        last_arm[0] = arm_angle
+    if abs(axis_angle - last_arm[1]) > 0.5:
+        set_servo_angle(servo2, axis_angle)
+        last_arm[1] = axis_angle
+
+    # As long as raw > deadzone: keep commanding full close (0°).
+    # As long as raw < -deadzone: keep commanding full open (MAX_CLAW_ANGLE).
+def move_claw(raw):
+    if raw > deadzone:
+        # close the claw fully
+        set_servo_angle(servo3, 0.0, hold=0.2)
+    elif raw < -deadzone:
+        # open the claw fully
+        set_servo_angle(servo3, MAX_CLAW_ANGLE, hold=0.2)
+    # if raw is near zero, do nothing (hold position)
+
+
+def arm_loop():
+    last_time = time.time()
+    while True:
+        now = time.time()
+        dt = now - last_time
+        last_time = now
+        move_arm(_input_shoulder, _input_axis, dt)
+        time.sleep(0.02)
+
+
+def claw_loop():
+    # Every 20 ms:
+    #  - raw > deadzone  → keep pulsing closed-duty (servo tries to close fully)
+    #  - raw < -deadzone → keep pulsing open-duty   (servo tries to open fully)
+    #  - otherwise       → zero PWM (servo holds)
+    while True:
+        raw = _input_claw
+        if raw > deadzone:
+            servo3.ChangeDutyCycle(CLAW_CLOSED_DC)
+        elif raw < -deadzone:
+            servo3.ChangeDutyCycle(CLAW_OPEN_DC)
+        else:
+            servo3.ChangeDutyCycle(0)
+        time.sleep(0.02)
+
+
+def start_movement_loops():
+    """Start both control threads for arm and claw."""
+    threading.Thread(target=arm_loop, daemon=True).start()
+    threading.Thread(target=claw_loop, daemon=True).start()
