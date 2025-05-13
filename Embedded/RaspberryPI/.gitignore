@@ -1,4 +1,3 @@
-
 # Python bytecode
 __pycache__/
 *.py[cod]
@@ -15,9 +14,6 @@ logs/
 
 # Raspberry Pi camera pictures
 pictures/
-*.jpg
-*.jpeg
-*.png
 
 # ffmpeg output
 *.h264
@@ -31,8 +27,9 @@ Thumbs.db
 # Environment / secrets (if used)
 .env
 *.env
+
 # Python/
 .vscode/
 
+# Ignore picamera test dir if needed
 Embedded/picamera2/
-pictures/*.jpg
