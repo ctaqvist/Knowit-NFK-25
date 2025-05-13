@@ -1,5 +1,6 @@
 package se.terrax9.ui.screens.login
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -43,7 +44,7 @@ class LoginViewModel() : ViewModel() {
         return Regex("^[A-Za-z0-9+_.%-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,63}$").matches(email)
     }
 
-    fun login() {
+    fun login(context: Context) {
         println("Will nog log in with E: $email and P: $password")
 
         if (email == "wrong" || email == "right") {
@@ -103,7 +104,7 @@ class LoginViewModel() : ViewModel() {
                         status = "Success! See log for token"
 
                         // Call login to add email and token
-                        UserData.login(email, token)
+                        UserData.login(email, token, context)
 
                         viewModelScope.launch {
                             _events.emit(LoginEvent.LOGIN_SUCCESS)

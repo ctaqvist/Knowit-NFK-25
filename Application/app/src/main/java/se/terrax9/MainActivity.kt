@@ -109,10 +109,15 @@ fun StateHandler(state: UserState, navController: NavController) {
     println("New Event: $state")
     when (state) {
         UserState.AUTH_NEEDED -> {
-            
+            UserData.loadLogin(LocalContext.current)
+            UserData.status = if (UserData.isLoggedIn()) UserState.LOGGED_IN else UserState.SIGNED_OUT
         }
-        UserState.SIGNED_OUT -> TODO()
-        UserState.LOGGED_IN -> TODO()
+        UserState.SIGNED_OUT -> {
+
+        }
+        UserState.LOGGED_IN -> {
+
+        }
     }
 }
 

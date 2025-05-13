@@ -18,7 +18,7 @@ object UserData {
     var email by mutableStateOf<String?>(null)
     var selectedRoverID by mutableStateOf<String?>(null)
 
-    var status by mutableStateOf<UserState>(UserState.SIGNED_OUT)
+    var status by mutableStateOf<UserState>(UserState.AUTH_NEEDED)
 
     fun login(email: String, token: String, context: Context) {
         UserData._isLoggedIn = true
@@ -36,6 +36,9 @@ object UserData {
     }
 
     fun loadLogin(context: Context) {
+        
+
+        return
         val sharedPrefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val savedToken = sharedPrefs.getString("token", null)
         val savedEmail = sharedPrefs.getString("email", null)
