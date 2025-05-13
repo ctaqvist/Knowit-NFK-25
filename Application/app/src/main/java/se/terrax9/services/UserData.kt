@@ -63,12 +63,4 @@ object UserData {
     fun isLoggedIn(): Boolean {
         return _isLoggedIn ?: false
     }
-
-    fun fallBack() {
-        if (isLoggedIn()) {
-            status = UserState.LOGGED_IN
-        } else {
-            status = UserState.SIGNED_OUT
-        }
-    }
 }

@@ -25,9 +25,11 @@ class ControllerViewModel() : ViewModel() {
 
     }
 
-    private val dataService = DataService(BuildConfig.WS_BASE_URL, { state ->
+    private val dataService = DataService(BuildConfig.WS_BASE_URL,
+        { state ->
         _serverStatus.value = if (state) ServerStatus.CONNECTED else ServerStatus.DISCONNECTED
-    }, { isGood ->
+    },
+        { isGood ->
         _roverStatus.value = if (isGood) RoverStatus.OK else RoverStatus.BAD
     })
     private var job: Job? = null

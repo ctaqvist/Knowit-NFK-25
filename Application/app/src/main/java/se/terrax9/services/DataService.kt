@@ -45,8 +45,7 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
     private var receiveJob: Job? = null
 
     private var socket: WebSocketSession? = null
-    private val _socketActive = MutableStateFlow(false)
-    val socketActiveFlow: StateFlow<Boolean> = _socketActive.asStateFlow()
+    var socketActive = false
 
     fun close() {
         runBlocking {
@@ -58,8 +57,8 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
     }
 
     private fun updateIsActive() {
-        _socketActive.value = socket?.isActive ?: false
-        onServerStatusChange(_socketActive.value)
+        socketActive = socket?.isActive ?: false
+        onServerStatusChange(socketActive)
     }
 
     // Initialize a socket and create callbacks
@@ -112,7 +111,7 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
                     } finally {
                         println("Socket is super closed")
                         socket?.close()
-                        _socketActive.value = false
+                        socketActive = false
                         onServerStatusChange(false)
                     }
                 }
@@ -175,7 +174,7 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
         runBlocking {
             receiveJob?.cancel()
             socket?.close()
-            _socketActive.value = false
+            socketActive = false
             onServerStatusChange(false)
         }
     }
