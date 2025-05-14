@@ -56,7 +56,7 @@ fun JoyStick(
 
     // Raw offset from origin and finger
     var rawOffset by remember { mutableStateOf(Offset.Zero) }
-
+    
     Box(
         modifier = Modifier
             .size(baseSize)
