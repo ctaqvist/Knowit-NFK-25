@@ -61,7 +61,7 @@ class TestMoveClaw(unittest.TestCase):
         with patch('servo_module.functions.set_servo_angle') as mock_set:
             ac.move_claw(raw=0.0)
             mock_set.assert_not_called()
-
+#h
 class TestStartMovementLoops(unittest.TestCase):
     @patch('servo_module.functions.threading.Thread')
     def test_start_movement_loops_creates_threads(self, mock_thread):
