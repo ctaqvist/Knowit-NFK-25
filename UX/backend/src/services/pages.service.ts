@@ -1,12 +1,10 @@
-import { Inject, Injectable, Param } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
-import { ApiResponse, Page, Review, Pages, ContactForm } from 'src/types/types';
-import { DownloadableFiles } from 'src/controllers/files.controller';
+import { ApiResponse, Page, Review, Pages } from 'src/types/types';
 import { Response } from 'express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { isCacheFresh } from 'src/utils/calc';
-import { Tables } from 'src/types/supabase.types';
 
 @Injectable()
 export class PageService {
@@ -127,7 +125,7 @@ export class PageService {
   async getFile(file: string): Promise<Buffer> {
     const { data, error } = await this.supabaseService.supabase.storage
       .from('files')
-      .download(`${file}.pdf`);
+      .download(file);
 
     if (error || !data) {
       throw new Error(`Error fetching ${file}: ${error}`);
@@ -149,50 +147,8 @@ export class PageService {
       if (error) throw error;
       return data.updated_at;
     } catch (error) {
-      console.error('Error when fetching last updated: ', error);
+      console.log('Error when fetching last updated: ', error);
       throw new Error(`Error when fetching last updated`);
-    }
-  }
-
-  /*
-  * Get booked times of a certain date
-  */
-  async getBookedTimes(
-    date: string,
-  ): Promise<ApiResponse<Tables<'booked_times_public_view'>[]>> {
-    try {
-      const CLIENT = this.supabaseService.supabase;
-      const { data, error } = await CLIENT.from('booked_times_public_view')
-        .select(`*`)
-        .eq('date', date);
-
-      if (error || !data) throw error;
-
-      return {
-        data: data,
-        message: `Successfully retrieved booked_times of date: ${date}`,
-      };
-    } catch (error) {
-      console.error(`Error when retrieving booked times: `, error);
-      return {
-        data: null,
-        error: error,
-        message: `Unable to retrieve booked times`,
-      };
-    }
-  }
-
-  async createBooking(formData: ContactForm) {
-    try {
-      const CLIENT = this.supabaseService.supabase;
-
-    } catch (error) {
-      console.error(`Error when retrieving booked times: `, error);
-      return {
-        data: null,
-        error: error,
-        message: `Unable to create new booking`,
-      }; 
     }
   }
 }

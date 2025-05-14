@@ -18,15 +18,29 @@ import {
   CustomFile,
   DownloadableFiles,
   SupportForm,
+  SupportFormValidity,
 } from '@/types/types';
 import { contentApi } from '@/api/contentApi';
 import React, { useState } from 'react';
-import { validateSupportInput, validateSupportForm } from '@/utils/validate';
+import { validateInput, validateSupportForm } from '@/utils/validate';
 import FileUpload from '@/components/FileUpload';
 import LinearProgress from '@mui/material/LinearProgress';
-import FAQ, { INITIAL_FORM_DATA, INITIAL_FORM_VALIDITY } from '@/utils/data/supportFAQ';
+import FAQ from '@/utils/data/supportFAQ';
 import Accordion from '@/components/CustomAccordion';
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+
+const INITIAL_FORM_DATA = {
+  f_name_input: '',
+  s_name_input: '',
+  email_input: '',
+  serial_input: '',
+  issue_category_input: 'Select an option',
+  issue_description_input: '',
+  date_input: '',
+  fileUploads: {
+    loading: false,
+    files: [],
+  },
+};
 
 function Support() {
   const [formData, setFormData] = useState<SupportForm>(INITIAL_FORM_DATA);
@@ -42,7 +56,15 @@ function Support() {
     timeout: null,
   });
 
-  const [formValidity, setFormValidity] = useState<Omit<typeof INITIAL_FORM_DATA, 'fileUploads'>>(INITIAL_FORM_VALIDITY);
+  const [formValidity, setFormValidity] = useState<SupportFormValidity>({
+    f_name_input: '',
+    s_name_input: '',
+    email_input: '',
+    serial_input: '',
+    issue_category_input: '',
+    issue_description_input: '',
+    date_input: '',
+  });
 
   const handleDownload = async (file: DownloadableFiles) => {
     try {
@@ -62,14 +84,14 @@ function Support() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const isValid = validateSupportInput(name, value);
+    const isValid = validateInput(name, value);
     setFormData({ ...formData, [name]: value as string });
     setFormValidity({ ...formValidity, [name]: isValid });
   };
 
   const handleSelectChange = (e: SelectChangeEvent) => {
     const { name, value } = e.target;
-    const isValid = validateSupportInput(name, value as string)
+    const isValid = validateInput(name, value as string)
     setFormData({ ...formData, [name]: value as string });
     setFormValidity({ ...formValidity, [name]: isValid });
   };
@@ -226,8 +248,7 @@ function Support() {
             {' '}
             Purchase & Delivery
           </Typography>
-          {FAQ.deliveryFAQ.map(q => <Accordion key={q.summary} summary={q.summary} details={q.details}
-          />)}
+          {FAQ.deliveryFAQ.map(q => <Accordion key={q.summary} summary={q.summary} details={q.details} />)}
         </Box>
         {/* Decorative: Background gradients + Design element */}
         <Box
@@ -505,7 +526,6 @@ function Support() {
                       id='issue_category_input'
                       name='issue_category_input'
                       labelId='demo-simple-select-label'
-                      IconComponent={KeyboardArrowDownRoundedIcon}
                       value={formData.issue_category_input}
                       onChange={handleSelectChange}
                       sx={{
@@ -522,7 +542,6 @@ function Support() {
                       <MenuItem value='Battery'>Battery</MenuItem>
                       <MenuItem value='Camera'>Camera</MenuItem>
                       <MenuItem value='Claw Arm'>Claw Arm</MenuItem>
-                      <MenuItem value='Other'>Other (specify in message)</MenuItem>
                     </Select>
                     {formValidity.issue_category_input &&
                       <Stack
@@ -618,11 +637,13 @@ function Support() {
                 />
               </Stack>
               <Stack sx={{ gap: '16px' }}>
-                <Typography tabIndex={-1} component='label' variant='h4' htmlFor='file_upload_input'>File upload (if any)</Typography>
+                <Typography component='label' variant='h4' htmlFor='file_upload_input'>File upload (if any)</Typography>
                 <Button
                   variant='contained'
+                  component='label'
+                  role={undefined}
+                  tabIndex={-1}
                   id='file_upload_input'
-                  onClick={() => (document.querySelector('#fileupload')! as HTMLButtonElement).click()}
                   sx={{
                     backgroundColor: 'rgba(24, 7, 87, 1)',
                     display: 'flex',
@@ -632,18 +653,14 @@ function Support() {
                     gap: '8px',
                     py: '45px',
                     textTransform: 'initial',
-                    '&:hover, :focus, :focus-visible, :focus-within': {
+                    '&:hover': {
                       boxShadow: 'none',
                       backgroundColor: 'rgba(24, 7, 87, 1)',
-                      border: '1px solid rgba(255, 255, 255, 0.50)',
                       borderStyle: 'dashed',
                     },
-
                   }}
                 >
                   <FileUpload
-                    id='fileupload'
-                    tabIndex={-1}
                     type='file'
                     onChange={handleUpload}
                     multiple
@@ -845,7 +862,7 @@ function Support() {
             </Button>
           </Stack>
           <Stack>
-            <img src='/src/assets/Icon_GPSR.svg' alt='' />
+            <img src='/src/assets/Icon_GPSR.svg' />
             <Typography
               sx={{ fontSize: 20 }}
               variant='subheading'
@@ -855,6 +872,7 @@ function Support() {
             </Typography>
             <Button
               component='label'
+              tabIndex={-1}
               role={undefined}
               onClick={() => handleDownload('GPSR')}
               variant='contained'

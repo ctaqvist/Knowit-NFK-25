@@ -1,5 +1,3 @@
-import { Dayjs } from 'dayjs';
-
 // General structure of backend API response
 export interface ApiResponse<T> {
   data: T;
@@ -57,42 +55,43 @@ export interface ProductPage {
     maxLength: number;
   }[];
   statistics: {
-    sun: {
+    planet0: {
       label: 'Statistic 1';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet1: {
       label: 'Statistic 2';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet2: {
       label: 'Statistic 3';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet3: {
       label: 'Statistic 4';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet4: {
       label: 'Statistic 5';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
   };
   gallery: {
+    position: number
     type: 'img' | 'video',
-    width: number,
-    height: number,
-    filePath: string
+    filePath: string,
+    recommended_apsect_ratio: string
   }[];
-  manual: {
-    label: '"TERRA-X9 Instruction Manual"';
-    filepath: string;
-  };
 }
 
 // Type for Support Page Data
@@ -147,32 +146,4 @@ export interface CustomFile extends File {
   loading?: boolean,
   success?: boolean,
   message?: string,
-}
-
-export interface ContactForm {
-  firstName: string,
-  surName: string,
-  companyName: string,
-  email: string,
-  telephone: Telephone,
-  businessField: string,
-  message: string,
-  booking: null | {
-    date: Dayjs | null,
-    time: string
-  }
-}
-
-
-
-type Telephone = CountryType & {
-  number: string
-}
-
-export interface CountryType {
-  code: string;
-  label: string;
-  phone: string;
-  suggested?: boolean;
-  isSearchField?: boolean
 }

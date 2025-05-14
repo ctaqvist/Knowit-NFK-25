@@ -145,187 +145,22 @@
   }
 }
 
-@keyframes fadeInOut {
-  5% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
+@keyframes fadeOut {
+  to {
     opacity: 0;
   }
 }
 
-#country-select-listbox {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: rgba(5, 3, 12, 0.3) !important;
-  backdrop-filter: blur(25px);
-
-  scrollbar-color: white transparent;
-  scrollbar-width: thin;
-
-  & .MuiAutocomplete-option {
-    margin: 6px 20px;
-    border-radius: 6px;
-    padding: 16px 10px;
-  }
-}
-
-.selectedCountry {
-  background-color: rgba(188, 197, 255, 0.2) !important;
-
+.planet-wrapper {
+  position: relative;
   &::after {
     content: '';
-    display: block;
-    width: 26px;
-    height: 18px;
-    background-image: url('/src/assets/Icon_checkmark.svg');
-    margin-left: auto;
-  }
-}
-.css-ibt4eh-MuiPaper-root-MuiAutocomplete-paper {
-  background-color: transparent !important;
-}
-
-#country-select-menu .MuiPaper-root {
-  background-color: rgba(5, 3, 12, 0.3) !important;
-  backdrop-filter: blur(25px);
-  padding: 12px 20px;
-
-  scrollbar-color: white transparent;
-  scrollbar-width: thin;
-
-  max-height: 400px;
-  width: 412.5px;
-
-  background-color: transparent;
-
-  border-radius: 10px;
-  border: none;
-
-  & li:has(> .MuiFormControl-root) {
-    border-bottom: 1px solid #bcc5ff;
-    border-radius: 0;
-    &:hover {
-      background: transparent;
-    }
-  }
-
-  & li {
-    padding: 16px 10px;
-    background: transparent;
-    gap: 9px;
-    font-family: 'Instrument Sans';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-
-    &:hover {
-      background: rgba(188, 197, 255, 0.2);
-    }
-  }
-}
-
-#custom-search {
-  padding-left: 40px;
-  &::placeholder {
-    opacity: 1;
-  }
-  &::before {
-    content: '';
-    width: 19px;
-    height: 19px;
-    display: block;
-    background-image: url('/src/assets/Icon_search.svg');
-  }
-}
-
-#country-select-listbox {
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  background-color: rgba(5, 3, 12, 0.3) !important;
-  backdrop-filter: blur(25px);
-
-  scrollbar-color: white transparent;
-  scrollbar-width: thin;
-
-  & .MuiAutocomplete-option {
-    margin: 6px 20px;
-    border-radius: 6px;
-    padding: 16px 10px;
-  }
-}
-
-.selectedCountry {
-  background-color: rgba(188, 197, 255, 0.2) !important;
-
-  &::after {
-    content: '';
-    display: block;
-    width: 26px;
-    height: 18px;
-    background-image: url('/src/assets/Icon_checkmark.svg');
-    margin-left: auto;
-  }
-}
-.css-ibt4eh-MuiPaper-root-MuiAutocomplete-paper {
-  background-color: transparent !important;
-}
-
-#country-select-menu .MuiPaper-root {
-  background-color: rgba(5, 3, 12, 0.3) !important;
-  backdrop-filter: blur(25px);
-  padding: 12px 20px;
-
-  scrollbar-color: white transparent;
-  scrollbar-width: thin;
-
-  max-height: 400px;
-  width: 412.5px;
-
-  background-color: transparent;
-
-  border-radius: 10px;
-  border: none;
-
-  & li:has(> .MuiFormControl-root) {
-    border-bottom: 1px solid #bcc5ff;
-    border-radius: 0;
-    &:hover {
-      background: transparent;
-    }
-  }
-
-  & li {
-    padding: 16px 10px;
-    background: transparent;
-    gap: 9px;
-    font-family: 'Instrument Sans';
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-
-    &:hover {
-      background: rgba(188, 197, 255, 0.2);
-    }
-    &:focus {
-      background: rgba(188, 197, 255, 0.2);
-    }
-  }
-}
-
-#custom-search {
-  padding-left: 40px;
-  &::placeholder {
-    opacity: 1;
-  }
-  &::before {
-    content: '';
-    width: 19px;
-    height: 19px;
-    display: block;
-    background-image: url('/src/assets/Icon_search.svg');
+    position: absolute;
+    inset: 0;
+    background-color: rgb(32 7 127 / 40%); /* Purple with 40% opacity */
+    mix-blend-mode: normal; /* or overlay, soft-light, etc. */
+    pointer-events: none;
+    z-index: 2;
+    clip-path: circle(49% at center);
   }
 }
