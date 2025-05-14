@@ -28,9 +28,8 @@ function Hero() {
           <img
             style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
             src={`${import.meta.env.VITE_SUPABASE_URL
-              }/storage/v1/object/public/images//hero_banner.png`}
-            alt=''
               }/storage/v1/object/public/images//new_hero.png`}
+            alt=''
           />
           <Box
             aria-hidden='true'
