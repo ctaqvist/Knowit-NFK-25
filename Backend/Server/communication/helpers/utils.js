@@ -192,6 +192,7 @@ export function removeConnectionFromUserRoverDict(ws, userRoverDict, clients) {
             if (userClient && userClient.readyState === WebSocket.OPEN) {
                 userClient.send(JSON.stringify({
                     response: "disconnected",
+                    rover_status: "disconnected",
                     message: `Rover ${roverSerial} has disconnected from user ${mappedUserId}.`
                 }));
             }
