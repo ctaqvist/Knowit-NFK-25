@@ -42,6 +42,8 @@ class SliderRowViewModel(val onChange: (Float, Float, Float) -> Unit) {
     var claw: Float = 0f
     private var _oldClaw: Float = claw
 
+    private var lastSentTime = 0L
+
     fun updateShoulder(it: Float) {
         shoulder = it
         _onChange()
@@ -58,13 +60,25 @@ class SliderRowViewModel(val onChange: (Float, Float, Float) -> Unit) {
     }
 
     private fun _onChange() {
-        if (shouldBeSentAgain(shoulder, _oldShoulder) ||
-            shouldBeSentAgain(elbow, _oldElbow) ||
-            shouldBeSentAgain(claw, _oldClaw)) {
+        val now = System.currentTimeMillis()
+        val forceful =
+            isForceful(shoulder, _oldShoulder) ||
+                    isForceful(elbow, _oldElbow) ||
+                    isForceful(claw, _oldClaw)
+
+        val shouldSend =
+            forceful || (now - lastSentTime >= 500 &&
+                    (shouldBeSentAgain(shoulder, _oldShoulder) ||
+                            shouldBeSentAgain(elbow, _oldElbow) ||
+                            shouldBeSentAgain(claw, _oldClaw)))
+
+        if (shouldSend) {
             onChange(shoulder, elbow, claw)
+
             _oldClaw = claw
             _oldElbow = elbow
             _oldShoulder = shoulder
+            lastSentTime = now
         }
     }
 
@@ -77,5 +91,9 @@ class SliderRowViewModel(val onChange: (Float, Float, Float) -> Unit) {
         return newValue || newExtremeValue
     }
 
-
+    private fun isForceful(new: Float, old: Float): Boolean {
+        return (new == 0f && old != 0f) ||
+                (new == 1f && old != 1f) ||
+                (new == -1f && old != -1f)
+    }
 }
