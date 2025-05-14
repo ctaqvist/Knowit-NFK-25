@@ -19,12 +19,13 @@ export class PageService {
       const CACHED_PAGES = await this.cacheManager.get('pages');
 
       // Check when last updated and if it's within the last hour
-      const LAST_UPDATED = await this.getLastUpdated('pages')
+      const LAST_UPDATED = await this.getLastUpdated('pages');
       const MAX_AGE = 60 * 60 * 1000;
 
       if (CACHED_PAGES && isCacheFresh(LAST_UPDATED, MAX_AGE))
         return {
-          data: CACHED_PAGES as Pages};
+          data: CACHED_PAGES as Pages,
+        };
 
       // Get all pages, assign them to ALLPAGES object
       const getAllPages = async () => {
@@ -85,7 +86,7 @@ export class PageService {
   async getReviews(): Promise<ApiResponse<Review[]>> {
     try {
       const CACHED_REVIEWS = await this.cacheManager.get('reviews');
-      
+
       // Check when last updated and if it's within the last hour
       const LAST_UPDATED = await this.getLastUpdated('reviews');
       const MAX_AGE = 60 * 60 * 1000;
@@ -98,7 +99,7 @@ export class PageService {
         content,
         clients(company_name)`);
 
-      if (error) throw error
+      if (error) throw error;
 
       const formattedReview = data?.map((review) => ({
         content: review.content,
@@ -116,15 +117,14 @@ export class PageService {
       return {
         data: null,
         error: error,
-        message: 'Something went wrong when fetching reviews'
-      }
+        message: 'Something went wrong when fetching reviews',
+      };
     }
   }
 
-  async getFile(path_to_folder: string, file: string): Promise<Buffer> {
-    const { data, error } = await this.supabaseService.supabase
-      .storage
-      .from(path_to_folder)
+  async getFile(file: string): Promise<Buffer> {
+    const { data, error } = await this.supabaseService.supabase.storage
+      .from('files')
       .download(file);
 
     if (error || !data) {

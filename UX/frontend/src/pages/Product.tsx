@@ -11,11 +11,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import Spinner from '@/components/Spinner';
 import { featureData } from '@/utils/data/product';
 import Icon from '@/components/Icon';
+import { useNavigate } from 'react-router';
 
 function Product() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSrc, setModalSrc] = useState('');
   const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleClose = () => setModalOpen(false);
 
@@ -56,7 +58,7 @@ function Product() {
         <Typography variant='h2' sx={{ top: 162, justifySelf: 'center', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Main features</Typography>
 
         {featureData.map(feature => (
-          <Stack sx={{ position: 'absolute', minWidth: 150, textWrap: 'pretty', lineHeight: 'normal', gap: '6px', ...feature.style }}>
+          <Stack key={feature.title} sx={{ position: 'absolute', minWidth: 150, textWrap: 'pretty', lineHeight: 'normal', gap: '6px', ...feature.style }}>
             <Stack direction='row' alignItems={'center'} gap={'6px'}>
               <Icon src={`/src/assets/${feature.icon}`} />
               <Typography variant='subheading2'>{feature.title}</Typography>
@@ -359,6 +361,28 @@ function Product() {
             }}
           />
         </Stack>
+      </Stack>
+
+      {/* Get in touch */}
+      <Stack component='section'
+              sx={{
+          backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/object/public/images//get_in_touch.png")`,
+            height: 1160, width: '100%',
+        }}>
+          <Stack
+          sx={{width: '74%', m: 'auto', height: 590}}
+          >
+            <Stack sx={{mb: '64px', gap: '16px'}}>
+              <Typography variant='subheading'>TERRA-X9 Wireless</Typography>
+              <Typography variant='body1' sx={{maxWidth: 738}}>The Terra-X9 wireless tablet control system provides a stable connection with less than 0.1 seconds latency anywhere in the world, intuitive touchscreen navigation, and multi-device collaboration — all protected by fail-safe protocols.</Typography>
+            </Stack>
+            <Stack sx={{mb: '40px', gap: '16px'}}>
+              <Typography variant='subheading' sx={{maxWidth: {xs: 300, md: '100%'}}}>Want to explore further?</Typography>
+              <Typography variant='body1' sx={{maxWidth: {xs: 400, lg: 588}}}>Our team will guide you through the rover’s capabilities, core technologies, and how it fits your mission needs.</Typography>
+            </Stack>
+            <Button variant='contained' onClick={() => navigate('/contact')}>Get in touch</Button>
+          </Stack>
       </Stack>
 
       {/* Gallery */}

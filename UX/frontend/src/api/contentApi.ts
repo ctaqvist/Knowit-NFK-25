@@ -3,11 +3,13 @@ import { Page, Review, ApiResponse, Pages } from '@/types/types';
 
 // Api gets content from the backend
 export const contentApi = {
-  getPages: (): Promise<ApiResponse<Pages>> => api.get('pages'),
-  getPage: (page: string): Promise<ApiResponse<Page>> => api.get(`pages/${page}`),
-  getReviews: (): Promise<ApiResponse<Review[]>> => api.get('pages/reviews'),
-  getFile: (path_to_folder: string, file: string): Promise<Blob> => api.get(`${path_to_folder}/${file}`, {
-    responseType: 'blob'
-  }),
-  sendSupportForm: () => {},
-}
+    getPages: (): Promise<ApiResponse<Pages>> => api.get('pages'),
+    getPage: (page: string): Promise<ApiResponse<Page>> =>
+        api.get(`pages/${page}`),
+    getReviews: (): Promise<ApiResponse<Review[]>> => api.get('pages/reviews'),
+    getFile: (file: string): Promise<Blob> =>
+        api.get(`files/${file}`, {
+            responseType: 'blob',
+        }),
+    sendSupportForm: () => {},
+};
