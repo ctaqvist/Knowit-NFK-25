@@ -22,7 +22,7 @@ import se.terrax9.ui.screens.controller.IconButton
 fun RightSideButtons(navController: NavController){
     Column (
         modifier = Modifier.fillMaxSize()
-            .padding(end = 71.dp, top = 71.dp),
+            .padding(end = 71.dp, top = 71.dp, bottom = 42.dp),
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Top
     ) {

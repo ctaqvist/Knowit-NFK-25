@@ -1,11 +1,12 @@
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,12 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -28,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,6 +66,8 @@ fun GalleryScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
     val gridState = rememberLazyGridState()
+
+    val showFullScreenImage by viewModel.showFullScreenImage.collectAsState()
 
     var refreshing by remember { mutableStateOf(false) }
     val pullRefreshState = rememberPullRefreshState(
@@ -134,7 +138,7 @@ fun GalleryScreen(
                                 state = gridState,
                                 modifier = Modifier
                                     .fillMaxSize(0.8f)
-                                    .padding(start = 71.dp, top = 50.dp, bottom = 50.dp, end = 16.dp),
+                                    .padding(start = 71.dp, top = 50.dp, bottom = 10.dp, end = 16.dp),
                                 verticalArrangement = Arrangement.spacedBy(19.dp),
                                 horizontalArrangement = Arrangement.spacedBy(19.dp),
                                 contentPadding = PaddingValues(0.dp)
@@ -162,13 +166,21 @@ fun GalleryScreen(
                                                 .aspectRatio(1.6F)
                                                 .height(150.dp)
                                                 .width(250.dp)
+                                                .clickable {
+                                                    viewModel.showFullScreenImage()
+                                                    viewModel.setImageToShow(url)
+                                                    Log.e("imageToShow", viewModel.getImageToShow())
+                                                }
                                         )
+
                                     }
                                 }
                             }
                             RightSideButtons(navController = navController)
                         }
-
+                        if(showFullScreenImage){
+                            FullScreenImage(viewModel)
+                        }
                     }
             }
         }
@@ -180,6 +192,67 @@ fun GalleryScreen(
             modifier = Modifier.align(Alignment.TopCenter),
             backgroundColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@SuppressLint("StateFlowValueCalledInComposition")
+@Composable
+fun FullScreenImage(viewModel: GalleryViewModel){
+
+    val imageToShow by viewModel.imageToShow.collectAsState()
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+    ){
+        Log.e("imageToShow2", imageToShow)
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageToShow)
+                .crossfade(true)
+                .build(),
+            contentDescription = "Image from $imageToShow",
+            modifier = Modifier
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            onError = {
+                Log.e("HttpImage", "Error loading image from $imageToShow", it.result.throwable)
+            }
+        )
+        Row (
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .padding(start = 13.dp, top = 13.dp, end = 13.dp, bottom = 13.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            CloseButton (
+                onClick = {
+                    viewModel.closeFullScreenImage()
+                    viewModel.resetImageToShow()
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun CloseButton(onClick: () -> Unit) {
+    Box (
+        Modifier
+            .width(75.dp)
+            .height(75.dp)
+            .background(color = Color(0x9905030C), shape = RoundedCornerShape(size = 7.dp))
+            .padding(start = 13.dp, top = 13.dp, end = 13.dp, bottom = 13.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.x),
+            contentDescription = "Close button",
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { onClick() }
         )
     }
 }

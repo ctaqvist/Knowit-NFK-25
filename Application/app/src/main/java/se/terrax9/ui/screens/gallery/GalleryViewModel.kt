@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import se.terrax9.services.APIService
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,6 +37,9 @@ class GalleryViewModel : ViewModel() {
 
     private val _imageGroups = MutableStateFlow<List<ImageGroup>>(emptyList())
     val imageGroups: StateFlow<List<ImageGroup>> = _imageGroups
+
+    var showFullScreenImage = MutableStateFlow(value = false)
+    var imageToShow = MutableStateFlow(value = "")
 
     init {
         fetchImages()
@@ -113,5 +118,26 @@ class GalleryViewModel : ViewModel() {
         } catch (e: Exception) {
             null
         }
+    }
+
+
+    fun closeFullScreenImage(){
+        showFullScreenImage.value = false
+    }
+
+    fun showFullScreenImage(){
+        showFullScreenImage.value = true
+    }
+
+    fun resetImageToShow(){
+        imageToShow.value = ""
+    }
+
+    fun setImageToShow(image: String){
+        imageToShow.value = image
+    }
+
+    fun getImageToShow(): String{
+        return imageToShow.value
     }
 }
