@@ -15,7 +15,8 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     if (!isRoverConnected(roverId, clients)) {
         ws.send(JSON.stringify({
             response: "error",
-            message: `Rover ${roverId} is not connected to the server.`
+            message: `Rover ${roverId} is not connected to the server.`,
+            rover_status: "disconnected"
         }));
         return;
     }
@@ -24,7 +25,8 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     if (isRoverInUse(roverId, userRoverDict)) {
         ws.send(JSON.stringify({
             response: "error",
-            message: `Rover ${roverId} is already in use by another user.`
+            message: `Rover ${roverId} is already in use by another user.`,
+            rover_status: "disconnected",
         }));
         console.log(`User ${userId} attempted to connect to rover ${roverId}, but it is already in use.`);
         return;
@@ -102,7 +104,7 @@ export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict)
             return;
         }
 
-        
+
         const roverClient = [...clients].find(client => client.token && client.token.roverSerial === roverId);
         if (roverClient && roverClient.readyState === WebSocket.OPEN) {
             roverClient.send(JSON.stringify({
