@@ -4,9 +4,10 @@ import java.util.Properties
 fun loadEnvProperties(): Properties {
     val props = Properties()
     val envFile = rootProject.file(".env")
-    if (envFile.exists()) {
-        props.load(envFile.inputStream())
+    if (!envFile.exists()) {
+        error(".env file is missing in the root project directory. Please create one with required keys.")
     }
+    props.load(envFile.inputStream())
     return props
 }
 

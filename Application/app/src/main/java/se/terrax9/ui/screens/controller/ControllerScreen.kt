@@ -51,11 +51,11 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
         }
     }
 
-    Column {
-        Spacer(modifier = Modifier.padding(vertical = 60.dp))
-        Text("serverStatus: ${serverStatus.value}", color = Color.White, fontSize = 16.sp)
-        Text("roverStatus: ${roverStatus.value}", color = Color.White, fontSize = 16.sp)
-    }
+//    Column {
+//        Spacer(modifier = Modifier.padding(vertical = 60.dp))
+//        Text("serverStatus: ${serverStatus.value}", color = Color.White, fontSize = 16.sp)
+//        Text("roverStatus: ${roverStatus.value}", color = Color.White, fontSize = 16.sp)
+//    }
 
     val errorFlow = viewModel.errorMessage
     val context = LocalContext.current
