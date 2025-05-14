@@ -53,7 +53,7 @@ light up the terrain and claw area.`,
     style: {
       left: '50%',
       transform: 'translateX(-50%)',
-      top: 820.5,
+      top: 819,
       maxWidth: 340,
     },
   },

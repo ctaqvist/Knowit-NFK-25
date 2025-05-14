@@ -22,37 +22,25 @@ function Hero() {
         // Banner Section
         component='section'
         id='hero_banner'
-        sx={{ height: 1000, width: '100%' }}
+        sx={{ minHeigth: 1000, width: '100vw', position: 'relative' }}
       >
-        <Box sx={{ position: 'relative', height: '100%' }}>
-          <img
-            style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
-            src={`${import.meta.env.VITE_SUPABASE_URL
-              }/storage/v1/object/public/images//new_hero.png`}
-            alt=''
-          />
-          <Box
-            aria-hidden='true'
-            sx={{
-              height: 150,
-              width: '100%',
-              background: 'linear-gradient(0deg, #05030C, rgba(0,0,0,0))',
-              position: 'absolute',
-              bottom: 0,
-            }}
-          />
-        </Box>
+        <img
+          style={{ width: '100%' }}
+          src={`${import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/object/public/images//new_hero.png`}
+          alt=''
+        />
 
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: { xs: 'center', sm: 'center', md: 'start' },
+            alignItems: { xs: 'center', md: 'start' },
             margin: '0 auto',
             width: 'clamp(200px, 80vw, 1276px)',
-            textAlign: { xs: 'center', sm: 'center', md: 'start' },
+            textAlign: { xs: 'center', md: 'start' },
             position: 'absolute',
-            top: 479,
+            top: 375,
             right: 'clamp(5vw, 10vw, 321px)',
             left: '11vw'
           }}

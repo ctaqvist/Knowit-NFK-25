@@ -49,14 +49,11 @@ function Product() {
       {/* Feature section */}
       <Stack
         component={'section'}
-        sx={{
-          height: 1085,
-          backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
-            }/storage/v1/object/public/images//feature_section.png")`,
-          backgroundPositionX: 'center',
-          backgroundSize: 'cover',
-        }}
+        sx={{ minHeight: 1085 }}
       >
+        <Box component={'img'}
+          src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images//feature_section.png`}
+        />
         <Typography
           variant='h2'
           sx={{
@@ -105,7 +102,7 @@ function Product() {
           alignItems: 'center',
           backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
             }/storage/v1/object/public/images//ivana-cajina-asuyh-_ZX54-unsplash%20(1)%201-3%202.png")`,
-          backgroundSize: 'contain',
+          backgroundSize: 'cover',
           position: 'relative',
         }}
       >
@@ -399,13 +396,14 @@ function Product() {
       <Stack
         component='section'
         sx={{
-          backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
-            }/storage/v1/object/public/images//get_in_touch.png")`,
-          height: 1160,
-          width: '100%',
+          minHeight: 1160,
+          position: 'relative'
         }}
       >
-        <Stack sx={{ width: '74%', m: 'auto', height: 590 }}>
+        <Box component='img' src={`${import.meta.env.VITE_SUPABASE_URL
+          }/storage/v1/object/public/images//get_in_touch.png`}
+          sx={{ objectFit: 'cover', height: '100%', }} />
+        <Stack sx={{ width: '74%', m: 'auto', height: 590, position: 'absolute', top: 294, left: 319 }}>
           <Stack sx={{ mb: '64px', gap: '16px' }}>
             <Typography variant='subheading'>TERRA-X9 Wireless</Typography>
             <Typography
