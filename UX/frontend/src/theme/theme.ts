@@ -236,6 +236,7 @@ export const theme = createTheme({
             },
             { props: { variant: 'contained', size: 'xsmall' }, style: {
               padding: '12px 16px', fontSize: 14,
+              borderRadius: 10,
               '&:hover': {boxShadow: 'none'},
               '&:focus': { boxShadow: 'none'}
             } },

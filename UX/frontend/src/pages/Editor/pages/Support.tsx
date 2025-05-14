@@ -253,8 +253,8 @@ function Support() {
               sx={{ mr: '20px' }}
               onClick={FAQ && FAQ.isNew ? handleAddFAQ : handleUpdateFAQ}
             >
-              {(!FAQ || FAQ.isNew) && 'Save question'}
-              {FAQ && !FAQ.isNew && 'Update'}
+              {(!FAQ || FAQ.isNew) && 'Add Question'}
+              {FAQ && !FAQ.isNew && 'Save Changes'}
             </Button>
             <Button
               onClick={() => setFAQ(null)}
