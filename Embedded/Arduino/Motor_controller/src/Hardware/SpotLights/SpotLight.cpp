@@ -2,15 +2,14 @@
 #include <Arduino.h>
 #include "../HardWareConfig.h"
 
-
-//Funktion som sätter på SpotLights
-void TurnSpotLightOn ()
+// Funktion som sätter på SpotLights
+void TurnSpotLightOn()
 {
   digitalWrite(SPOTLIGHTS_PIN, HIGH);
 }
 
-//Funktion som stänger av SpotLights
-void TurnSpotLightOff ()
+// Funktion som stänger av SpotLights
+void TurnSpotLightOff()
 {
-  digitalWrite( SPOTLIGHTS_PIN, LOW);
+  digitalWrite(SPOTLIGHTS_PIN, LOW);
 }

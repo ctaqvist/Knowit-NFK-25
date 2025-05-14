@@ -12,4 +12,8 @@ const int PWM_AB = 3;
 const int PWM_CD = 5;  
 
 const int SPOTLIGHTS_PIN = 12; 
+
+const int BUZZER_PIN = 13;
+// Analog pin for battery voltage reading
+const int BATTERY_PIN = A0; 
 #endif

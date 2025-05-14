@@ -1,7 +1,7 @@
 import json
 import pytest
 from unittest.mock import MagicMock, patch
-from RaspberryPI.commands.rover.forwarder import forward_joystick_to_arduino
+from commands.rover.rover_forwarder import forward_joystick_to_arduino
 
 
 # Helper to call forwarder with patched arduino.send

@@ -1,6 +1,7 @@
 import { CacheInterceptor } from '@nestjs/cache-manager';
-import { Controller, Get, Param, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { PageService } from 'src/services/pages.service';
+import { ContactForm } from 'src/types/types';
 
 // These are the routes for the pages
 @Controller('pages')
@@ -17,9 +18,21 @@ export class PageController {
   getPage(@Param('page') page: string) {
     return this.pageService.getPage(page)
   }
+
+  @Get('booked-times/:date')
+  getBookedTimes(@Param('date') date: string) {
+    return this.pageService.getBookedTimes(date)
+  }
   
   @Get() 
    getPages() {
      return this.pageService.getPages()
+   }
+
+   @Post('booked-times') 
+   createBooking(
+    @Body() formData: ContactForm
+   ) {
+    return this.pageService.createBooking(formData)
    }
 }

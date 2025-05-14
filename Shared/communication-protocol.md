@@ -12,15 +12,39 @@ Each communication must specify the roverID for the `roverID` key. The standard 
 
 ### Forceful commands
 The following commands are forceful and the sender fully controls the rovers response.
-
-`PIC` - Takes a picture  
 `START-STREAM` - Connects to server and start the stream  
-`STOP-STREAM` - Stop streaming and close the connection to server  
-`TANKTURN` - Perform a tank turn  
-`HEADLIGHT_ON` - Turn on headlights  
-`HEADLIGHT_OFF` - Turn off headlights  
-`FWD` - Move the rover forward
-`STOP` - Stop all rover movement
+`STOP-STREAM` - Stop streaming and close the connection to server    
+`LIGHTS_ON` - Turn on headlights  
+`LIGHTS_OFF` - Turn off headlights  
+
+All commands should be sent in this format:
+```
+{
+  "rover_id": -roverID-,
+  "command": -command-
+}
+```
+
+## Take a picture
+`PIC` - Takes a pictures, sends a response in the following way:
+**Example response for `PIC` from Rasberry PI**:
+```
+{
+  "rover_id:" -roverID-,
+  "type": "pic-response",
+  "success": "true",
+  "image_data": -base64data-
+}
+```
+or
+```
+{
+  "rover_id:" -roverID-,
+  "type": "pic-response",
+  "success": "false"
+}
+```
+
 
 ## Reactive commands
 
@@ -30,7 +54,7 @@ The following commands are reactive and the sender passes ownership to the rover
 
 ```
 {
-    "roverID": -roverID-,
+    "rover_id": -roverID-,
     "steer": {
         "x": -xValue-,
         "y": -yValue-
@@ -38,14 +62,35 @@ The following commands are reactive and the sender passes ownership to the rover
 }
 ```
 
-### Control the arm
+### Control the arm (shoulder, elbow and claw)
+The arm currently has 3 axis, each axis is controlled by a value in range [-1:1].
 
+For example: 
 ```
 {
-    "roverID": -roverID-,
-    "steer-arm": [
-        "x": -xValue-,
-        "y": -yValue-
-    ]
+    "rover_id": -roverID-,
+    "steer_arm": {
+        "shoulder": -value-,
+        "axis": -value-,
+        "claw": -value-,
+    }
 }
 ```
+
+### Battery Protection
+
+- **battery_level**  
+  A float between 0.0 (empty) and 1.0 (fully charged) indicating the current battery level.
+
+- **warning_signal**  
+  A boolean where `true` means the battery is running low.
+
+- **sleep_mode**  
+  A boolean where `true` means the rover will shut down because the battery is empty.
+
+```json
+{
+  "battery_level": 0.75,
+  "warning_signal": false,
+  "sleep_mode": false
+}

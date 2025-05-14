@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import se.terrax9.R
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
@@ -33,12 +34,15 @@ import kotlin.math.sin
 @Composable
 fun JoyStick(
     isFixed: Boolean = false,
-    onMove: (x: Float, y: Float) -> Unit = { _, _ -> }
+    getCommand: (Float, Float) -> String = { x, y -> "$x, $y" },
+    onMove: (String) -> Unit = { _ -> }
 ) {
+    val viewModel = JoyStickViewModel(getCommand, onMove)
+
     val baseSize = 240.dp
     val knobSize = 140.dp
 
-    // Visual offset defines the maximun distance the joystick can be dragged before being capped.
+    // Visual offset defines the maximum distance the joystick can be dragged before being capped.
     // This value is used to visually cap the movement of the joystick
     val maxVisualOffset = with(LocalDensity.current) { ((baseSize - knobSize) / 1f).toPx() }
 
@@ -66,7 +70,7 @@ fun JoyStick(
                     onDragEnd = {
                         joyStickOffset = Offset.Zero
                         rawOffset = Offset.Zero
-                        onMove(0f, 0f)
+                        viewModel.onMove(0f, 0f)
                     },
                     onDrag = { change, dragAmount ->
                         // Update fingerOffset
@@ -78,15 +82,22 @@ fun JoyStick(
 
                         // Update the offset of the joy stick from center
                         joyStickOffset = if (isFixed) {
-                            rawOffset.clampWithin(maxVisualOffset).fixToMainAxle()
+                            rawOffset
+                                .clampWithin(maxVisualOffset)
+                                .fixToMainAxle()
                         } else clampedVisualOffset
 
                         // Normalize offset and emit onMove
                         val normalizedOffset = clampedVisualOffset.normalize(maxActualOffset)
                         // If offset is less than deadzone, always send 0, 0
                         if (normalizedOffset.getDistance() > deadZoneOffset) {
-                            onMove(normalizedOffset.x, -normalizedOffset.y)
-                        } else onMove(0f, 0f)
+                            if (isFixed) {
+                                val offset = normalizedOffset.fixToMainAxle()
+                                viewModel.onMove(offset.x, -offset.y)
+                            } else {
+                                viewModel.onMove(normalizedOffset.x, -normalizedOffset.y)
+                            }
+                        } else viewModel.onMove(0f, 0f)
                     }
                 )
             },

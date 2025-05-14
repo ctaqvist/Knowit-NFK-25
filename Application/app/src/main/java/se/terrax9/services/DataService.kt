@@ -16,7 +16,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import se.terrax9.ui.screens.test.Commands
 import kotlin.math.absoluteValue
 
 val client = HttpClient {
@@ -78,7 +77,7 @@ class DataService(private val uri: String = "") {
                 receiveJob = kotlinx.coroutines.GlobalScope.launch {
                     for (frame in session.incoming) {
                         if (frame is Frame.Text) {
-                            println("Received: ${frame.readText()}")
+                            //println("Received: ${frame.readText()}")
                         } else {
                             println("Received message that wasn't text.")
                         }
@@ -105,32 +104,10 @@ class DataService(private val uri: String = "") {
         }
     }
 
-    private var lastX = 0f
-    private var lastY = 0f
-    suspend fun sendSteer(x: Float, y: Float) = withContext(Dispatchers.IO) {
-
-        // If X or Y has a new extreme value it must always be updated
-        val newMaxValue = (x.absoluteValue == 1f && lastX.absoluteValue != 1f) || (y.absoluteValue == 1f && lastY.absoluteValue != 1f)
-        val newMinValue = (x == 0f && lastX != 0f) || (y == 0f && lastY != 0f)
-        val newExtremeValue = newMinValue || newMaxValue
-
-        // Only update X and Y if at least one of them has increased 0.02 since last transfer
-        val newValue = (lastX - x).absoluteValue > 0.02 || ((lastY - y).absoluteValue > 0.02)
-
-        if (newExtremeValue || newValue) {
-            // Send new data message
-            //sendMessage(Commands.steer(x, y))
-            sendMessage(Commands.arm(x, y))
-
-            // Update last X and Y
-            lastX = x
-            lastY = y
-        }
-    }
-
     suspend fun sendMessage(message: String) {
         ensureOpenConnection()
         try {
+            println("Sending a new message of: $message")
             socket?.send(message)
         } catch (e: Exception) {
             println("Failed to send message: ${e.localizedMessage}")

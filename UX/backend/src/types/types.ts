@@ -116,3 +116,28 @@ export interface SupportPage {
     }[];
   }[],
 }
+export interface ContactForm {
+  firstName: string,
+  surName: string,
+  companyName: string,
+  email: string,
+  telephone: Telephone,
+  businessField: string,
+  message: string,
+  booking: null | {
+    date: string
+    time: string
+  }
+}
+
+type Telephone = CountryType & {
+  number: string
+}
+
+export interface CountryType {
+  code: string;
+  label: string;
+  phone: string;
+  suggested?: boolean;
+  isSearchField?: boolean
+}

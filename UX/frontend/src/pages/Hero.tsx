@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { useContent } from '../hooks/useContent';
 import { Marquee } from '@/components/magicui/marquee';
 import { ReviewCard } from '@/components/ReviewCard';
@@ -28,6 +28,8 @@ function Hero() {
           <img
             style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
             src={`${import.meta.env.VITE_SUPABASE_URL
+              }/storage/v1/object/public/images//hero_banner.png`}
+            alt=''
               }/storage/v1/object/public/images//new_hero.png`}
           />
           <Box
@@ -266,7 +268,7 @@ function Hero() {
               the rover’s core technologies, mission capabilities, and how it
               fits into the future of space mobility.
             </Typography>
-            <Button variant='contained'>Get in touch</Button>
+            <Link variant='button' href='/contact'>Get in touch</Link>
           </Box>
         </Box>
       </Box>
