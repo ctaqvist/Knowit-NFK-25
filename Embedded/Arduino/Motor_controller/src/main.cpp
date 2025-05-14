@@ -19,6 +19,6 @@ void setup()
 void loop()
 {
   commandHandler.listen();
-  CheckBatteryAndWarn();
-  SendBatteryStatusToServer();
+  //CheckBatteryAndWarn();
+  //SendBatteryStatusToServer();
 }
