@@ -41,7 +41,11 @@ val client = HttpClient {
 // It acts as a domain layer and is not bound by android context
 // As of ticket 145, we will connect and suspend on the UI thread meaning that the UI freezes as we are connecting to the server.
 // This due to a bug where we connect many times and create duplicate listeners
-class DataService(private val uri: String = "", val onServerStatusChange: (Boolean) -> Unit = {}, val onRoverStatusChange: (Boolean) -> Unit ={}) {
+class DataService(
+    private val uri: String = "",
+    val onServerStatusChange: (Boolean) -> Unit = {},
+    val onRoverStatusChange: (Boolean) -> Unit = {}
+) {
     private var receiveJob: Job? = null
 
     private var socket: WebSocketSession? = null
@@ -74,7 +78,7 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
                 return
             }
 
-            println ("Trying to connect to server...")
+            println("Trying to connect to server...")
             println("Usertoken is: ${UserData.token}")
             runBlocking {
                 socket = client.webSocketSession {
@@ -91,7 +95,7 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
             updateIsActive()
 
             // Send initial message
-            socket?.send("It is me i'm the problem it's me")
+            //socket?.send("It is me i'm the problem it's me")
 
             // Listen to incoming messages
             socket?.let { session ->
@@ -146,6 +150,10 @@ class DataService(private val uri: String = "", val onServerStatusChange: (Boole
                 println("Failed to connect to rover!")
                 UserData.selectedRoverID = null
                 onRoverStatusChange(false)
+                runBlocking {
+                    socket?.close()
+                    receiveJob?.cancel()
+                }
             }
 
             "connected" -> {

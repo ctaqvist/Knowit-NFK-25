@@ -1,5 +1,6 @@
 package se.terrax9.ui.screens.controller
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,6 +56,14 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
         Text("serverStatus: ${serverStatus.value}", color = Color.White, fontSize = 16.sp)
         Text("roverStatus: ${roverStatus.value}", color = Color.White, fontSize = 16.sp)
     }
+
+    val errorFlow = viewModel.errorMessage
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        errorFlow.collect { msg ->
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+        }
+    }
 }
 
 @Composable
@@ -70,21 +81,39 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
     ) {
         // Left side
         Column(
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
         ) {
+            // Spacer between buttons
+            Spacer(modifier = Modifier.height(24.dp))
 
-            AppButton(if (serverStatus.value == ControllerViewModel.ServerStatus.CONNECTED) "DISCONNECT" else "CONNECT") {
+            // Connect/Disconnect button
+            AppButton(
+                text = if (serverStatus.value == ControllerViewModel.ServerStatus.CONNECTED) "DISCONNECT" else "CONNECT"
+            ) {
                 viewModel.toggleConnect()
             }
 
-            Text(if (isLighted) "ON" else "OFF")
-            IconButton(
-                text = "Lights",
-                iconRes = R.drawable.lights,
-                onClick = viewModel::toggleLights
-            )
+            // Spacer between buttons
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Lights section
+            Box(contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(if (isLighted) "ON" else "OFF")
+                    IconButton(
+                        text = "Lights",
+                        iconRes = R.drawable.lights,
+                        onClick = viewModel::toggleLights
+                    )
+                }
+
+                // Overlay when disconnected
+                if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+                    DisableBlocker()
+                }
+            }
         }
 
         // Center
@@ -156,15 +185,17 @@ fun BottomDashboard(viewModel: ControllerViewModel) {
 
         // Semi-transparent overlay when disconnected
         if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.5f))
-                    .clickable {  }
-            )
+            DisableBlocker()
         }
     }
+}
 
-
-
+@Composable
+fun DisableBlocker() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f))
+            .pointerInput(Unit) {} // Intercepts and blocks all touch input
+    )
 }
