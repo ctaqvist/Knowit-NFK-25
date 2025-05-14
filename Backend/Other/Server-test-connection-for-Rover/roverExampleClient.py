@@ -7,7 +7,7 @@ from datetime import datetime
 
 ROVER_TOKEN_WITH_INFINITE_TIME = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb3ZlcklkIjoxLCJyb3ZlclNlcmlhbCI6InJvdmVyLTAwMSIsImlhdCI6MTc0NjUxMzI2Mn0.7GJFXH6KjS3QPTchEq8eSwRE9oePc04jzHzNvh43eII"
 
-URI = f"ws://localhost:8080?token={ROVER_TOKEN_WITH_INFINITE_TIME}"
+URI = f"ws://terrax9.se:8081?token={ROVER_TOKEN_WITH_INFINITE_TIME}"
 
 # Used to get messages from terminal
 
