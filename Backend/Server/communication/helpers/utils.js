@@ -7,12 +7,49 @@ export function sendPong(ws) {
 
 // Already checked that parsed has connect command
 // Dictionary that contatins if a user is connected to a rover
+
+export function tryToConnectedToRover(parsed, userId, userRoverDict, clients) {
+    // Use get userIdFromWebsokcet and pass in here
+    // Get the message and send it using sendCustomeResponse
+    const roverId = getRoverIdFromParsedMessage(parsed);
+
+    if(!roverIsConnected(roverId, clients)){
+        return {
+            response: "error",
+            message: `Rover ${roverId} is not connected to the server.`
+        };
+    }
+    
+    if(RoverIsInUse(roverId, userRoverDict)){
+        console.log(`User ${userId} attempted to connect to rover ${roverId}, but it is already in use.`);
+        return {
+            response: "error",
+            message: `Rover ${roverId} is already in use by another user.`
+        };
+    }
+    
+    if(userIsConnectedToRover(userId, userRoverDict)){
+        return {
+            response: 'error',
+            rover_status: "disconnected",
+            message: `User ${userId} is already connected to a rover.`
+        };
+    }
+
+    establishConnection(userRoverDict, userId, roverId);
+    return {
+        response: "success",
+        rover_status: "connected",
+        message: `Connected to rover ${roverId}.`
+    };
+}
+
 export function connectToRover(parsed, userRoverDict, ws, clients) {
     const userId = ws.token.userId;
     const roverId = parsed.rover_id;
 
     // 1. Check if the rover is connected to the server (otherwise send error and throw return)
-    if (!isRoverConnected(roverId, clients)) {
+    if (!roverIsConnected(roverId, clients)) {
         ws.send(JSON.stringify({
             response: "error",
             message: `Rover ${roverId} is not connected to the server.`
@@ -21,7 +58,7 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     }
 
     // 2. Check if the rover is already in use (otherwise send error and throw return)
-    if (isRoverInUse(roverId, userRoverDict)) {
+    if (RoverIsInUse(roverId, userRoverDict)) {
         ws.send(JSON.stringify({
             response: "error",
             message: `Rover ${roverId} is already in use by another user.`
@@ -31,12 +68,12 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     }
 
     //3. Check if user is already connected to a rover (otherwise send error and throw return)
-    const userIsConncted = isUserConnectedToRover(userId, userRoverDict);
+    const userIsConncted = userIsConnectedToRover(userId, userRoverDict);
     console.log("user is connected: ", userIsConncted)
-    if (isUserConnectedToRover(userId, userRoverDict)) {
+    if (userIsConnectedToRover(userId, userRoverDict)) {
         console.log("User with id ", userId, " is already connected to rover: ", userRoverDict[userId])
         ws.send(JSON.stringify({
-            response: "error",
+            response: 'error',
             rover_status: "disconnected",
             message: `User ${userId} is already connected to a rover.`
         }));
@@ -45,30 +82,27 @@ export function connectToRover(parsed, userRoverDict, ws, clients) {
     }
 
     // Check if the user is already connected to a rover
-    if (!userRoverDict[userId]) {
-        userRoverDict[userId] = roverId;
-        console.log("User with id ", userId, " is connected to rover: ", roverId)
-        console.log(userRoverDict)
-        ws.send(JSON.stringify({
-            response: "success",
-            rover_status: "connected",
-            message: `Connected to rover ${roverId}.`
-        }));
-    }
+    userRoverDict[userId] = roverId;
+    console.log("User with id ", userId, " is connected to rover: ", roverId)
+    ws.send(JSON.stringify({
+        response: "success",
+        rover_status: "connected",
+        message: `Connected to rover ${roverId}.`
+    }));
 }
 
 // Checks if a rover is already assigned to a user
-function isRoverInUse(roverId, userRoverDict) {
+function RoverIsInUse(roverId, userRoverDict) {
     return Object.values(userRoverDict).includes(roverId);
 }
 
 // Check if user is already connected to a rover
-function isUserConnectedToRover(userId, userRoverDict) {
+function userIsConnectedToRover(userId, userRoverDict) {
     return Object.keys(userRoverDict).includes(userId.toString());
 }
 
 //Check if a rover with a given id is connected to server
-function isRoverConnected(roverId, clients) {
+function roverIsConnected(roverId, clients) {
     const roverClient = [...clients].find(client => client.token && client.token.roverSerial === roverId);
     return roverClient && roverClient.readyState === WebSocket.OPEN;
 }
@@ -221,4 +255,28 @@ export function disconnectFromRover(ws, parsed, userRoverDict) {
             message: `User ${userId} is not connected to rover ${roverId}.`
         }));
     }
+}
+
+/* New utils */
+
+export function sendCustomResponse(ws, rover_status, response, message) {
+    const res = {};
+    if (rover_status !== null && rover_status !== undefined) res.rover_status = rover_status;
+    if (response !== null && response !== undefined) res.response = response;
+    if (message !== null && message !== undefined) res.message = message;
+    ws.send(JSON.stringify(res));
+}
+
+
+export function getUserIdfromWebSocket(ws) {
+    return ws.token.userId;
+}
+
+export function getRoverIdFromParsedMessage(parsed) {
+    return parsed.rover_id;
+}
+
+export function establishConnection(userRoverDict, userId, roverId){
+    userRoverDict[userId] = roverId;
+    console.log("User with id ", userId, " is connected to rover: ", roverId)
 }
