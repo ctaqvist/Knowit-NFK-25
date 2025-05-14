@@ -121,6 +121,10 @@ export function forwardMessageToAllClients(parsed, clients, ws) {
     })
 }
 
+export function forwardMessageToTargetRover(parsed, ){
+
+}
+
 // Send message to specific client which is specified in the message
 export function forwardMessageToTargetClient(parsed, clients, ws, userRoverDict) {
     // Determine sender type
@@ -275,6 +279,14 @@ export function getUserIdfromWebSocket(ws) {
     return ws.token.userId;
 }
 
+export function senderIsRover(ws){
+    return ws.token && ws.token.roverSerial;
+}
+
+export function senderIsUser(ws){
+    const senderIsUser = ws.token && ws.token.userId;
+} 
+
 export function getRoverIdFromParsedMessage(parsed) {
     return parsed.rover_id;
 }
@@ -282,4 +294,8 @@ export function getRoverIdFromParsedMessage(parsed) {
 export function establishConnection(userRoverDict, userId, roverId){
     userRoverDict[userId] = roverId;
     console.log("User with id ", userId, " is connected to rover: ", roverId)
+}
+
+export function getMappedRoverId(userId, userRoverDict){
+    return userRoverDict[userId]
 }
