@@ -1,7 +1,7 @@
 # How to connect to server
 
-(From ticket 43)
-Last changed: 2025-04-14 
+(From ticket 242)
+Last changed: 2025-05-13
 
 ## General
 
@@ -14,7 +14,35 @@ Streaming outbound port 9000 (with websocket, wss)
 
 ## How rover connects to the server
 
-For communication the rover should connect with Websocket on port 80 with wss.
+Rover should send a POST request to:
+
+https://v2.terrax9.se/rover/login
+
+A JSON like this:
+```
+{
+    "roverSerial": "rover-001",
+    "password": "1234"
+}
+```
+Note that "rover-001" is just a development example in the database. For different rovers, the serial and the password will be different.
+
+If the credentials are correct, the rover will receive a response like this:
+```
+{
+    "token": "a token"
+}
+```
+otherwise a json response with status 401 like this:
+```
+{
+    "message": "Invalid credentials"
+}
+```
+Later, when the rover wants to connect to the WebSocket, the token should be added to the WebSocket query like this:
+```
+wss://v2.terrax9.se:PORT?token=tokenThatYouGotBefore
+```
 
 ## How app connects to the server
 

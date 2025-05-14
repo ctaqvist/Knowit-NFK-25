@@ -21,8 +21,6 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 
-logging.debug("=== Rover system is starting up ===")
-
 def run():
     logging.debug("Running main() function")
 
