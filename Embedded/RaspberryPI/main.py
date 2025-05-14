@@ -1,6 +1,7 @@
 import sys
 import os
 import logging
+import asyncio
 from config.settings import IS_RPI
 
 if IS_RPI:
@@ -20,26 +21,11 @@ logging.basicConfig(
     handlers=[logging.StreamHandler()]
 )
 
-logging.debug("=== Rover system is starting up ===")
-try:
-    import asyncio
-    from communication.websocket_communication import listen_to_server
-    from communication.serial_helper import arduino
+def run():
+    logging.debug("Running main() function")
 
-
-    def run():
-        logging.debug("Running main() function")
-        if IS_RPI:
-            servo_module.servo1, servo_module.servo2, servo_module.servo3 = (
-                servo_module.setup_pins()
-            )
-        arduino.connect()
-        logging.debug("Arduino connected.")
-        asyncio.run(listen_to_server())
-        logging.debug("WebSocket server started.")
-        
-    if __name__ == "__main__":
-        run()
+    if IS_RPI:
+        servo_module.setup_pins()
 
     arduino.connect()
     logging.debug("Arduino connected.")
