@@ -1,6 +1,7 @@
 package se.terrax9
 
 import GalleryScreen
+import SettingsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +22,7 @@ import se.terrax9.ui.theme.Terrax9Theme
 object Routes {
     val Dashboard = "dashboard"
     val Gallery = "gallery"
+    val Settings = "settings"
 }
 
 class MainActivity : ComponentActivity() {
@@ -42,6 +44,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Routes.Gallery) {
                                 GalleryScreen()
+                            }
+                            composable(Routes.Settings) {
+                                SettingsScreen(navController)
                             }
                         }
                     }

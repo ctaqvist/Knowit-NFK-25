@@ -11,17 +11,23 @@ object Commands {
     }
 
     private fun createSteer(x: Float, y: Float): String {
-        return """{ "rover_id": "$roverId", "steer": {"x": "${String.format(Locale.ROOT, "%.2f", x)}", 
-            |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
+        return """{ "rover_id": "$roverId", "steer": {"x": "${
+            String.format(
+                Locale.ROOT,
+                "%.2f",
+                x
+            )
+        }", 
+            |"y": "${String.format(Locale.ROOT, "%.2f", y)}"} }""".trimMargin()
     }
 
-    private fun createArm(x: Float, y: Float): String {
-        return """{ "rover_id": "$roverId", "steer_arm": {"x": "${String.format(Locale.ROOT, "%.2f", x)}", 
-            |"y": "${String.format(Locale.ROOT,"%.2f", y)}"} }""".trimMargin()
-    }
+    private fun createSteerArm(_shoulder: Float, _elbow: Float, _claw: Float): String {
 
-    private fun createClaw(x: Float, y: Float): String {
-        return """{ "rover_id": "$roverId", "claw_data": { "claw": "${String.format(Locale.ROOT,"%.2f", y)}" }}""".trimMargin()
+        val shoulder = String.format(Locale.ROOT, "%.2f", _shoulder)
+        val elbow = String.format(Locale.ROOT, "%.2f", _elbow)
+        val claw = String.format(Locale.ROOT, "%.2f", _claw)
+
+        return """{ "rover_id": "$roverId", "steer_arm": {"shoulder": "$shoulder", "axis": "$elbow", "claw": "$claw"}}""".trimMargin()
     }
 
     // Use these functions to create commands
@@ -33,8 +39,8 @@ object Commands {
     fun startHeadlights(): String = createCommand(Command.START_HEADLIGHTS)
     fun closeHeadlights(): String = createCommand(Command.CLOSE_HEADLIGHTS)
     fun steer(x: Float, y: Float): String = createSteer(x, y)
-    fun arm(x: Float, y: Float): String = createArm(x, y)
-    fun claw(x: Float, y: Float): String = createClaw(x, y)
+    fun steerArm(shoulder: Float, elbow: Float, claw: Float): String =
+        createSteerArm(shoulder, elbow, claw)
 
     private enum class Command(val value: String) {
         // Used enums to prevent errors caused by typos or inconsistent string

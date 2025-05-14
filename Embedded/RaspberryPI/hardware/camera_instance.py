@@ -1,5 +1,4 @@
 # camera_instance.py
-
 from picamera2 import Picamera2
 
 _picam2 = None

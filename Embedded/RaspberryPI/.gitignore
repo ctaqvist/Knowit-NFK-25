@@ -31,5 +31,5 @@ Thumbs.db
 # Python/
 .vscode/
 
-# Ignore picamera test dir if needed
+
 Embedded/picamera2/

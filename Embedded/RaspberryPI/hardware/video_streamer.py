@@ -1,13 +1,11 @@
-from picamera2 import Picamera2
+
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 import subprocess
 import os
 import time
-
 from hardware.camera_instance import get_camera_instance, release_camera_instance
 
-# Global flags
 encoder = H264Encoder(bitrate=2000000)
 output_path = "/tmp/stream.h264"
 ffmpeg_process = None
@@ -32,6 +30,7 @@ def wait_until_camera_free(timeout=3):
         time.sleep(0.1)
 
     return False
+
 
 def start_video_stream():
     global is_streaming, ffmpeg_process
@@ -72,6 +71,7 @@ def start_video_stream():
         time.sleep(0.1)
 
     print("Launching ffmpeg to SRT endpoint...")
+
     ffmpeg_process = subprocess.Popen([
         "ffmpeg",
         "-re",
@@ -98,7 +98,6 @@ def stop_video_stream():
 
     print("Stopping video stream...")
 
-    # Terminate the FFmpeg subprocess
     if ffmpeg_process:
         ffmpeg_process.terminate()
         ffmpeg_process.wait()
@@ -118,3 +117,4 @@ def stop_video_stream():
     is_streaming = False
     print("Stream stopped.")
     time.sleep(0.3)  # Give the OS a short delay to finalize camera release
+

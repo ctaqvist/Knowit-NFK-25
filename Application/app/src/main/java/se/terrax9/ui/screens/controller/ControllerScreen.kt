@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,6 +19,7 @@ import androidx.navigation.NavController
 import se.terrax9.R
 import se.terrax9.Routes
 import se.terrax9.services.Commands
+import se.terrax9.ui.theme.LexendExa
 
 @Composable
 fun ControllerScreen(navController: NavController) {
@@ -95,6 +97,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
                 text = "Settings",
                 iconRes = R.drawable.settings
             ) {
+                navController.navigate(Routes.Settings)
             }
         }
     }
@@ -120,16 +123,11 @@ fun BottomDashboard(viewModel: ControllerViewModel) {
                 iconRes = R.drawable.camera,
                 onClick = viewModel::takePhoto
             )
-            JoyStick(
-                onMove = viewModel::sendCommand,
-                getCommand = Commands::arm,
-                isFixed = true
-            )
-            JoyStick(
-                onMove = viewModel::sendCommand,
-                getCommand = Commands::claw,
-                isFixed = true
-            )
+
+            SliderRow { x, y, z ->
+                viewModel.sendCommand(Commands.steerArm(x, y, z))
+            }
+
         }
     }
 }

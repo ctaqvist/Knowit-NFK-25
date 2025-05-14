@@ -7,8 +7,6 @@ from hardware.camera_instance import get_camera_instance, release_camera_instanc
 from hardware.video_streamer import is_streaming, stop_video_stream, start_video_stream
 from hardware.video_streamer import *
 
-
-
 PICTURE_DIR = "./pictures"
 
 def take_picture():

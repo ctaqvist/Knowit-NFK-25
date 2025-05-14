@@ -4,7 +4,7 @@ from .rover_lights import *
 from .rover_forwarder import *
 from config.settings import IS_RPI
 if IS_RPI:
-    from commands.arm.arm_forwarder import forward_arm, forward_claw
+    from commands.arm.arm_forwarder import forward_arm
 
 async def process_command(websocket, data):
     command = data.get("command")
@@ -16,10 +16,6 @@ async def process_command(websocket, data):
     elif "steer_arm" in data:
         if IS_RPI:
             await forward_arm(data["steer_arm"], websocket)
-        return
-    elif "claw_data" in data:
-        if IS_RPI:
-            await forward_claw(data["claw_data"], websocket)
         return
 
     if command is not None:

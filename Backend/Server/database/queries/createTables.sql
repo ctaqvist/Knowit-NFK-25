@@ -1,0 +1,28 @@
+-- createTables.sql
+CREATE TABLE IF NOT EXISTS role (
+    roleId INTEGER PRIMARY KEY AUTOINCREMENT,
+    role TEXT UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS user (
+    userId INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    email TEXT UNIQUE,
+    roleId INTEGER,
+    FOREIGN KEY (roleId) REFERENCES role(roleId)
+);
+
+CREATE TABLE IF NOT EXISTS rover (
+    roverId INTEGER PRIMARY KEY AUTOINCREMENT,
+    rover_serial TEXT UNIQUE, 
+    password TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS userRover (
+    userRoverId INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER,
+    roverId INTEGER,
+    FOREIGN KEY (userId) REFERENCES user(userId),
+    FOREIGN KEY (roverId) REFERENCES rover(roverId)
+);

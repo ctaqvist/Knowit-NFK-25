@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:imageName', (req, res) => {
-    const { imageName } = req.params
+    const { imageName } = req.params;
     const filePath = path.join(imagesStaticPath, imageName);
 
     // Check if the file path exist
