@@ -96,11 +96,11 @@ fun UserStatusScreen() {
     val token = UserData.token
     val state = UserData.status
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 16.sp)
-        Text("token: $token", color = Color.White, fontSize = 16.sp)
-        Text("state: $state", color = Color.White, fontSize = 16.sp)
-    }
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        Text("isLoggedIn $isLoggedIn", color = Color.White, fontSize = 16.sp)
+//        Text("token: $token", color = Color.White, fontSize = 16.sp)
+//        Text("state: $state", color = Color.White, fontSize = 16.sp)
+//    }
 }
 
 @Composable

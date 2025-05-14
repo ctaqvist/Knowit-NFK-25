@@ -40,6 +40,7 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
             painter = painterResource(R.drawable.backgroundpicture),
             contentDescription = null,
             contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
         )
 
         Column(
@@ -51,11 +52,11 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
         }
     }
 
-    Column {
-        Spacer(modifier = Modifier.padding(vertical = 60.dp))
-        Text("serverStatus: ${serverStatus.value}", color = Color.White, fontSize = 16.sp)
-        Text("roverStatus: ${roverStatus.value}", color = Color.White, fontSize = 16.sp)
-    }
+//    Column {
+//        Spacer(modifier = Modifier.padding(vertical = 60.dp))
+//        Text("serverStatus: ${serverStatus.value}", color = Color.White, fontSize = 16.sp)
+//        Text("roverStatus: ${roverStatus.value}", color = Color.White, fontSize = 16.sp)
+//    }
 
     val errorFlow = viewModel.errorMessage
     val context = LocalContext.current
@@ -99,7 +100,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             Spacer(modifier = Modifier.height(24.dp))
 
             // Lights section
-            Box(contentAlignment = Alignment.Center) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxHeight(0.5f)) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(if (isLighted) "ON" else "OFF")
                     IconButton(
