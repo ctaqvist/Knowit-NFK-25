@@ -150,3 +150,17 @@
     opacity: 0;
   }
 }
+
+.planet-wrapper {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgb(32 7 127 / 40%); /* Purple with 40% opacity */
+    mix-blend-mode: normal; /* or overlay, soft-light, etc. */
+    pointer-events: none;
+    z-index: 2;
+    clip-path: circle(49% at center);
+  }
+}

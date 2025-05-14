@@ -16,13 +16,13 @@ import { useNavigate } from 'react-router';
 function Product() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSrc, setModalSrc] = useState('');
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleClose = () => setModalOpen(false);
 
   function expandGalleryMedia(src: string) {
-    setLoading(true)
+    setLoading(true);
     setModalSrc(src);
     setModalOpen(true);
   }
@@ -46,35 +46,61 @@ function Product() {
 
   return (
     <>
-
       {/* Feature section */}
       <Stack
         component={'section'}
         sx={{
           height: 1085,
-          backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images//feature_section.png")`, backgroundPositionX: 'center', backgroundSize: 'cover'
-        }}>
+          backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/object/public/images//feature_section.png")`,
+          backgroundPositionX: 'center',
+          backgroundSize: 'cover',
+        }}
+      >
+        <Typography
+          variant='h2'
+          sx={{
+            top: 162,
+            justifySelf: 'center',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }}
+        >
+          Main features
+        </Typography>
 
-        <Typography variant='h2' sx={{ top: 162, justifySelf: 'center', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>Main features</Typography>
-
-        {featureData.map(feature => (
-          <Stack key={feature.title} sx={{ position: 'absolute', minWidth: 150, textWrap: 'pretty', lineHeight: 'normal', gap: '6px', ...feature.style }}>
-            <Stack direction='row' alignItems={'center'} gap={'6px'}>
+        {featureData.map((feature) => (
+          <Stack
+            key={feature.title}
+            sx={{
+              position: 'absolute',
+              minWidth: 150,
+              textWrap: 'pretty',
+              lineHeight: 'normal',
+              gap: '6px',
+              ...feature.style,
+            }}
+          >
+            <Stack
+              direction='row'
+              alignItems={'center'}
+              gap={'6px'}
+            >
               <Icon src={`/src/assets/${feature.icon}`} />
               <Typography variant='subheading2'>{feature.title}</Typography>
             </Stack>
             <Typography variant='body3'>{feature.details}</Typography>
           </Stack>
         ))}
-
-      </Stack >
+      </Stack>
 
       {/* Statistics Section */}
       <Stack
         component={'section'}
         sx={{
-          gap: '179px',
-          height: 1920,
+          gap: '100px',
+          height: 1311,
           justifyContent: 'center',
           alignItems: 'center',
           backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
@@ -83,14 +109,28 @@ function Product() {
           position: 'relative',
         }}
       >
-        <Box role='presentation' sx={{
-          height: 196, width: '100%', position: 'absolute', bottom: 0,
-          background: 'linear-gradient(180deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)'
-        }} />
-        <Box role='presentation' sx={{
-          height: 196, width: '100%', position: 'absolute', top: 0,
-          background: 'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)'
-        }} />
+        <Box
+          role='presentation'
+          sx={{
+            height: 196,
+            width: '100%',
+            position: 'absolute',
+            bottom: 0,
+            background:
+              'linear-gradient(180deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)',
+          }}
+        />
+        <Box
+          role='presentation'
+          sx={{
+            height: 196,
+            width: '100%',
+            position: 'absolute',
+            top: 0,
+            background:
+              'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)',
+          }}
+        />
         <Typography variant='h2'>Terra X9 in numbers</Typography>
 
         {/* Planets */}
@@ -102,20 +142,18 @@ function Product() {
             id='planets'
             sx={{ gap: '120px', alignItems: 'center', position: 'relative' }}
           >
-            <Box position={'relative'}>
+            <Box position={'relative'} className='planet-wrapper'>
               <video
                 autoPlay
                 muted
                 loop
                 src={`${import.meta.env.VITE_SUPABASE_URL
-                  }/storage/v1/object/public/images//planet_1A.mp4`}
+                  }/storage/v1/object/public/images//planet_1_greyscale.mp4`}
                 style={{
                   clipPath: 'circle(49% at center)',
                   width: 104,
                   height: 102.667,
                   zIndex: 2,
-                  filter:
-                    'saturate(100%) saturate(79%) hue-rotate(258deg) brightness(70%) opacity(1) contrast(1)',
                   position: 'relative',
                 }}
               />
@@ -148,20 +186,19 @@ function Product() {
                 />
               </Stack>
             </Box>
-            <Box position={'relative'}>
+            <Box className='planet-wrapper'>
               <video
                 autoPlay
                 muted
                 loop
+                className='planet'
                 src={`${import.meta.env.VITE_SUPABASE_URL
-                  }/storage/v1/object/public/images//planet_2A.mp4`}
+                  }/storage/v1/object/public/images//planet_2_greyscale.mp4`}
                 style={{
                   clipPath: 'circle(49% at center)',
                   width: 131.401,
                   height: 129.377,
                   zIndex: 2,
-                  filter:
-                    'saturate(100%) saturate(79%) hue-rotate(258deg) brightness(70%) opacity(1) contrast(1)',
                   position: 'relative',
                 }}
               />
@@ -190,20 +227,19 @@ function Product() {
                 />
               </Stack>
             </Box>
-            <Box position={'relative'}>
+            <Box className='planet-wrapper'>
               <video
                 autoPlay
                 muted
+
                 loop
                 src={`${import.meta.env.VITE_SUPABASE_URL
-                  }/storage/v1/object/public/images//planet_1A.mp4`}
+                  }/storage/v1/object/public/images//planet_1_greyscale.mp4`}
                 style={{
                   clipPath: 'circle(49% at center)',
                   width: 191,
                   height: 188.551,
                   zIndex: 2,
-                  filter:
-                    'saturate(100%) saturate(79%) hue-rotate(258deg) brightness(70%) opacity(1) contrast(1)',
                   position: 'relative',
                 }}
               />
@@ -238,20 +274,18 @@ function Product() {
                 />
               </Stack>
             </Box>
-            <Box position={'relative'}>
+            <Box className='planet-wrapper'>
               <video
                 autoPlay
                 muted
                 loop
                 src={`${import.meta.env.VITE_SUPABASE_URL
-                  }/storage/v1/object/public/images//planet_2A.mp4`}
+                  }/storage/v1/object/public/images//planet_2_greyscale.mp4`}
                 style={{
                   clipPath: 'circle(49% at center)',
                   width: 131.401,
                   height: 129.377,
                   zIndex: 2,
-                  filter:
-                    'saturate(100%) saturate(79%) hue-rotate(258deg) brightness(70%) opacity(1) contrast(1)',
                   position: 'relative',
                 }}
               />
@@ -280,20 +314,18 @@ function Product() {
                 />
               </Stack>
             </Box>
-            <Box position={'relative'}>
+            <Box className='planet-wrapper'>
               <video
                 autoPlay
                 muted
                 loop
                 src={`${import.meta.env.VITE_SUPABASE_URL
-                  }/storage/v1/object/public/images//planet_1A.mp4`}
+                  }/storage/v1/object/public/images//planet_1_greyscale.mp4`}
                 style={{
                   clipPath: 'circle(49% at center)',
                   width: 104,
                   height: 102.667,
                   zIndex: 2,
-                  filter:
-                    'saturate(100%) saturate(79%) hue-rotate(258deg) brightness(70%) opacity(1) contrast(1)',
                   position: 'relative',
                 }}
               />
@@ -364,25 +396,50 @@ function Product() {
       </Stack>
 
       {/* Get in touch */}
-      <Stack component='section'
-              sx={{
+      <Stack
+        component='section'
+        sx={{
           backgroundImage: `url("${import.meta.env.VITE_SUPABASE_URL
             }/storage/v1/object/public/images//get_in_touch.png")`,
-            height: 1160, width: '100%',
-        }}>
-          <Stack
-          sx={{width: '74%', m: 'auto', height: 590}}
-          >
-            <Stack sx={{mb: '64px', gap: '16px'}}>
-              <Typography variant='subheading'>TERRA-X9 Wireless</Typography>
-              <Typography variant='body1' sx={{maxWidth: 738}}>The Terra-X9 wireless tablet control system provides a stable connection with less than 0.1 seconds latency anywhere in the world, intuitive touchscreen navigation, and multi-device collaboration — all protected by fail-safe protocols.</Typography>
-            </Stack>
-            <Stack sx={{mb: '40px', gap: '16px'}}>
-              <Typography variant='subheading' sx={{maxWidth: {xs: 300, md: '100%'}}}>Want to explore further?</Typography>
-              <Typography variant='body1' sx={{maxWidth: {xs: 400, lg: 588}}}>Our team will guide you through the rover’s capabilities, core technologies, and how it fits your mission needs.</Typography>
-            </Stack>
-            <Button variant='contained' onClick={() => navigate('/contact')}>Get in touch</Button>
+          height: 1160,
+          width: '100%',
+        }}
+      >
+        <Stack sx={{ width: '74%', m: 'auto', height: 590 }}>
+          <Stack sx={{ mb: '64px', gap: '16px' }}>
+            <Typography variant='subheading'>TERRA-X9 Wireless</Typography>
+            <Typography
+              variant='body1'
+              sx={{ maxWidth: 738 }}
+            >
+              The Terra-X9 wireless tablet control system provides a stable
+              connection with less than 0.1 seconds latency anywhere in the
+              world, intuitive touchscreen navigation, and multi-device
+              collaboration — all protected by fail-safe protocols.
+            </Typography>
           </Stack>
+          <Stack sx={{ mb: '40px', gap: '16px' }}>
+            <Typography
+              variant='subheading'
+              sx={{ maxWidth: { xs: 300, md: '100%' } }}
+            >
+              Want to explore further?
+            </Typography>
+            <Typography
+              variant='body1'
+              sx={{ maxWidth: { xs: 400, lg: 588 } }}
+            >
+              Our team will guide you through the rover’s capabilities, core
+              technologies, and how it fits your mission needs.
+            </Typography>
+          </Stack>
+          <Button
+            variant='contained'
+            onClick={() => navigate('/contact')}
+          >
+            Get in touch
+          </Button>
+        </Stack>
       </Stack>
 
       {/* Gallery */}
@@ -399,15 +456,27 @@ function Product() {
           position: 'relative',
         }}
       >
-        <Box role='presentation' sx={{
-          height: 196, width: '100%', position: 'absolute', top: 0,
-          background: 'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)'
-        }} />
-        <Typography variant='h2' sx={{ zIndex: 5, position: 'relative' }}>Gallery</Typography>
+        <Box
+          role='presentation'
+          sx={{
+            height: 196,
+            width: '100%',
+            position: 'absolute',
+            top: 0,
+            background:
+              'linear-gradient(0deg, rgba(5, 3, 12, 0.00) 0%, rgba(5, 3, 12, 0.89) 78.85%, #05030C 98.08%)',
+          }}
+        />
+        <Typography
+          variant='h2'
+          sx={{ zIndex: 5, position: 'relative' }}
+        >
+          Gallery
+        </Typography>
 
         <Box
           sx={{
-            '& .MuiBox-root': { borderRadius: '6px' },
+            '& .MuiBox-root': { borderRadius: '6px', overflow: 'hidden' },
             maxWidth: 1064,
             height: 628,
             gap: '20px',
@@ -416,12 +485,12 @@ function Product() {
             gridTemplateRows: 'repeat(12, 1fr)',
             display: 'grid',
             '& > .MuiButtonBase-root': { p: 0 },
+            '& img': { height: '100%' },
           }}
         >
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/0.jpg'
               )
             }
@@ -434,9 +503,8 @@ function Product() {
           </Button>
           <Button
             sx={{ gridColumn: 1, gridRow: '5 / span 4' }}
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/1.jpg'
               )
             }
@@ -449,9 +517,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/2.jpg'
               )
             }
@@ -465,9 +532,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/grid_video.mp4'
               )
             }
@@ -494,9 +560,8 @@ function Product() {
           </Button>
           <Button
             sx={{ gridColumn: 2, gridRow: '7 / span 6' }}
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/4.jpg'
               )
             }
@@ -509,9 +574,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/5.jpg'
               )
             }
@@ -525,9 +589,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/6.jpg'
               )
             }
@@ -541,15 +604,14 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/7.jpg'
               )
             }
             sx={{ gridColumn: '3 / span 2', gridRow: '7 / span 6' }}
           >
-            <Box>
+            <Box sx={{ height: '100%', }}>
               <img
                 src={`${import.meta.env.VITE_SUPABASE_URL
                   }/storage/v1/object/public/images/gallery/7.png`}
@@ -557,9 +619,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/8.jpg'
               )
             }
@@ -573,9 +634,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/9.jpg'
               )
             }
@@ -589,9 +649,8 @@ function Product() {
             </Box>
           </Button>
           <Button
-            onClick={(e) =>
+            onClick={() =>
               expandGalleryMedia(
-
                 'https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images/gallery/full/10.jpg'
               )
             }
@@ -617,135 +676,46 @@ function Product() {
           }}
         />
       </Stack>
-
-      <Box
-        // Interested in purchasing Section
-        component='section'
-        id='interested_in_purchasing'
-        sx={{ height: 999, position: 'relative' }}
+      {/* MODAL: Shows enlarged image */}
+      <Modal
+        open={modalOpen}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100%',
+        }}
       >
-        {/* Decorative: Background gradients + Design element */}
-        <Box
-          aria-hidden='true'
-          id='left-gradient'
-          sx={{
-            width: 805,
-            height: 805,
-            position: 'absolute',
-            background:
-              'radial-gradient(50% 50% at 50% 50%, rgba(85, 38, 255, 0.70) 0%, rgba(24, 7, 87, 0.00) 100%)',
-            left: 'calc(-1 * ((910px / 2) + 50px))',
-            top: '-89px',
-          }}
-        />
-        <Box
-          aria-hidden='true'
-          id='right-gradient'
-          sx={{
-            width: 910,
-            height: 910,
-            position: 'absolute',
-            background:
-              'radial-gradient(50% 50% at 50% 50%, rgba(85, 38, 255, 0.70) 0%, rgba(24, 7, 87, 0.00) 100%)',
-            right: 'calc(-1 * (910px / 2))',
-            bottom: '-200px',
-            zIndex: 2,
-          }}
-        />
-        <Box
-          aria-hidden='true'
-          sx={{
-            position: 'absolute',
-            backgroundImage:
-              'url("https://qxlvyblcyywkxiqtbcrb.supabase.co/storage/v1/object/public/images//design_el.png")',
-            width: 579,
-            height: 387,
-            backgroundPosition: 'bottom',
-            zIndex: 4,
-            right: '17.03vw',
-            top: '313.55px',
-          }}
-        />
-
-        <Box
-          // Interested in purchasing 'Content of value'
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '32px',
-              zIndex: 3,
-              width: 'clamp(200px, 80vw, 1276px)',
-            }}
-          >
-            <Typography
-              variant='h2'
-              color='text.main'
+        <Box sx={{ style, display: 'flex', position: 'relative' }}>
+          {loading && <Spinner />}
+          {modalSrc.endsWith('mp4') ? (
+            <video
+              autoPlay
+              muted
+              loop
+              src={modalSrc}
+              onCanPlay={() => setLoading(false)}
+            />
+          ) : (
+            <img
+              onLoad={() => setLoading(false)}
+              style={{ maxHeight: '80vh' }}
+              src={modalSrc}
+            />
+          )}
+          {modalSrc && !loading && (
+            <IconButton
+              onClick={() => setModalOpen(false)}
+              sx={{ position: 'absolute', top: '10px', right: '10px' }}
             >
-              Interested in purchasing?
-            </Typography>
-            <Typography
-              variant='body1'
-              color='text.main'
-              sx={{ maxWidth: 724 }}
-            >
-              Book a consultation through our contact form, and we’ll help you
-              through the next step of purchasing interplanetary rover TERRA-X9
-              with confidence!
-            </Typography>
-            <Button variant='contained'>BOOK A CONSULTATION</Button>
-          </Box>
+              <CloseIcon />
+            </IconButton>
+          )}
         </Box>
-        {/* MODAL: Shows enlarged image */}
-        <Modal
-          open={modalOpen}
-          onClose={handleClose}
-          aria-labelledby='modal-modal-title'
-          aria-describedby='modal-modal-description'
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Box sx={{ style, display: 'flex', position: 'relative' }}>
-            {loading && <Spinner />}
-            {
-              modalSrc.endsWith('mp4') ? (
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  src={modalSrc}
-                  onCanPlay={() => setLoading(false)}
-                />
-              ) : (
-                <img
-                  onLoad={() => setLoading(false)}
-                  style={{ maxHeight: '80vh' }}
-                  src={modalSrc}
-                />
-              )
-            }
-            {modalSrc && !loading &&
-              < IconButton
-                onClick={() => setModalOpen(false)}
-                sx={{ position: 'absolute', top: '10px', right: '10px' }}
-              >
-                <CloseIcon />
-              </IconButton>
-            }
-          </Box>
-        </Modal >
-      </Box >
+      </Modal>
     </>
   );
 }
