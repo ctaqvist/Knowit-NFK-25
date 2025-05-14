@@ -1,10 +1,12 @@
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Button, Link, Typography } from '@mui/material';
 import { useContent } from '../hooks/useContent';
 import { Marquee } from '@/components/magicui/marquee';
 import { ReviewCard } from '@/components/ReviewCard';
+import { useNavigate } from 'react-router';
 
 function Hero() {
   const { reviews } = useContent();
+  const navigate = useNavigate()
 
   // Split reviews in two rows
   const firstRow = reviews?.slice(0, reviews?.length / 2);
@@ -20,13 +22,13 @@ function Hero() {
         // Banner Section
         component='section'
         id='hero_banner'
-        sx={{ height: 1000 }}
+        sx={{ height: 1000, width: '100%' }}
       >
         <Box sx={{ position: 'relative', height: '100%' }}>
           <img
             style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
             src={`${import.meta.env.VITE_SUPABASE_URL
-              }/storage/v1/object/public/images//hero_banner.png`}
+              }/storage/v1/object/public/images//new_hero.png`}
             alt=''
           />
           <Box
@@ -76,7 +78,7 @@ function Hero() {
             rovers with 360° vision, smart object collection, and seamless
             wireless control—right from your device.
           </Typography>
-          <Link variant='button' href='/product'>Discover more</Link>
+          <Button onClick={() => navigate('/product')} variant='contained'>More about the rover</Button>
         </Box>
       </Box>
       {/* Reviews section */}

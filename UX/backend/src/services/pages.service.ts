@@ -1,4 +1,4 @@
-import { Inject, Injectable, Param } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { SupabaseService } from './supabase.service';
 import { ApiResponse, Page, Review, Pages, ContactForm } from 'src/types/types';
 import { DownloadableFiles } from 'src/controllers/files.controller';

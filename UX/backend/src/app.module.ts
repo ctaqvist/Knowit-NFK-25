@@ -12,7 +12,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [CacheModule.register(), ConfigModule.forRoot()],
-  controllers: [AppController, PageController, AdminController],
+  controllers: [AppController, PageController, AdminController, FileController],
   providers: [AppService, PageService, ConfigService, SupabaseService, AdminService],
 })
 export class AppModule {}
