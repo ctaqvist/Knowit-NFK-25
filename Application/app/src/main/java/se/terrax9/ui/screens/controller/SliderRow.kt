@@ -24,11 +24,11 @@ fun SliderRow(onChange: (Float, Float, Float) -> Unit) {
     })
 
     Row() {
-        Slider(onMove = { vm.updateShoulder(it) })
+        Slider(onMove = { vm.updateShoulder(it) }, text = "BASE")
 
-        Slider(onMove = { vm.updateElbow(it) })
+        Slider(onMove = { vm.updateElbow(it) }, text = "MIDDLE")
 
-        Slider(onMove = { vm.updateClaw(it) })
+        Slider(onMove = { vm.updateClaw(it) }, text = "GRIP")
     }
 }
 
