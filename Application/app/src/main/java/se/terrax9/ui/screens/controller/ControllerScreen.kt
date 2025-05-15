@@ -103,7 +103,12 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             Spacer(modifier = Modifier.height(24.dp))
 
             // Lights section
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f).fillMaxHeight()) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(if (isLighted) "ON" else "OFF")
                     IconButton(
@@ -131,16 +136,17 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
                     .aspectRatio(ratio = 16f / 9f)
                     .clip(RoundedCornerShape(24.dp))
             )
-                if (!viewModel.BACKDOOR && serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
-                    DisableBlocker()
-                }
+            if (!viewModel.BACKDOOR && serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+                DisableBlocker()
             }
         }
 
 
         // Right side
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
