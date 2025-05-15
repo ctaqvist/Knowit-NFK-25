@@ -15,7 +15,19 @@ export default function ScrollToHash() {
       }
     } else {
       window.scrollTo(0, 0);
+
     }
+
+    let title = 'TerraX9';
+    const isHome = pathname === '/';
+
+    if (!isHome) {
+      const suffix = `${pathname[1]?.toUpperCase()}${pathname.slice(2)}`;
+      title += ` | ${suffix}`;
+    }
+
+    document.title = title;
+
   }, [hash, pathname]);
 
   return null;
