@@ -236,6 +236,29 @@ export const theme = createTheme({
         },
       },
     },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          fontSize: 30,
+          fill: '#FFF',
+          color: '#FFF',
+          variants: [
+            {
+              props: { color: 'primary' },
+              color: '#FFF',
+            },
+            {
+              props: { size: 'small' },
+              fontSize: 20,
+            },
+            {
+              props: { size: 'large' },
+              fontSize: 40,
+            },
+          ],
+        },
+      },
+    },
     MuiAccordionSummary: {
       styleOverrides: {
         root: {

@@ -18,8 +18,7 @@ export default function ScrollToHash() {
         });
       }
     } else {
-      window.scrollTo(0, 0);
-
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     }
 
     let title = 'TerraX9';
