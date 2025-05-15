@@ -38,9 +38,11 @@ object Commands {
     fun ping(): String = createCommand(Command.PING)
     fun startHeadlights(): String = createCommand(Command.START_HEADLIGHTS)
     fun closeHeadlights(): String = createCommand(Command.CLOSE_HEADLIGHTS)
+    fun connectToRover(): String = createCommand(Command.CONNECT)
     fun steer(x: Float, y: Float): String = createSteer(x, y)
     fun steerArm(shoulder: Float, elbow: Float, claw: Float): String =
         createSteerArm(shoulder, elbow, claw)
+
 
     private enum class Command(val value: String) {
         // Used enums to prevent errors caused by typos or inconsistent string
@@ -50,6 +52,7 @@ object Commands {
         TANK_TURN("TANKTURN"),
         PING("ping"),
         START_HEADLIGHTS("LIGHTS_ON"),
-        CLOSE_HEADLIGHTS("LIGHTS_OFF")
+        CLOSE_HEADLIGHTS("LIGHTS_OFF"),
+        CONNECT("connect")
     }
 }

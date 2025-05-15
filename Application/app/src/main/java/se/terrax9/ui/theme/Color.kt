@@ -12,4 +12,7 @@ object AppColors {
     // Main
     val Dark = Color(0xFF05030C)
     val Light = Color(0xFFFFFFFF)
+
+    val Error = Color(0xFFFF3131)
+    val Success = Color(0xFF49AB1B)
 }
