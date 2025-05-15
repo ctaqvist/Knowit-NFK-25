@@ -10,18 +10,18 @@ function Header() {
           About rover
         </Typography>
       </Link>
-      <Link to={'/support'}>
+      <Link to={'/#reviews'}>
         <Typography variant="headerlink" component="div">
-          Support
+          Reviews
         </Typography>
       </Link>
       <Link to='/' id='logo' style={{ flexShrink: 0 }}>
         <img src="/logo_full.svg" alt="Home"
           style={{ width: 'fit-content', height: 60.891 }} />
       </Link>
-      <Link to={'/#reviews'}>
+      <Link to={'/support'}>
         <Typography variant="headerlink" component="div">
-          Reviews
+          Support
         </Typography>
       </Link>
       <Link to={'/contact'}>
