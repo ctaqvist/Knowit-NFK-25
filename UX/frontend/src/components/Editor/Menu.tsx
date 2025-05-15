@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Settings from './Settings';
 import Support from '@/pages/Editor/pages/Support';
 import CustomTabPanel from '../CustomTabPanel';
+import UnderConstruction from '@/pages/Editor/UnderConstruction';
 
 
 function Menu() {
@@ -32,10 +33,10 @@ function Menu() {
         <Tab label='Settings' />
       </Tabs>
       <CustomTabPanel value={value} index={0}>
-        Hero Page
+        <UnderConstruction />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Product page
+        <UnderConstruction />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <Support />

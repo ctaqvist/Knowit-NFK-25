@@ -19,7 +19,7 @@ import {
 import { ChangeEvent, useState } from 'react';
 
 function Support() {
-  const { pages, updatePage } = useContent();
+  const { pages, updateContent } = useContent();
   const [alert, setAlert] = useState<{
     show: boolean;
     timeout: NodeJS.Timeout | null;
@@ -105,13 +105,14 @@ function Support() {
   const handleAddFAQ = async () => {
     if (!FAQ || !pages) return
     const { isNew, ...rest } = FAQ
+    if (!rest.question || !rest.answer) return showAlert('Missing question or answer input', 'error')
+
     const updatedPage = { ...pages?.support, ['FAQ']: [...pages.support.FAQ, rest] }
     console.log(updatedPage)
     const result = await contentApi.updatePage('support', updatedPage)
-    console.log('Result: ', result)
     if (!result.error) {
-      updatePage(result.data.page, result.data.content)
-      triggerAnimation(FAQ.id)
+      updateContent(result.data.page, result.data.content)
+      setTimeout(() => triggerAnimation(FAQ.id), 10)
       setFAQ(null)
     }
   }
@@ -119,23 +120,24 @@ function Support() {
   const handleUpdateFAQ = async () => {
     if (!FAQ || !pages) return
     const { isNew, ...rest } = FAQ
+
+    if (!rest.question || !rest.answer) return showAlert('Missing question or answer input', 'error')
     const updatedPage = { ...pages?.support, ['FAQ']: [...pages.support.FAQ, rest] }
     console.log(updatedPage)
     const result = await contentApi.updatePage('support', updatedPage)
-    console.log('Result: ', result)
 
     if (!result.error) {
-      updatePage(result.data.page, result.data.content)
-      triggerAnimation(FAQ.id)
+      updateContent(result.data.page, result.data.content)
+      setTimeout(() => triggerAnimation(FAQ.id), 10)
       setFAQ(null)
     }
   }
 
   const triggerAnimation = (id: string) => {
     const el = document.querySelector(`[data-id='${id}']`)
-    if (!el) return
+    if (!el) return console.log('No element found')
     el.classList.add('saved-FAQ')
-    setTimeout(() => el.classList.remove('saved-FAQ'), 5000)
+    // setTimeout(() => el.classList.remove('saved-FAQ'), 5000)
   }
 
   const filteredFAQ = (category: FAQ[]) => {
@@ -428,18 +430,23 @@ function Support() {
                     backgroundColor: 'rgba(188, 197, 255, 0.50)',
                     color: '#FFF',
                   },
+                  '& .MuiTabs-list': {
+                    position: 'relative'
+                  },
+                  '& .MuiTabs-list::after': {
+                    content: '""',
+                    width: '1px',
+                    height: '34px',
+                    display: 'block',
+                    bgcolor: 'white',
+                    position: 'absolute',
+                    left: '50%',
+                    justifySelf: 'center',
+                    alignSelf: 'center',
+                  }
                 }}
               >
                 <Tab label='Purchase & Delivery' />
-                <Box
-                  role='presentation'
-                  sx={{
-                    width: '1px',
-                    bgcolor: 'white',
-                    height: 34,
-                    alignSelf: 'center',
-                  }}
-                />
                 <Tab label='Terra-X9 & Application' />
               </Tabs>
             </Stack>

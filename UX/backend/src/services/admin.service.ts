@@ -42,7 +42,7 @@ export class AdminService {
 
       if (error) throw error;
 
-      const now = new Date().toISOString().slice(0, 10);
+      const now = new Date().toISOString()
       const { error: updateError } = await CLIENT.from('pages')
         .update({
           updated_at: now,

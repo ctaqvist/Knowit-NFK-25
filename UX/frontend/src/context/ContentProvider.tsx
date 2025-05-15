@@ -18,7 +18,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false))
   }, []);
 
-  function updatePage(page: string, content: Page) {
+  function updateContent(page: string, content: Page) {
     if (!pages) return
     setPages({ ...pages, [page]: content })
   }
@@ -27,7 +27,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     pages,
     loading,
     reviews,
-    updatePage
+    updateContent
   }
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
