@@ -42,6 +42,7 @@ class ControllerViewModel() : ViewModel() {
         }
     }
     private var job: Job? = null
+    val BACKDOOR = true
 
     private val _isLighted = MutableStateFlow(true)
     val isLighted: StateFlow<Boolean> = _isLighted
@@ -54,6 +55,7 @@ class ControllerViewModel() : ViewModel() {
 
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage: SharedFlow<String> = _errorMessage
+
 
     fun sendCommand(command: String) {
         viewModelScope.launch {

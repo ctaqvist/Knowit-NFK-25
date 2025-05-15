@@ -22,9 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.runBlocking
 import se.terrax9.R
 import se.terrax9.Routes
 import se.terrax9.services.Commands
+import se.terrax9.services.DataService
+import se.terrax9.services.UserData
 import se.terrax9.ui.shared.AppButton
 import se.terrax9.ui.theme.LexendExa
 
@@ -40,7 +43,6 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
             painter = painterResource(R.drawable.backgroundpicture),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
         )
 
         Column(
@@ -87,7 +89,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             modifier = Modifier.weight(1f)
         ) {
             // Spacer between buttons
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Connect/Disconnect button
             AppButton(
@@ -100,7 +102,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             Spacer(modifier = Modifier.height(24.dp))
 
             // Lights section
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f).fillMaxHeight()) {
+            Box(contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(if (isLighted) "ON" else "OFF")
                     IconButton(
@@ -111,25 +113,22 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
                 }
 
                 // Overlay when disconnected
-                if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+                if (!viewModel.BACKDOOR && serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
                     DisableBlocker()
                 }
             }
         }
 
-        Box(
+        // Center
+        VideoStream(
             modifier = Modifier
                 .weight(3f)
-                .fillMaxHeight(),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            VideoStream(
-                modifier = Modifier
-                    .aspectRatio(ratio = 16f / 9f)
-                    .clip(RoundedCornerShape(24.dp))
-            )
-        }
-
+                .aspectRatio(ratio = 16f / 9f)
+                .border(
+                    3.dp, color = Color.White, shape = RoundedCornerShape(size = 12.dp)
+                )
+                .clip(RoundedCornerShape(24.dp))
+        )
 
         // Right side
         Column(
@@ -188,7 +187,7 @@ fun BottomDashboard(viewModel: ControllerViewModel) {
         }
 
         // Semi-transparent overlay when disconnected
-        if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+        if (!viewModel.BACKDOOR && serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
             DisableBlocker()
         }
     }

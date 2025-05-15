@@ -1,6 +1,7 @@
 package se.terrax9.services
 
 import android.util.Log
+import androidx.lifecycle.viewmodel.compose.viewModel
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.websocket.WebSockets
@@ -86,8 +87,8 @@ class DataService(
                         protocol = URLProtocol.WS
                         host = "terrax9.se"
                         path("/")
-                        port = 8081
-                        parameters.append("token", UserData.token!!) // Crash if no token provided
+                        port = 8080
+                        //parameters.append("token", UserData.token!!) // Crash if no token provided
                     }
                 }
             }
@@ -141,6 +142,9 @@ class DataService(
         }
     }
 
+    var incomingMessage: String? = null
+    var lastMessage: String? = null
+
     fun handleIncomingMessage(payload: String) {
         val json = JSONObject(payload)
         val state = json.optString("rover_status")
@@ -166,13 +170,36 @@ class DataService(
                 println("Got other message")
             }
         }
+
+        val roverID = json.optString("rover_id")
+        val roverStatus = json.optString("status")
+
+        when (roverStatus) {
+            "ok" -> {
+                UserData.roverStatus = true
+                if (incomingMessage != null) {
+                    runBlocking {
+                        sendMessage(incomingMessage!!)
+                        incomingMessage = null
+                    }
+                }
+            }
+        }
     }
 
     suspend fun sendMessage(message: String) {
+        !UserData.roverStatus
         ensureOpenConnection()
+        println("RoverStatus: ${UserData.roverStatus}")
+        if (!UserData.roverStatus) {
+            incomingMessage = message
+            return
+        }
+
         try {
             println("Sending a new message of: $message")
             socket?.send(message)
+            UserData.roverStatus = false
         } catch (e: Exception) {
             println("Failed to send message: ${e.localizedMessage}")
         }
