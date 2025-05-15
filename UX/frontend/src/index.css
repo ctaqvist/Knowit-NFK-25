@@ -181,7 +181,7 @@
     display: block;
     width: 26px;
     height: 18px;
-    background-image: url('/src/assets/Icon_checkmark.svg');
+    background-image: url('./assets/Icon_checkmark.svg');
     margin-left: auto;
   }
 }
@@ -238,7 +238,7 @@
     width: 19px;
     height: 19px;
     display: block;
-    background-image: url('/src/assets/Icon_search.svg');
+    background-image: url('./assets/Icon_search.svg');
   }
 }
 
@@ -266,7 +266,7 @@
     display: block;
     width: 26px;
     height: 18px;
-    background-image: url('/src/assets/Icon_checkmark.svg');
+    background-image: url('./assets/Icon_checkmark.svg');
     margin-left: auto;
   }
 }
@@ -326,7 +326,7 @@
     width: 19px;
     height: 19px;
     display: block;
-    background-image: url('/src/assets/Icon_search.svg');
+    background-image: url('./assets/Icon_search.svg');
   }
 }
 

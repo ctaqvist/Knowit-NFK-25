@@ -9,11 +9,13 @@ import { AuthRedirect } from '../pages/Editor/AuthRedirect';
 import Root from '../components/Root';
 import Support from '@/pages/Support';
 import EditorRoot from '../pages/Editor/Root'
+import Error from '@/pages/Error';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    errorElement: <Error />,
     children: [{
       path: '/',
       element: <Hero />

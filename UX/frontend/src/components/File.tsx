@@ -2,6 +2,8 @@ import { CustomFile } from '@/types/types';
 import { IconButton, LinearProgress, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Icon from './Icon';
+import deleteIcon from '../assets/Icon_delete.svg'
+import removeIcon from '../assets/Icon_remove.svg'
 
 type FileProps = {
   file: CustomFile,
@@ -63,7 +65,7 @@ function File({ file, handleRemoveUpload }: FileProps) {
               `${!file.success ? 'brightness(0) saturate(100%) invert(29%) sepia(63%) saturate(1954%) hue-rotate(337deg) brightness(105%) contrast(107%)' : ''}`
           }} onClick={() => handleRemoveUpload(file)}>
             <Icon
-              src={file.success ? '/src/assets/Icon_delete.svg' : '/src/assets/Icon_remove.svg'}
+              src={file.success ? deleteIcon : removeIcon}
               height='24px'
             />
           </IconButton>
