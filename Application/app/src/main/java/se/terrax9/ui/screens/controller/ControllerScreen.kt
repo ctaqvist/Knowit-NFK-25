@@ -40,6 +40,7 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
             painter = painterResource(R.drawable.backgroundpicture),
             contentDescription = null,
             contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
         )
 
         Column(
@@ -86,7 +87,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             modifier = Modifier.weight(1f)
         ) {
             // Spacer between buttons
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             // Connect/Disconnect button
             AppButton(
@@ -99,7 +100,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             Spacer(modifier = Modifier.height(24.dp))
 
             // Lights section
-            Box(contentAlignment = Alignment.Center) {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.weight(1f).fillMaxHeight()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(if (isLighted) "ON" else "OFF")
                     IconButton(
@@ -116,16 +117,19 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
             }
         }
 
-        // Center
-        VideoStream(
+        Box(
             modifier = Modifier
                 .weight(3f)
-                .aspectRatio(ratio = 16f / 9f)
-                .border(
-                    3.dp, color = Color.White, shape = RoundedCornerShape(size = 12.dp)
-                )
-                .clip(RoundedCornerShape(24.dp))
-        )
+                .fillMaxHeight(),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            VideoStream(
+                modifier = Modifier
+                    .aspectRatio(ratio = 16f / 9f)
+                    .clip(RoundedCornerShape(24.dp))
+            )
+        }
+
 
         // Right side
         Column(
