@@ -56,7 +56,6 @@ class ControllerViewModel() : ViewModel() {
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage: SharedFlow<String> = _errorMessage
 
-
     fun sendCommand(command: String) {
         viewModelScope.launch {
             dataService.sendMessage(command)
