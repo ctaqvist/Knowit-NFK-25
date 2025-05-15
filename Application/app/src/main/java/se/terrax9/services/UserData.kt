@@ -19,6 +19,7 @@ object UserData {
     var selectedRoverID by mutableStateOf<String?>(null)
 
     var status by mutableStateOf<UserState>(UserState.AUTH_NEEDED)
+    var roverStatus by mutableStateOf(true)
 
     fun login(email: String, token: String, context: Context) {
         UserData._isLoggedIn = true
