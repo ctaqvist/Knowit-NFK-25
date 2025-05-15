@@ -9,8 +9,8 @@ import {
 import { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import Spinner from '@/components/Spinner';
-import { featureData } from '@/utils/data/product';
-import Icon from '@/components/Icon';
+// import { featureData } from '@/utils/data/product';
+// import Icon from '@/components/Icon';
 import { useNavigate } from 'react-router';
 
 function Product() {
@@ -47,27 +47,13 @@ function Product() {
   return (
     <>
       {/* Feature section */}
-      <Stack
-        component={'section'}
-        sx={{ minHeight: 1085 }}
-      >
-        <Box component={'img'}
-          src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images//feature_section.png`}
+      <Stack component={'section'}>
+        <Box
+          component={'img'}
+          src={`${import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/object/public/images//feature_section.png`}
         />
-        <Typography
-          variant='h2'
-          sx={{
-            top: 162,
-            justifySelf: 'center',
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-          }}
-        >
-          Main features
-        </Typography>
-
-        {featureData.map((feature) => (
+        {/* {featureData.map((feature) => (
           <Stack
             key={feature.title}
             sx={{
@@ -89,7 +75,7 @@ function Product() {
             </Stack>
             <Typography variant='body3'>{feature.details}</Typography>
           </Stack>
-        ))}
+        ))} */}
       </Stack>
 
       {/* Statistics Section */}
@@ -139,7 +125,10 @@ function Product() {
             id='planets'
             sx={{ gap: '120px', alignItems: 'center', position: 'relative' }}
           >
-            <Box position={'relative'} className='planet-wrapper'>
+            <Box
+              position={'relative'}
+              className='planet-wrapper'
+            >
               <video
                 autoPlay
                 muted
@@ -228,7 +217,6 @@ function Product() {
               <video
                 autoPlay
                 muted
-
                 loop
                 src={`${import.meta.env.VITE_SUPABASE_URL
                   }/storage/v1/object/public/images//planet_1_greyscale.mp4`}
@@ -396,19 +384,37 @@ function Product() {
       <Stack
         component='section'
         sx={{
-          minHeight: 1160,
-          position: 'relative'
+          position: 'relative',
         }}
       >
-        <Box component='img' src={`${import.meta.env.VITE_SUPABASE_URL
-          }/storage/v1/object/public/images//get_in_touch.png`}
-          sx={{ objectFit: 'cover', height: '100%', }} />
-        <Stack sx={{ width: '74%', m: 'auto', height: 590, position: 'absolute', top: 294, left: 319 }}>
-          <Stack sx={{ mb: '64px', gap: '16px' }}>
-            <Typography variant='subheading'>TERRA-X9 Wireless</Typography>
+        <Box
+          component='img'
+          src={`${import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/object/public/images//get_in_touch.png`}
+          sx={{ objectFit: 'cover', height: '100%' }}
+        />
+        <Stack
+          sx={{
+            width: '74%',
+            m: 'auto',
+            height: '36.29%',
+            position: 'absolute',
+            top: { xs: '15%', lg: '25%' },
+            left: '16.67%',
+            zIndex: 3,
+          }}
+        >
+          <Stack sx={{ mb: '4vw', gap: '1.3vw' }}>
+            <Typography
+              variant='subheading'
+              fontSize={'clamp(18px, 2vw, 141px)'}
+            >
+              TERRA-X9 Wireless
+            </Typography>
             <Typography
               variant='body1'
-              sx={{ maxWidth: 738 }}
+              fontSize={'clamp(14px, 1.2vw, 2rem)'}
+              sx={{ maxWidth: { xs: '80%', lg: '50%' } }}
             >
               The Terra-X9 wireless tablet control system provides a stable
               connection with less than 0.1 seconds latency anywhere in the
@@ -416,16 +422,18 @@ function Product() {
               collaboration — all protected by fail-safe protocols.
             </Typography>
           </Stack>
-          <Stack sx={{ mb: '40px', gap: '16px' }}>
+          <Stack sx={{ mb: '1.7vw', gap: '1.3vw' }}>
             <Typography
               variant='subheading'
+              fontSize={'clamp(18px, 2vw, 141px)'}
               sx={{ maxWidth: { xs: 300, md: '100%' } }}
             >
               Want to explore further?
             </Typography>
             <Typography
               variant='body1'
-              sx={{ maxWidth: { xs: 400, lg: 588 } }}
+              fontSize={'clamp(14px, 1.2vw, 2rem)'}
+              sx={{ maxWidth: { xs: '40%', xl: 588 } }}
             >
               Our team will guide you through the rover’s capabilities, core
               technologies, and how it fits your mission needs.
@@ -434,6 +442,13 @@ function Product() {
           <Button
             variant='contained'
             onClick={() => navigate('/contact')}
+            sx={{
+              fontSize: 'clamp(14px, 1vw, 30px)',
+              paddingLeft: 'clamp(18px, 1vw, 28px)',
+              paddingRight: 'clamp(18px, 1vw, 28px)',
+              paddingTop: 'clamp(10px, 1vw, 20px)',
+              paddingBottom: 'clamp(10px, 1vw, 20px)',
+            }}
           >
             Get in touch
           </Button>
@@ -609,7 +624,7 @@ function Product() {
             }
             sx={{ gridColumn: '3 / span 2', gridRow: '7 / span 6' }}
           >
-            <Box sx={{ height: '100%', }}>
+            <Box sx={{ height: '100%' }}>
               <img
                 src={`${import.meta.env.VITE_SUPABASE_URL
                   }/storage/v1/object/public/images/gallery/7.png`}

@@ -58,7 +58,7 @@ export const theme = createTheme({
       fontSize: 20,
       fontWeight: 400,
       fontFamily: 'Instrument Sans, sans-serif',
-      lineHeight: '30px',
+      lineHeight: '150%',
     },
     body2: {
       fontSize: 18,
