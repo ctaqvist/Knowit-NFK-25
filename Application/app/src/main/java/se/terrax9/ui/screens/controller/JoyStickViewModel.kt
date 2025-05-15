@@ -28,7 +28,7 @@ class JoyStickViewModel(val command: (Float, Float) -> String, val sendMessage: 
         val newExtremeValue = newMinValue || newMaxValue
 
         val newValue =
-            (lastSent.first - new.first).absoluteValue > 0.02 || ((lastSent.second - new.second).absoluteValue > 0.02)
+            (lastSent.first - new.first).absoluteValue > 0.1 || ((lastSent.second - new.second).absoluteValue > 0.1)
         return newValue || newExtremeValue
     }
 }

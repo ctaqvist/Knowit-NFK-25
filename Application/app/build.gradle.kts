@@ -1,3 +1,18 @@
+import java.util.Properties
+
+// Helper to load ENV variables
+fun loadEnvProperties(): Properties {
+    val props = Properties()
+    val envFile = rootProject.file(".env")
+    if (!envFile.exists()) {
+        error(".env file is missing in the root project directory. Please create one with required keys.")
+    }
+    props.load(envFile.inputStream())
+    return props
+}
+
+val env = loadEnvProperties()
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,16 +22,6 @@ plugins {
 android {
     namespace = "se.terrax9"
     compileSdk = 35
-
-    defaultConfig {
-        applicationId = "se.terrax9"
-        minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 
     buildTypes {
         release {
@@ -36,6 +41,20 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    defaultConfig {
+        applicationId = "se.terrax9"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_BASE_URL", "\"${env["API_BASE_URL"] ?: ""}\"")
+        buildConfigField("String", "WS_BASE_URL", "\"${env["WS_BASE_URL"] ?: ""}\"")
+        buildConfigField("String", "STREAM_BASE_URL", "\"${env["STREAM_BASE_URL"] ?: ""}\"")
     }
 }
 
