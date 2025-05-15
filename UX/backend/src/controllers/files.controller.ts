@@ -13,14 +13,8 @@ export class FileController {
   @Get(':file')
   @Header('Content-Type', 'application/pdf')
   @Header('Content-Disposition', 'attachment; filename=:file.pdf')
-  
   async getFile(@Param('file') file: DownloadableFiles, @Res() res: Response) {
     const buffer = await this.pageService.getFile(file);
     res.send(buffer);  
-  }
-
-  @Post(':file')
-  async updateFile(@Param('file') fileName: DownloadableFiles, @Body() newFile: File) {
-    return this.pageService.updateFile(fileName, newFile)
   }
 }

@@ -138,53 +138,6 @@ export class PageService {
     return Buffer.from(arrayBuffer);
   }
 
-  async updateFile(fileName: string, newFile: any): Promise<ApiResponse<null>> {
-    try {
-      const VALID_FILES = ['Instruction_Manual', 'GPSR'];
-      if (!VALID_FILES.includes(fileName))
-        throw new Error(
-          'Invalid file, new file must be either an Instruction Manual or GPSR pdf',
-        );
-
-      const CLIENT = this.supabaseService.supabase;
-
-      const { data, error } = await CLIENT.storage
-        .from('files')
-        .upload(`${fileName}.pdf`, newFile, {
-          upsert: true,
-        });
-
-      if (error || !data) throw error;
-
-      await this.updateLastUpdated('pages');
-
-      return {
-        message: 'Successfully updated file!',
-        data: null,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        message: 'Failed to update file',
-        error,
-        data: null,
-      };
-    }
-  }
-
-  async updateLastUpdated(table: string) {
-    try {
-      const CLIENT = this.supabaseService.supabase;
-      const now = new Date().toISOString().slice(0, 10);
-      const { error } = await CLIENT.from(table).update({ updated_at: now });
-
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error when updating "Last updated": ', error);
-      throw new Error(`Error when updating ${table}`);
-    }
-  }
-
   async getLastUpdated(table: string): Promise<string> {
     try {
       const CLIENT = this.supabaseService.supabase;

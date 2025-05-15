@@ -1,3 +1,4 @@
+import { adminApi } from '@/api/adminApi';
 import { contentApi } from '@/api/contentApi';
 import CustomTabPanel from '@/components/CustomTabPanel';
 import { RenderQuestion } from '@/components/Editor/RenderQuestion';
@@ -46,7 +47,7 @@ function Support() {
       answer: '',
       isNew: true,
       id: crypto.randomUUID(),
-      category: tab === 0 ? 'deliveryFAQ' : 'applicationFAQ'
+      category: tab === 0 ? 'deliveryFAQ' : 'applicationFAQ',
     });
 
   const handlePreview = async (file: DownloadableFiles) => {
@@ -69,19 +70,30 @@ function Support() {
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files, name } = e.target;
+    console.log(name);
 
     if (!files) return;
     const FILE_VALIDITY = validateNewFile(files);
     if ('errorMessage' in FILE_VALIDITY)
       return showAlert(FILE_VALIDITY.errorMessage!, 'error');
 
-    const result = await contentApi.updateFile(
+    const newFile = new File([files[0]], name, {
+      type: files[0].type,
+      lastModified: files[0].lastModified,
+    });
+
+
+    const result = await adminApi.updateFile(
       name as DownloadableFiles,
-      files[0]
+      newFile
     );
     if (result.error)
       return showAlert('Something went wrong when updating file', 'error');
-    showAlert(`${name} has been updated!`, 'success');
+    showAlert(
+      `${name.includes('_') ? name.split('_').join(' ') : name
+      } has been updated!`,
+      'success'
+    );
   };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
@@ -103,42 +115,50 @@ function Support() {
   };
 
   const handleAddFAQ = async () => {
-    if (!FAQ || !pages) return
-    const { isNew, ...rest } = FAQ
-    if (!rest.question || !rest.answer) return showAlert('Missing question or answer input', 'error')
+    if (!FAQ || !pages) return;
+    const { isNew, ...rest } = FAQ;
+    if (!rest.question || !rest.answer)
+      return showAlert('Missing question or answer input', 'error');
 
-    const updatedPage = { ...pages?.support, ['FAQ']: [...pages.support.FAQ, rest] }
-    console.log(updatedPage)
-    const result = await contentApi.updatePage('support', updatedPage)
+    const updatedPage = {
+      ...pages?.support,
+      ['FAQ']: [...pages.support.FAQ, rest],
+    };
+    console.log(updatedPage);
+    const result = await adminApi.updatePage('support', updatedPage);
     if (!result.error) {
-      updateContent(result.data.page, result.data.content)
-      setTimeout(() => triggerAnimation(FAQ.id), 10)
-      setFAQ(null)
+      updateContent(result.data.page, result.data.content);
+      setTimeout(() => triggerAnimation(FAQ.id), 10);
+      setFAQ(null);
     }
-  }
+  };
 
   const handleUpdateFAQ = async () => {
-    if (!FAQ || !pages) return
-    const { isNew, ...rest } = FAQ
+    if (!FAQ || !pages) return;
+    const { isNew, ...rest } = FAQ;
 
-    if (!rest.question || !rest.answer) return showAlert('Missing question or answer input', 'error')
-    const updatedPage = { ...pages?.support, ['FAQ']: [...pages.support.FAQ, rest] }
-    console.log(updatedPage)
-    const result = await contentApi.updatePage('support', updatedPage)
+    if (!rest.question || !rest.answer)
+      return showAlert('Missing question or answer input', 'error');
+    const updatedPage = {
+      ...pages?.support,
+      ['FAQ']: [...pages.support.FAQ, rest],
+    };
+    console.log(updatedPage);
+    const result = await adminApi.updatePage('support', updatedPage);
 
     if (!result.error) {
-      updateContent(result.data.page, result.data.content)
-      setTimeout(() => triggerAnimation(FAQ.id), 10)
-      setFAQ(null)
+      updateContent(result.data.page, result.data.content);
+      setTimeout(() => triggerAnimation(FAQ.id), 10);
+      setFAQ(null);
     }
-  }
+  };
 
   const triggerAnimation = (id: string) => {
-    const el = document.querySelector(`[data-id='${id}']`)
-    if (!el) return console.log('No element found')
-    el.classList.add('saved-FAQ')
+    const el = document.querySelector(`[data-id='${id}']`);
+    if (!el) return console.log('No element found');
+    el.classList.add('saved-FAQ');
     // setTimeout(() => el.classList.remove('saved-FAQ'), 5000)
-  }
+  };
 
   const filteredFAQ = (category: FAQ[]) => {
     return category.filter(
@@ -148,9 +168,10 @@ function Support() {
     );
   };
 
-  const deliveryFAQ = pages?.support.FAQ.filter(q => q.category === 'deliveryFAQ') || []
-  const applicationFAQ = pages?.support.FAQ.filter(q => q.category === 'applicationFAQ') || []
-
+  const deliveryFAQ =
+    pages?.support.FAQ.filter((q) => q.category === 'deliveryFAQ') || [];
+  const applicationFAQ =
+    pages?.support.FAQ.filter((q) => q.category === 'applicationFAQ') || [];
 
   return (
     <Box sx={{ py: '101px', px: 2 }}>
@@ -431,7 +452,7 @@ function Support() {
                     color: '#FFF',
                   },
                   '& .MuiTabs-list': {
-                    position: 'relative'
+                    position: 'relative',
                   },
                   '& .MuiTabs-list::after': {
                     content: '""',
@@ -443,7 +464,7 @@ function Support() {
                     left: '50%',
                     justifySelf: 'center',
                     alignSelf: 'center',
-                  }
+                  },
                 }}
               >
                 <Tab label='Purchase & Delivery' />
@@ -481,41 +502,47 @@ function Support() {
                 index={0}
               >
                 <Stack className='FAQstack'>
-                  {searchterm && filteredFAQ(deliveryFAQ)
-                    .map(q => RenderQuestion({
-                      entry: q,
-                      handleClick: setFAQ,
-                      selectedId: FAQ && FAQ.id,
-                    }))}
+                  {searchterm &&
+                    filteredFAQ(deliveryFAQ).map((q) =>
+                      RenderQuestion({
+                        entry: q,
+                        handleClick: setFAQ,
+                        selectedId: FAQ && FAQ.id,
+                      })
+                    )}
 
-                  {!searchterm && deliveryFAQ.map((q) =>
-                    RenderQuestion({
-                      entry: q,
-                      handleClick: setFAQ,
-                      selectedId: FAQ && FAQ.id,
-                    })
-                  )}
+                  {!searchterm &&
+                    deliveryFAQ.map((q) =>
+                      RenderQuestion({
+                        entry: q,
+                        handleClick: setFAQ,
+                        selectedId: FAQ && FAQ.id,
+                      })
+                    )}
                 </Stack>
               </CustomTabPanel>
               <CustomTabPanel
                 value={tab}
-                index={2}
+                index={1}
               >
                 <Stack className='FAQstack'>
-                  {searchterm && filteredFAQ(applicationFAQ)
-                    .map(q => RenderQuestion({
-                      entry: q,
-                      handleClick: setFAQ,
-                      selectedId: FAQ && FAQ.id,
-                    }))}
+                  {searchterm &&
+                    filteredFAQ(applicationFAQ).map((q) =>
+                      RenderQuestion({
+                        entry: q,
+                        handleClick: setFAQ,
+                        selectedId: FAQ && FAQ.id,
+                      })
+                    )}
 
-                  {!searchterm && applicationFAQ.map((q) =>
-                    RenderQuestion({
-                      entry: q,
-                      handleClick: setFAQ,
-                      selectedId: FAQ && FAQ.id,
-                    })
-                  )}
+                  {!searchterm &&
+                    applicationFAQ.map((q) =>
+                      RenderQuestion({
+                        entry: q,
+                        handleClick: setFAQ,
+                        selectedId: FAQ && FAQ.id,
+                      })
+                    )}
                 </Stack>
               </CustomTabPanel>
             </Stack>
