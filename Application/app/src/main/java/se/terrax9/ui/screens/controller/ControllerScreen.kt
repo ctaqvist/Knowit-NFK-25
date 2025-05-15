@@ -22,9 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.runBlocking
 import se.terrax9.R
 import se.terrax9.Routes
 import se.terrax9.services.Commands
+import se.terrax9.services.DataService
+import se.terrax9.services.UserData
 import se.terrax9.ui.shared.AppButton
 import se.terrax9.ui.theme.LexendExa
 
@@ -110,7 +113,7 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
                 }
 
                 // Overlay when disconnected
-                if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+                if (!viewModel.BACKDOOR && serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
                     DisableBlocker()
                 }
             }
@@ -184,7 +187,7 @@ fun BottomDashboard(viewModel: ControllerViewModel) {
         }
 
         // Semi-transparent overlay when disconnected
-        if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+        if (!viewModel.BACKDOOR && serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
             DisableBlocker()
         }
     }

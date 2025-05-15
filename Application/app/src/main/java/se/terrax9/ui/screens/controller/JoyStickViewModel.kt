@@ -9,18 +9,23 @@ class JoyStickViewModel(
     private var lastSent: Pair<Float, Float> = Pair(0f, 0f)
     private var lastSentTime = 0L  // time in millis
 
+    private var incoming: String = ""
+
     fun onMove(x: Float, y: Float) {
         val new = Pair(x, y)
         val now = System.currentTimeMillis()
-        if (isForceful(new.first.absoluteValue, new.second.absoluteValue) || shouldBeSentAgain(
+        //if (isForceful(new.first.absoluteValue, new.second.absoluteValue) || shouldBeSentAgain(
+        if (shouldBeSentAgain(
                 new,
                 lastSent
-            ) && now - lastSentTime >= 500
+            ) && now - lastSentTime >= 100
         ) {
             val commandStr = command(new.first, new.second)
             sendMessage(commandStr)
             lastSent = new
             lastSentTime = now
+        } else {
+
         }
     }
 
