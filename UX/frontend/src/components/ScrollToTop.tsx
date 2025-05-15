@@ -11,7 +11,11 @@ export default function ScrollToHash() {
       const id = hash.replace('#', '');
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest'
+        });
       }
     } else {
       window.scrollTo(0, 0);

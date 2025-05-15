@@ -36,10 +36,6 @@ export const router = createBrowserRouter([
       element: <Support />
     },
     {
-      path: '/:file',
-      element: <div></div>
-    },
-    {
       path: '/login',
       element: <>
         <AuthRedirect />
