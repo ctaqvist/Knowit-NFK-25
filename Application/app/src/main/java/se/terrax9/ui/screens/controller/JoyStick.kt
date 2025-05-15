@@ -119,16 +119,18 @@ fun JoyStick(
                         )
                     }
                     .size(knobSize)
+                    .zIndex(20f)
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.joystick_base),
+                contentDescription = "Joystick center",
+                modifier = Modifier
+                    .size(baseSize)
                     .zIndex(10f)
             )
         }
-        Image(
-            painter = painterResource(id = R.drawable.joystick_base),
-            contentDescription = "Joystick center",
-            modifier = Modifier
-                .size(baseSize)
-                .zIndex(10f)
-        )
+
     }
 }
 

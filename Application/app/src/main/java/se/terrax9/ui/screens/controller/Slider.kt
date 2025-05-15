@@ -1,9 +1,12 @@
 package se.terrax9.ui.screens.controller
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -45,8 +48,8 @@ fun Slider(
     onMove: (Float) -> Unit = { _ -> },
     text: String = ""
 ) {
-    val baseSize = 240.dp
-    val knobSize = 140.dp
+    val baseSize = 210.dp
+    val knobSize = 110.dp
 
     // Visual offset defines the maximum distance the joystick can be dragged before being capped.
     // This value is used to visually cap the movement of the joystick
@@ -62,9 +65,19 @@ fun Slider(
 
     // Raw offset from origin and finger
     var rawOffset by remember { mutableStateOf(Offset.Zero) }
+
+
+
     Box(
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxHeight()
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.vertical_background),
+            contentDescription = "Joystick background",
+            modifier = Modifier
+                .height(baseSize*1.5f)
+        )
         Box(
             modifier = Modifier
                 .height(baseSize)
@@ -94,39 +107,38 @@ fun Slider(
                 },
             contentAlignment = Alignment.Center
         ) {
-            Box (
-                modifier = Modifier
-                    .offset { IntOffset(0, joyStickOffset.y.roundToInt()) },
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.joystickcenter),
-                    contentDescription = "Joystick center",
+            Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
+                Box(
                     modifier = Modifier
-                        .size(knobSize)
-                        .zIndex(10f)
-                )
+                        .offset { IntOffset(0, joyStickOffset.y.roundToInt()) }
+                        .zIndex(15f),
 
-                Text(
-                    text, style = TextStyle(
-                        fontSize = 15.sp,
-                        fontFamily = FontFamily(Font(R.font.lexendera)),
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFFFFFFFF),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.joystick_ball),
+                        contentDescription = "Joystick center",
+                        modifier = Modifier
+                            .size(knobSize)
+                            .zIndex(10f)
+                    )
 
-                        textAlign = TextAlign.Center,
-                    ), modifier = Modifier.zIndex(11f)
-                )
+                    Text(
+                        text, style = TextStyle(
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.lexendera)),
+                            fontWeight = FontWeight(500),
+                            color = Color(0xFFFFFFFF),
+
+                            textAlign = TextAlign.Center,
+                        ), modifier = Modifier.zIndex(11f)
+                    )
+                }
+
+
             }
-        }
-        Image(
-            painter = painterResource(id = R.drawable.vertical_background),
-            contentDescription = "Joystick background",
-            modifier = Modifier
-                .height(baseSize * 1.3f)
-                .zIndex(9f)
 
-        )
+        }
     }
 }
 

@@ -189,12 +189,30 @@ class DataService(
     }
 
     suspend fun sendMessage(message: String) {
-        if (!UserData.roverStatus) {
+
+        if (!message.contains("steer")) {
+            ensureOpenConnection()
+            println("RoverStatus: ${UserData.roverStatus}")
+
+            try {
+                println("Sending a new message of: $message")
+                socket?.send(message)
+                UserData.roverStatus = false
+            } catch (e: Exception) {
+                println("Failed to send message: ${e.localizedMessage}")
+            }
+            return
+        }
+
+        if (!UserData.roverStatus && !message.contains("connect")) {
             incomingMessage = message
             println("SKIP: message that will be put in queue: $incomingMessage")
             return
         }
-        UserData.roverStatus = false
+
+        if (!message.contains("connect")) {
+            UserData.roverStatus = false
+        }
         ensureOpenConnection()
         println("RoverStatus: ${UserData.roverStatus}")
 
