@@ -177,6 +177,7 @@ class DataService(
         when (roverStatus) {
             "ok" -> {
                 UserData.roverStatus = true
+                println(incomingMessage ?: "no incoming messagse")
                 if (incomingMessage != null) {
                     runBlocking {
                         sendMessage(incomingMessage!!)
@@ -188,13 +189,14 @@ class DataService(
     }
 
     suspend fun sendMessage(message: String) {
-        !UserData.roverStatus
-        ensureOpenConnection()
-        println("RoverStatus: ${UserData.roverStatus}")
         if (!UserData.roverStatus) {
             incomingMessage = message
+            println("SKIP: message that will be put in queue: $incomingMessage")
             return
         }
+        UserData.roverStatus = false
+        ensureOpenConnection()
+        println("RoverStatus: ${UserData.roverStatus}")
 
         try {
             println("Sending a new message of: $message")

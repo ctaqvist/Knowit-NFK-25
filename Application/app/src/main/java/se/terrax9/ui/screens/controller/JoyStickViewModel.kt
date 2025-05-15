@@ -14,8 +14,8 @@ class JoyStickViewModel(
     fun onMove(x: Float, y: Float) {
         val new = Pair(x, y)
         val now = System.currentTimeMillis()
-        //if (isForceful(new.first.absoluteValue, new.second.absoluteValue) || shouldBeSentAgain(
-        if (shouldBeSentAgain(
+        if (isForceful(new.first.absoluteValue, new.second.absoluteValue) || shouldBeSentAgain(
+        //if (shouldBeSentAgain(
                 new,
                 lastSent
             ) && now - lastSentTime >= 100
@@ -24,8 +24,6 @@ class JoyStickViewModel(
             sendMessage(commandStr)
             lastSent = new
             lastSentTime = now
-        } else {
-
         }
     }
 
