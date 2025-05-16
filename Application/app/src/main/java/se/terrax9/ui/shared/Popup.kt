@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,16 +30,16 @@ import androidx.compose.ui.unit.sp
 import se.terrax9.R
 
 @Composable
-fun Popup(iconRes: Int,
-          title: String,
-          description: String,
-          onDismiss: () -> Unit,
-          buttonOneText: String? = null,
-          buttonOneColor: Color = Color(0xFF5526FF),
-          buttonTwoText: String? = null,
-          buttonTwoColor: Color = Color(0xFF5526FF),
-          onButtonOneClick: (() -> Unit)? = null,
-          onButtonTwoClick: (() -> Unit)? = null) {
+fun PopupView(iconRes: Int,
+              title: String,
+              description: String,
+              onDismiss: () -> Unit,
+              buttonOneText: String? = null,
+              buttonOneColor: Color = Color(0xFF5526FF),
+              buttonTwoText: String? = null,
+              buttonTwoColor: Color = Color(0xFF5526FF),
+              onButtonOneClick: (() -> Unit)? = null,
+              onButtonTwoClick: (() -> Unit)? = null) {
 
     val gradientColors = listOf(Color(0xFF05030C), Color(0xFF180757))
 
@@ -143,6 +141,6 @@ fun PopupButton(text: String, onClick: () -> Unit, color: Color) {
 @Preview
 @Composable
 fun PopupPreview() {
-    Popup(iconRes = R.drawable.warning, title = "Delete user from rover?", description = "This action cannot be undone. The user will lose access immediately.", onDismiss = {}, buttonOneText = "DELETE",
+    PopupView(iconRes = R.drawable.warning, title = "Delete user from rover?", description = "This action cannot be undone. The user will lose access immediately.", onDismiss = {}, buttonOneText = "DELETE",
         buttonOneColor = Color(0x33FFFFFF), buttonTwoText = "CANCEL", buttonTwoColor = Color(0xFFFF3131))
 }
