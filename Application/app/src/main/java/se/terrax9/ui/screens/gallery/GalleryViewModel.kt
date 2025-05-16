@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import se.terrax9.services.APIService
+import se.terrax9.services.UserData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,7 +25,7 @@ data class ImageGroup(
 class GalleryViewModel : ViewModel() {
     private val apiService = APIService()
 
-    private val url = "http://ws.terrax9.se/images/"
+    private val url = "http://terrax9.se:8081/images?token${UserData.token ?: ""}"
 
     private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
     val imageUrls: StateFlow<List<String>> = _imageUrls
