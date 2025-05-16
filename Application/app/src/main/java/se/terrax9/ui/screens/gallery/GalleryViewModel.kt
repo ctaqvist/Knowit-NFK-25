@@ -24,7 +24,7 @@ data class ImageGroup(
 class GalleryViewModel : ViewModel() {
     private val apiService = APIService()
 
-    private val url = "https://terrax9.se/images/"
+    private val url = "http://ws.terrax9.se/images/"
 
     private val _imageUrls = MutableStateFlow<List<String>>(emptyList())
     val imageUrls: StateFlow<List<String>> = _imageUrls

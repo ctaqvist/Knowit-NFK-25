@@ -149,6 +149,18 @@ class DataService(
         val json = JSONObject(payload)
         val state = json.optString("rover_status")
 
+        val response = json.optString("response")
+
+        if (response == "disconnected" || (response == "error" && json.optString("message") != "Rover rover-001 is already in use by another user.")) {
+            println("Failed to connect to rover!")
+            UserData.selectedRoverID = null
+            onRoverStatusChange(false)
+            runBlocking {
+                socket?.close()
+                receiveJob?.cancel()
+            }
+        }
+
         when (state) {
             "disconnected" -> {
                 println("Failed to connect to rover!")
