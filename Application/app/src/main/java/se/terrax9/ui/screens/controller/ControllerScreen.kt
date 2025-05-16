@@ -118,10 +118,10 @@ fun UpperDashboard(viewModel: ControllerViewModel, navController: NavController)
                     )
                 }
 
-                // // Overlay when disconnected
-                // if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
-                //     DisableBlocker()
-                // }
+                 // Overlay when disconnected
+                 if (serverStatus.value == ControllerViewModel.ServerStatus.DISCONNECTED) {
+                     DisableBlocker()
+                 }
             }
         }
 

@@ -87,8 +87,8 @@ class DataService(
                         protocol = URLProtocol.WS
                         host = "terrax9.se"
                         path("/")
-                        port = 8080
-                        //parameters.append("token", UserData.token!!) // Crash if no token provided
+                        port = 8081
+                        parameters.append("token", UserData.token!!) // Crash if no token provided
                     }
                 }
             }

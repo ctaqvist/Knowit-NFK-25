@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import se.terrax9.BuildConfig
 import se.terrax9.services.DataService
 import se.terrax9.services.Commands
+import se.terrax9.services.UserData
 
 class ControllerViewModel() : ViewModel() {
 
@@ -86,5 +87,7 @@ class ControllerViewModel() : ViewModel() {
         } else {
             sendCommand(Commands.connectToRover())
         }
+
+        UserData.roverStatus = true
     }
 }

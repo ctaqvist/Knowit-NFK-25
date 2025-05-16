@@ -100,7 +100,7 @@ fun Slider(
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.joystickcenter),
+                    painter = painterResource(id = R.drawable.joystick_ball),
                     contentDescription = "Joystick center",
                     modifier = Modifier
                         .size(knobSize)
