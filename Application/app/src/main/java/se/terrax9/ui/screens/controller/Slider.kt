@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +48,7 @@ fun Slider(
     text: String = ""
 ) {
     val baseSize = 240.dp
-    val knobSize = 140.dp
+    val knobSize = 120.dp
 
     // Visual offset defines the maximum distance the joystick can be dragged before being capped.
     // This value is used to visually cap the movement of the joystick
@@ -62,9 +64,20 @@ fun Slider(
 
     // Raw offset from origin and finger
     var rawOffset by remember { mutableStateOf(Offset.Zero) }
+
+    Spacer(modifier = Modifier.padding(horizontal = 14.dp))
+
     Box(
         contentAlignment = Alignment.Center
     ) {
+        Box(contentAlignment = Alignment.Center) {
+            Image(
+                painter = painterResource(id = R.drawable.vertical_background),
+                contentDescription = "Joystick background",
+                modifier = Modifier
+                    .height(baseSize * 2f)
+            )
+        }
         Box(
             modifier = Modifier
                 .height(baseSize)
@@ -94,12 +107,6 @@ fun Slider(
                 },
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.vertical_background),
-                contentDescription = "Joystick background",
-                modifier = Modifier
-                    .height(baseSize * 1.3f)
-            )
             Box(
                 modifier = Modifier,
                 contentAlignment = Alignment.Center
