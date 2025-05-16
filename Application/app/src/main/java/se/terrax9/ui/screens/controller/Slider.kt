@@ -94,39 +94,44 @@ fun Slider(
                 },
             contentAlignment = Alignment.Center
         ) {
-            Box (
+            Image(
+                painter = painterResource(id = R.drawable.vertical_background),
+                contentDescription = "Joystick background",
                 modifier = Modifier
-                    .offset { IntOffset(0, joyStickOffset.y.roundToInt()) },
+                    .height(baseSize * 1.3f)
+            )
+            Box(
+                modifier = Modifier,
                 contentAlignment = Alignment.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.joystick_ball),
-                    contentDescription = "Joystick center",
+                Box(
                     modifier = Modifier
-                        .size(knobSize)
-                        .zIndex(10f)
-                )
+                        .offset { IntOffset(0, joyStickOffset.y.roundToInt()) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.joystick_ball),
+                        contentDescription = "Joystick center",
+                        modifier = Modifier
+                            .size(knobSize)
+                            .zIndex(10f)
+                    )
 
-                Text(
-                    text, style = TextStyle(
-                        fontSize = 15.sp,
-                        fontFamily = FontFamily(Font(R.font.lexendera)),
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFFFFFFFF),
+                    Text(
+                        text, style = TextStyle(
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.lexendera)),
+                            fontWeight = FontWeight(500),
+                            color = Color(0xFFFFFFFF),
 
-                        textAlign = TextAlign.Center,
-                    ), modifier = Modifier.zIndex(11f)
-                )
+                            textAlign = TextAlign.Center,
+                        ), modifier = Modifier.zIndex(11f)
+                    )
+                }
+
+
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.vertical_background),
-            contentDescription = "Joystick background",
-            modifier = Modifier
-                .height(baseSize * 1.3f)
-                .zIndex(9f)
-
-        )
     }
 }
 

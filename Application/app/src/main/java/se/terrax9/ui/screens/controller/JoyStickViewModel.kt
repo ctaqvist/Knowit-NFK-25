@@ -15,11 +15,12 @@ class JoyStickViewModel(
         val new = Pair(x, y)
         val now = System.currentTimeMillis()
         //if (isForceful(new.first.absoluteValue, new.second.absoluteValue) || shouldBeSentAgain(
-        if (shouldBeSentAgain(
+        if (isForceful(new.first.absoluteValue, new.second.absoluteValue) || shouldBeSentAgain(
                 new,
                 lastSent
-            ) && now - lastSentTime >= 100
-        ) {
+            ) && now - lastSentTime >= 30
+        )
+        {
             val commandStr = command(new.first, new.second)
             sendMessage(commandStr)
             lastSent = new
@@ -30,7 +31,7 @@ class JoyStickViewModel(
     }
 
     fun isForceful(x: Float, y: Float): Boolean {
-        return (x == 0f && lastSent.first != 0f) || (y == 0f && lastSent.second != 0f) || (x == 1f && lastSent.first != 1f) || (y == 1f && lastSent.second != 1f)
+        return (x == 0f && lastSent.first != 0f) || (y == 0f && lastSent.second != 0f)
     }
 
     private fun shouldBeSentAgain(new: Pair<Float, Float>, old: Pair<Float, Float>): Boolean {
