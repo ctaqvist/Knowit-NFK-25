@@ -34,21 +34,21 @@ fun SettingsScreen(navController: NavController) {
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
-            Row {
-                Column(
-                    modifier = Modifier
-                        .padding(start = 70.dp)
-                        //.weight(1f)
-                    ,
-                    verticalArrangement = Arrangement.spacedBy(42.dp)
-                ) {
-                    RoverInfo(username = "Moji", roverSerial = "Rover1")
-                    SelectRoverButton()
-                    SettingsButtons(viewModel, context)
-                }
-
-                RightSideButtons(navController = navController)
+        Row {
+            Column(
+                modifier = Modifier
+                    .padding(start = 70.dp)
+                //.weight(1f)
+                ,
+                verticalArrangement = Arrangement.spacedBy(42.dp)
+            ) {
+                RoverInfo(username = "Moji", roverSerial = "Rover1")
+                SelectRoverButton()
+                SettingsButtons(viewModel, context)
             }
+
+            RightSideButtons(navController = navController)
+        }
     }
 }
 
@@ -57,28 +57,28 @@ fun SettingsScreen(navController: NavController) {
 fun SettingsButtons(viewModel: SettingsViewModel, context: Context) {
     Column(verticalArrangement = Arrangement.spacedBy(42.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(42.dp)) {
-            SettingsButton(text = "User profile", iconRes = R.drawable.user_profile){
+            SettingsButton(text = "User profile", iconRes = R.drawable.user_profile) {
 
             }
-            SettingsButton(text = "Rover Sharing", iconRes = R.drawable.share){
+            SettingsButton(text = "Rover Sharing", iconRes = R.drawable.share) {
 
             }
-            SettingsButton(text = "User Manual", iconRes = R.drawable.manual){
+            SettingsButton(text = "User Manual", iconRes = R.drawable.manual) {
                 // Test to redirect to a google
                 viewModel.openWebPage(context, SettingsLink.GOOGLE)
             }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(42.dp)) {
-            SettingsButton(text = "Support", iconRes = R.drawable.support){
+            SettingsButton(text = "Support", iconRes = R.drawable.support) {
 
             }
-            SettingsButton(text = "GPSR", iconRes = R.drawable.gpsr){
+            SettingsButton(text = "GPSR", iconRes = R.drawable.gpsr) {
 
             }
-            SettingsButton(text = "Privary policy", iconRes = R.drawable.privacy){
+            SettingsButton(text = "Privary policy", iconRes = R.drawable.privacy) {
 
             }
-            SettingsButton(text = "App info", iconRes = R.drawable.info){
+            SettingsButton(text = "App info", iconRes = R.drawable.info) {
 
             }
         }
