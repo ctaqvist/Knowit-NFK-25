@@ -11,6 +11,8 @@ import {
 } from 'react';
 import { ContactForm } from '@/types/types';
 import Icon from './Icon';
+import searchIcon from '../assets/Icon_search.svg'
+import arrowDown from '../assets/Icon_arrow_down.svg'
 
 type CountrySelectProps = {
     formData: ContactForm;
@@ -108,7 +110,7 @@ export default function CountrySelect({
                     style={{ borderRadius: 2 }}
                 />
                 <Icon
-                    src='/src/assets/Icon_arrow_down.svg'
+                    src={arrowDown}
                     width='18px'
                     height='14px'
                     alt='Expand'
@@ -130,9 +132,9 @@ export default function CountrySelect({
                 value={formData.telephone.number}
                 onChange={handleNumberChange}
                 inputProps={{
-                    autocomplete: 'new-password',
+                    autoComplete: 'new-password',
                     form: {
-                        autocomplete: 'off',
+                        autoComplete: 'off',
                     },
                 }}
                 id='number-input'
@@ -156,7 +158,7 @@ export default function CountrySelect({
                     >
                         <MenuItem sx={{ position: 'relative' }}>
                             <Box sx={{ position: 'absolute' }}>
-                                <Icon src='/src/assets/Icon_search.svg' />
+                                <Icon src={searchIcon} />
                             </Box>
                             <TextField
                                 placeholder='Search for country'

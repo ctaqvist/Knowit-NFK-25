@@ -1,10 +1,12 @@
-import { Box, Link, Typography } from '@mui/material';
+import { Box, Button, Link, Typography } from '@mui/material';
 import { useContent } from '../hooks/useContent';
 import { Marquee } from '@/components/magicui/marquee';
 import { ReviewCard } from '@/components/ReviewCard';
+import { useNavigate } from 'react-router';
 
 function Hero() {
   const { reviews } = useContent();
+  const navigate = useNavigate();
 
   // Split reviews in two rows
   const firstRow = reviews?.slice(0, reviews?.length / 2);
@@ -20,44 +22,31 @@ function Hero() {
         // Banner Section
         component='section'
         id='hero_banner'
-        sx={{ height: 1000 }}
+        sx={{ minHeigth: 1000, width: '100vw', position: 'relative' }}
       >
-        <Box sx={{ position: 'relative', height: '100%' }}>
-          <img
-            style={{ width: '100%', objectFit: 'cover', minHeight: '100%' }}
-            src={`${import.meta.env.VITE_SUPABASE_URL
-              }/storage/v1/object/public/images//hero_banner.png`}
-            alt=''
-          />
-          <Box
-            aria-hidden='true'
-            sx={{
-              height: 150,
-              width: '100%',
-              background: 'linear-gradient(0deg, #05030C, rgba(0,0,0,0))',
-              position: 'absolute',
-              bottom: 0,
-            }}
-          />
-        </Box>
+        <img
+          style={{ width: '100%' }}
+          src={`${import.meta.env.VITE_SUPABASE_URL
+            }/storage/v1/object/public/images//new_hero.png`}
+          alt=''
+        />
 
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            alignItems: { xs: 'center', sm: 'center', md: 'start' },
             margin: '0 auto',
-            width: 'clamp(200px, 80vw, 1276px)',
-            textAlign: { xs: 'center', sm: 'center', md: 'start' },
+            width: '74%',
             position: 'absolute',
-            top: 479,
-            right: 'clamp(5vw, 10vw, 321px)',
-            left: '11vw'
+            top: '38%',
+            left: '11vw',
+            height: '24.9%',
           }}
         >
           <Typography
             variant='h1'
             color='text.primary'
+            sx={{ fontSize: 'clamp(18px, 2.1vw, 168px)' }}
           >
             TERRA-X9 Interplanetary Rover
           </Typography>
@@ -66,17 +55,36 @@ function Hero() {
             color='text.primary'
             sx={{
               mt: '16px',
-              maxWidth: 629,
-              fontSize: 20,
-              lineHeight: '30px',
-              mb: '32px',
+              maxWidth: '56%',
+              fontSize: 'clamp(14px, 1.2vw, 2rem)',
+              mb: '2vw',
             }}
           >
-            TERRA-X9 produce all-terrain, real-time controlled interplanetary
-            rovers with 360° vision, smart object collection, and seamless
-            wireless control—right from your device.
+            <Typography
+              sx={{ display: 'inline-block', fontSize: 'inherit' }}
+              fontWeight={700}
+              component={'span'}
+            >
+              TERRA-X9
+            </Typography>{' '}
+            produce all-terrain, real-time controlled interplanetary rovers with
+            360° vision, smart object collection, and seamless wireless
+            control—right from your device.
           </Typography>
-          <Link variant='button' href='/product'>Discover more</Link>
+          <Button
+            onClick={() => navigate('/product')}
+            variant='contained'
+            sx={{
+              zIndex: 2,
+              fontSize: 'clamp(14px, 1vw, 30px)',
+              paddingLeft: 'clamp(18px, 1vw, 28px)',
+              paddingRight: 'clamp(18px, 1vw, 28px)',
+              paddingTop: 'clamp(10px, 1vw, 20px)',
+              paddingBottom: 'clamp(10px, 1vw, 20px)',
+            }}
+          >
+            More about the rover
+          </Button>
         </Box>
       </Box>
       {/* Reviews section */}
@@ -265,7 +273,12 @@ function Hero() {
               the rover’s core technologies, mission capabilities, and how it
               fits into the future of space mobility.
             </Typography>
-            <Link variant='button' href='/contact'>Get in touch</Link>
+            <Link
+              variant='button'
+              href='/contact'
+            >
+              Get in touch
+            </Link>
           </Box>
         </Box>
       </Box>

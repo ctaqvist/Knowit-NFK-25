@@ -27,6 +27,15 @@ import LinearProgress from '@mui/material/LinearProgress';
 import FAQ, { INITIAL_FORM_DATA, INITIAL_FORM_VALIDITY } from '@/utils/data/supportFAQ';
 import Accordion from '@/components/CustomAccordion';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import alertSign from '../assets/alert_sign.svg'
+import downloadIcon from '../assets/Icon_download.svg'
+import GPSRIcon from '../assets/Icon_GPSR.svg'
+import manualIcon from '../assets/Icon_manual.svg'
+import designElement from '../assets/design_element.png'
+import infoIcon from '../assets/Icon_info.svg'
+import uploadIcon from '../assets/Icon_upload.svg'
+import deleteIcon from '../assets/Icon_delete.svg'
+import removeIcon from '../assets/Icon_remove.svg'
 
 function Support() {
   const [formData, setFormData] = useState<SupportForm>(INITIAL_FORM_DATA);
@@ -334,7 +343,7 @@ function Support() {
                           direction='row'
                         >
                           <Icon
-                            src='/src/assets/alert_sign.svg'
+                            src={alertSign}
                             width='28px'
                           />
                           {formValidity.f_name_input}
@@ -372,7 +381,7 @@ function Support() {
                           component={'p'}
                         >
                           <Icon
-                            src='/src/assets/alert_sign.svg'
+                            src={alertSign}
                             width='28px'
                           />
                           {formValidity.s_name_input}
@@ -417,7 +426,7 @@ function Support() {
                           direction='row'
                         >
                           <Icon
-                            src='/src/assets/alert_sign.svg'
+                            src={alertSign}
                             width='28px'
                           />
                           {formValidity.email_input}
@@ -448,7 +457,7 @@ function Support() {
                     >
                       <Box>
                         <Icon
-                          src='/src/assets/Icon_info.svg'
+                          src={infoIcon}
                           width='24px'
                         />
                       </Box>
@@ -472,7 +481,7 @@ function Support() {
                           direction='row'
                         >
                           <Icon
-                            src='/src/assets/alert_sign.svg'
+                            src={alertSign}
                             width='28px'
                           />
                           {formValidity.serial_input}
@@ -530,7 +539,7 @@ function Support() {
                         direction='row' alignItems={'center'}
                       >
                         <Icon
-                          src='/src/assets/alert_sign.svg'
+                          src={alertSign}
                           width='28px'
                         />
                         <FormHelperText sx={{ color: '#FF3131' }}>
@@ -568,7 +577,7 @@ function Support() {
                           direction='row'
                         >
                           <Icon
-                            src='/src/assets/alert_sign.svg'
+                            src={alertSign}
                             width='28px'
                           />
                           {formValidity.date_input}
@@ -608,7 +617,7 @@ function Support() {
                         direction='row'
                       >
                         <Icon
-                          src='/src/assets/alert_sign.svg'
+                          src={alertSign}
                           width='28px'
                         />
                         {formValidity.issue_description_input}
@@ -648,7 +657,7 @@ function Support() {
                     onChange={handleUpload}
                     multiple
                   />
-                  <img src='/src/assets/Icon_upload.svg' />
+                  <img src={uploadIcon} />
                   <Typography
                     variant='body1'
                     sx={{ fontWeight: 600 }}
@@ -681,7 +690,7 @@ function Support() {
                       <Typography>{file.name}</Typography>
                       <IconButton onClick={() => handleRemoveUpload(file)}>
                         <Icon
-                          src='/src/assets/Icon_delete.svg'
+                          src={deleteIcon}
                           height='24px'
                         />
                       </IconButton>
@@ -706,7 +715,7 @@ function Support() {
                           filter: 'brightness(0) saturate(100%) invert(39%) sepia(86%) saturate(4609%) hue-rotate(343deg) brightness(109%) contrast(108%)'
                         }}>
                           <Icon
-                            src='/src/assets/Icon_remove.svg'
+                            src={removeIcon}
                             height='24px'
                           />
                         </IconButton>
@@ -731,7 +740,7 @@ function Support() {
                         <Typography>{file.name}</Typography>
                         <IconButton onClick={() => handleRemoveUpload(file)}>
                           <Icon
-                            src='/src/assets/Icon_delete.svg'
+                            src={deleteIcon}
                             height='24px'
                           />
                         </IconButton>
@@ -757,7 +766,7 @@ function Support() {
           sx={{
             zIndex: 0,
             position: 'absolute',
-            backgroundImage: 'url("/src/assets/design_element.png")',
+            backgroundImage: `url(${designElement})`,
             right: 0,
             bottom: 0,
             width: '50%',
@@ -772,7 +781,7 @@ function Support() {
           sx={{
             zIndex: 0,
             position: 'absolute',
-            backgroundImage: 'url("/src/assets/design_element.png")',
+            backgroundImage: `url(${designElement})`,
             left: 0,
             top: 0,
             transform: 'rotate(180deg)',
@@ -826,7 +835,7 @@ function Support() {
           }}
         >
           <Stack>
-            <img src='/src/assets/Icon_manual.svg' />
+            <img src={manualIcon} />
             <Typography
               sx={{ fontSize: 20 }}
               variant='subheading'
@@ -839,13 +848,13 @@ function Support() {
               onClick={() => handleDownload('Instruction_Manual')}
               variant='contained'
               size='small'
-              endIcon={<Icon src='/src/assets/Icon_download.svg' />}
+              endIcon={<Icon src={downloadIcon} />}
             >
               Download
             </Button>
           </Stack>
           <Stack>
-            <img src='/src/assets/Icon_GPSR.svg' alt='' />
+            <img src={GPSRIcon} alt='' />
             <Typography
               sx={{ fontSize: 20 }}
               variant='subheading'
@@ -859,7 +868,7 @@ function Support() {
               onClick={() => handleDownload('GPSR')}
               variant='contained'
               size='small'
-              endIcon={<Icon src='/src/assets/Icon_download.svg' />}
+              endIcon={<Icon src={downloadIcon} />}
             >
               Download
             </Button>
