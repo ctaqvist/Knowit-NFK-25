@@ -37,7 +37,7 @@ def start_video_stream():
         "-i", output_path,
         "-c:v", "copy",
         "-f", "mpegts",
-        "srt://test.lazyloops.se:1234?pkt_size=1316&latency=50"
+        "srt://terrax9.se:1235?pkt_size=1316&latency=50"
     ])
     is_streaming = True
 

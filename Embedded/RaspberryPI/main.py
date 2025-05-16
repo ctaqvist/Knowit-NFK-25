@@ -2,10 +2,14 @@ import sys
 import os
 import logging
 import asyncio
+import threading
+import time
+
 from config.settings import IS_RPI
 
 if IS_RPI:
     import Robotic_arm.servo_module.functions as servo_module
+    from hardware.video_streamer import start_video_stream 
 
 from communication.websocket_communication import listen_to_server
 from communication.serial_helper import arduino
@@ -30,6 +34,18 @@ def run():
     arduino.connect()
     logging.debug("Arduino connected.")
 
+    if IS_RPI:
+        def delayed_stream_start():
+            time.sleep(1)  
+            try:
+                start_video_stream()
+                logging.debug("Video stream started automatically.")
+            except Exception as e:
+                logging.error(f"Failed to start video stream: {e}")
+
+        threading.Thread(target=delayed_stream_start, daemon=True).start()
+
+    # 🎧 Starta websocketlyssnaren
     loop = asyncio.get_event_loop()
     tasks = [
         loop.create_task(listen_to_server())
