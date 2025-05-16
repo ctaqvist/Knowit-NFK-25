@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code (with submodules)
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          submodules: false
 
       - name: Configure, build & test
         working-directory: Embedded/Arduino/Motor_controller
