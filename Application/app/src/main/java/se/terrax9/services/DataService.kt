@@ -164,6 +164,7 @@ class DataService(
                 // TODO: FIX HARDCODED VALUE
                 UserData.selectedRoverID = "rover-001"
                 onRoverStatusChange(true)
+                UserData.roverStatus = true
             }
 
             else -> {
@@ -174,6 +175,7 @@ class DataService(
         val roverID = json.optString("rover_id")
         val roverStatus = json.optString("status")
 
+        println("roverStatus: $roverStatus")
         when (roverStatus) {
             "ok" -> {
                 UserData.roverStatus = true
@@ -188,6 +190,19 @@ class DataService(
     }
 
     suspend fun sendMessage(message: String) {
+
+        if (message.contains("connect")) {
+            UserData.roverStatus = true
+            ensureOpenConnection()
+            try {
+                println("Sending a new message of: $message")
+                socket?.send(message)
+                UserData.roverStatus = true
+            } catch (e: Exception) {
+                println("Failed to send message: ${e.localizedMessage}")
+            }
+        }
+
         !UserData.roverStatus
         ensureOpenConnection()
         println("RoverStatus: ${UserData.roverStatus}")

@@ -43,7 +43,7 @@ class ControllerViewModel() : ViewModel() {
         }
     }
     private var job: Job? = null
-    val BACKDOOR = true
+    val BACKDOOR = false
 
     private val _isLighted = MutableStateFlow(true)
     val isLighted: StateFlow<Boolean> = _isLighted
@@ -83,8 +83,10 @@ class ControllerViewModel() : ViewModel() {
 
     fun toggleConnect() {
         if (serverStatus.value == ServerStatus.CONNECTED) {
+            println("Now disconnected :))")
             dataService.disconnect()
         } else {
+            println("Now connect...")
             sendCommand(Commands.connectToRover())
         }
 
