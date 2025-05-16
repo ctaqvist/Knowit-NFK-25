@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terrax9 Control Interface</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 0;
+        }
+        .status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #eee;
+        }
+        .control-section {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .joysticks-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .joystick-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .joystick-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .joystick-container {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            background-color: #eee;
+            border-radius: 50%;
+            touch-action: none;
+        }
+        .vertical-joystick-container {
+            width: 80px;
+            height: 200px;
+            position: relative;
+            background-color: #eee;
+            border-radius: 40px;
+            touch-action: none;
+        }
+        .joystick-knob {
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            user-select: none;
+        }
+        .vertical-joystick-knob {
+            width: 40px;
+            height: 40px;
+            background-color: #3498db;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            user-select: none;
+        }
+        .value-display {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+            height: 20px;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:active {
+            background-color: #1c6ea4;
+        }
+        .battery-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .battery-level {
+            width: 150px;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .battery-fill {
+            height: 100%;
+            background-color: #2ecc71;
+            transition: width 0.5s;
+        }
+        .warning {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Terrax9 Control Interface</h1>
+        
+        <div class="status" id="connection-status">Ansluter till rover...</div>
+        
+        <div class="control-section">
+            <h2 class="section-title">Kontroller</h2>
+            <div class="joysticks-container">
+                <div class="joystick-wrapper">
+                    <div class="joystick-label">Styrning</div>
+                    <div class="joystick-container" id="main-joystick">
+                        <div class="joystick-knob" id="main-joystick-knob"></div>
+                    </div>
+                    <div class="value-display" id="main-joystick-value">x: 0.00, y: 0.00</div>
+                </div>
+                
+                <div class="joystick-wrapper">
+                    <div class="joystick-label">Shoulder</div>
+                    <div class="vertical-joystick-container" id="shoulder-joystick">
+                        <div class="vertical-joystick-knob" id="shoulder-joystick-knob"></div>
+                    </div>
+                    <div class="value-display" id="shoulder-value">0.00</div>
+                </div>
+                
+                <div class="joystick-wrapper">
+                    <div class="joystick-label">Axis</div>
+                    <div class="vertical-joystick-container" id="axis-joystick">
+                        <div class="vertical-joystick-knob" id="axis-joystick-knob"></div>
+                    </div>
+                    <div class="value-display" id="axis-value">0.00</div>
+                </div>
+                
+                <div class="joystick-wrapper">
+                    <div class="joystick-label">Claw</div>
+                    <div class="vertical-joystick-container" id="claw-joystick">
+                        <div class="vertical-joystick-knob" id="claw-joystick-knob"></div>
+                    </div>
+                    <div class="value-display" id="claw-value">0.00</div>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button id="pic-btn">PIC</button>
+                <button id="start-stream-btn">START-STREAM</button>
+                <button id="stop-stream-btn">STOP-STREAM</button>
+                <button id="lights-on-btn">LIGHTS_ON</button>
+                <button id="lights-off-btn">LIGHTS_OFF</button>
+            </div>
+        </div>
+        
+        <div class="battery-info">
+            <div>
+                <div>Batteri: <span id="battery-percentage">--</span>%</div>
+                <div id="battery-warning" class="warning" style="display:none">Låg batterinivå!</div>
+                <div id="sleep-mode" class="warning" style="display:none">Sovläge aktiverat!</div>
+            </div>
+            <div class="battery-level">
+                <div class="battery-fill" id="battery-fill" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ROVER_ID = 'rover-001';
+        let ws = null;
+        
+        // Joystick states
+        let mainJoystickActive = false;
+        let shoulderJoystickActive = false;
+        let axisJoystickActive = false;
+        let clawJoystickActive = false;
+        
+        // Joystick data
+        let steerData = { x: 0, y: 0 };
+        let armData = {
+            shoulder: 0,
+            axis: 0,
+            claw: 0
+        };
+        
+        // Throttle timers
+        let steerThrottleTimer = null;
+        let armThrottleTimer = null;
+        
+        // Battery info
+        let batteryInfo = {
+            level: 0,
+            warning: false,
+            sleepMode: false
+        };
+
+        // Initialize connection
+        function connectWebSocket() {
+            const statusDisplay = document.getElementById('connection-status');
+            
+            try {
+                ws = new WebSocket('wss://terrax9.se');
+                
+                ws.onopen = () => {
+                    statusDisplay.textContent = 'Ansluten till rover';
+                    statusDisplay.style.backgroundColor = '#d5f5e3';
+                };
+                
+                ws.onclose = () => {
+                    statusDisplay.textContent = 'Frånkopplad från rover';
+                    statusDisplay.style.backgroundColor = '#fadbd8';
+                    
+                    // Try to reconnect after 5 seconds
+                    setTimeout(connectWebSocket, 5000);
+                };
+                
+                ws.onerror = (error) => {
+                    console.error('WebSocket Error:', error);
+                    statusDisplay.textContent = 'Fel vid anslutning';
+                    statusDisplay.style.backgroundColor = '#fadbd8';
+                };
+                
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        
+                        // Handle battery information
+                        if (data.hasOwnProperty('battery_level')) {
+                            updateBatteryInfo(data);
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error parsing message:', error);
+                    }
+                };
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                statusDisplay.textContent = 'Kunde inte ansluta till rover';
+                statusDisplay.style.backgroundColor = '#fadbd8';
+                
+                // Try to reconnect after 5 seconds
+                setTimeout(connectWebSocket, 5000);
+            }
+        }
+
+        // Update battery display
+        function updateBatteryInfo(data) {
+            batteryInfo.level = data.battery_level;
+            batteryInfo.warning = data.warning_signal;
+            batteryInfo.sleepMode = data.sleep_mode;
+            
+            const percentageEl = document.getElementById('battery-percentage');
+            const fillEl = document.getElementById('battery-fill');
+            const warningEl = document.getElementById('battery-warning');
+            const sleepEl = document.getElementById('sleep-mode');
+            
+            // Update percentage and fill
+            const percentage = Math.round(batteryInfo.level * 100);
+            percentageEl.textContent = percentage;
+            fillEl.style.width = `${percentage}%`;
+            
+            // Update color based on level
+            if (percentage < 20) {
+                fillEl.style.backgroundColor = '#e74c3c';
+            } else if (percentage < 50) {
+                fillEl.style.backgroundColor = '#f39c12';
+            } else {
+                fillEl.style.backgroundColor = '#2ecc71';
+            }
+            
+            // Show/hide warnings
+            warningEl.style.display = batteryInfo.warning ? 'block' : 'none';
+            sleepEl.style.display = batteryInfo.sleepMode ? 'block' : 'none';
+        }
+
+        // Send command to the rover
+        function sendCommand(command) {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const message = {
+                    rover_id: ROVER_ID,
+                    command: command
+                };
+                ws.send(JSON.stringify(message));
+            }
+        }
+
+        // Send steer joystick data with throttling
+        function sendSteerData() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const message = {
+                    rover_id: ROVER_ID,
+                    steer: {
+                        x: parseFloat(steerData.x.toFixed(2)),
+                        y: parseFloat(steerData.y.toFixed(2))
+                    }
+                };
+                ws.send(JSON.stringify(message));
+            }
+        }
+
+        // Send arm control data with throttling
+        function sendArmData() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const message = {
+                    rover_id: ROVER_ID,
+                    steer_arm: {
+                        shoulder: parseFloat(armData.shoulder.toFixed(2)),
+                        axis: parseFloat(armData.axis.toFixed(2)),
+                        claw: parseFloat(armData.claw.toFixed(2))
+                    }
+                };
+                ws.send(JSON.stringify(message));
+            }
+        }
+
+        // Initialize main joystick functionality
+        function initMainJoystick() {
+            const joystick = document.getElementById('main-joystick');
+            const knob = document.getElementById('main-joystick-knob');
+            const valueDisplay = document.getElementById('main-joystick-value');
+            let joystickRect = joystick.getBoundingClientRect();
+            const maxDistance = (joystickRect.width - knob.offsetWidth) / 2;
+            
+            function updateMainJoystickPosition(clientX, clientY) {
+                const centerX = joystickRect.left + joystickRect.width / 2;
+                const centerY = joystickRect.top + joystickRect.height / 2;
+                
+                let deltaX = clientX - centerX;
+                let deltaY = clientY - centerY;
+                
+                // Calculate distance from center
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                // Limit to the joystick boundaries
+                if (distance > maxDistance) {
+                    const ratio = maxDistance / distance;
+                    deltaX *= ratio;
+                    deltaY *= ratio;
+                }
+                
+                // Update knob position
+                knob.style.transform = `translate(${deltaX-25}px, ${deltaY-25}px)`;
+                
+                // Update joystick values (-1 to 1)
+                steerData.x = deltaX / maxDistance;
+                steerData.y = -deltaY / maxDistance; // Invert Y for logical control
+                
+                // Update value display
+                valueDisplay.textContent = `x: ${steerData.x.toFixed(2)}, y: ${steerData.y.toFixed(2)}`;
+                
+                // Throttle data sending
+                if (!steerThrottleTimer) {
+                    sendSteerData();
+                    steerThrottleTimer = setTimeout(() => {
+                        steerThrottleTimer = null;
+                        if (mainJoystickActive) {
+                            sendSteerData();
+                        }
+                    }, 100); // Throttle to 10 times per second max
+                }
+            }
+            
+            // Mouse events
+            joystick.addEventListener('mousedown', (e) => {
+                mainJoystickActive = true;
+                joystickRect = joystick.getBoundingClientRect(); // Update rect
+                // Use center of joystick with small offset
+                const centerX = joystickRect.left + joystickRect.width / 2;
+                const centerY = joystickRect.top + joystickRect.height / 2;
+                // Apply a small offset (5px) for initial position
+                updateMainJoystickPosition(centerX + 5, centerY + 5);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (mainJoystickActive) {
+                    updateMainJoystickPosition(e.clientX, e.clientY);
+                }
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (mainJoystickActive) {
+                    mainJoystickActive = false;
+                    knob.style.transform = 'translate(-50%, -50%)';
+                    steerData = { x: 0, y: 0 };
+                    valueDisplay.textContent = `x: 0.00, y: 0.00`;
+                    sendSteerData();
+                }
+            });
+            
+            // Touch events
+            joystick.addEventListener('touchstart', (e) => {
+                mainJoystickActive = true;
+                joystickRect = joystick.getBoundingClientRect(); // Update rect
+                // Use center of joystick with small offset
+                const centerX = joystickRect.left + joystickRect.width / 2;
+                const centerY = joystickRect.top + joystickRect.height / 2;
+                // Apply a small offset (5px) for initial position
+                updateMainJoystickPosition(centerX + 5, centerY + 5);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (mainJoystickActive) {
+                    updateMainJoystickPosition(e.touches[0].clientX, e.touches[0].clientY);
+                    e.preventDefault();
+                }
+            });
+            
+            document.addEventListener('touchend', () => {
+                if (mainJoystickActive) {
+                    mainJoystickActive = false;
+                    knob.style.transform = 'translate(-50%, -50%)';
+                    steerData = { x: 0, y: 0 };
+                    valueDisplay.textContent = `x: 0.00, y: 0.00`;
+                    sendSteerData();
+                }
+            });
+        }
+
+        // Initialize vertical joystick functionality
+        function initVerticalJoystick(id, property) {
+            const joystick = document.getElementById(`${id}-joystick`);
+            const knob = document.getElementById(`${id}-joystick-knob`);
+            const valueDisplay = document.getElementById(`${id}-value`);
+            let joystickRect = joystick.getBoundingClientRect();
+            const maxDistance = (joystickRect.height - knob.offsetHeight) / 2;
+            
+            // Reference to active state variable
+            const activeStateRef = `${id}JoystickActive`;
+            
+            function updateVerticalJoystickPosition(clientY) {
+                const centerY = joystickRect.top + joystickRect.height / 2;
+                
+                let deltaY = clientY - centerY;
+                
+                // Limit to vertical joystick boundaries
+                if (Math.abs(deltaY) > maxDistance) {
+                    deltaY = Math.sign(deltaY) * maxDistance;
+                }
+                
+                // Update knob position (only vertical)
+                knob.style.transform = `translate(-50%, ${deltaY-20}px)`;
+                
+                // Calculate value between -1 and 1
+                const value = -deltaY / maxDistance; // Invert Y for logical control
+                
+                // Update arm data
+                armData[property] = value;
+                
+                // Update value display
+                valueDisplay.textContent = value.toFixed(2);
+                
+                // Throttle data sending
+                if (!armThrottleTimer) {
+                    sendArmData();
+                    armThrottleTimer = setTimeout(() => {
+                        armThrottleTimer = null;
+                        if (shoulderJoystickActive || axisJoystickActive || clawJoystickActive) {
+                            sendArmData();
+                        }
+                    }, 100); // Throttle to 10 times per second max
+                }
+            }
+            
+            // Mouse events
+            joystick.addEventListener('mousedown', (e) => {
+                window[activeStateRef] = true;
+                joystickRect = joystick.getBoundingClientRect(); // Update rect
+                // Use center of joystick with small offset
+                const centerY = joystickRect.top + joystickRect.height / 2;
+                // Apply a small offset (5px) for initial position
+                updateVerticalJoystickPosition(centerY + 5);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (window[activeStateRef]) {
+                    updateVerticalJoystickPosition(e.clientY);
+                }
+            });
+            
+            // Touch events
+            joystick.addEventListener('touchstart', (e) => {
+                window[activeStateRef] = true;
+                joystickRect = joystick.getBoundingClientRect(); // Update rect
+                // Use center of joystick with small offset
+                const centerY = joystickRect.top + joystickRect.height / 2;
+                // Apply a small offset (5px) for initial position
+                updateVerticalJoystickPosition(centerY + 5);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('touchmove', (e) => {
+                if (window[activeStateRef]) {
+                    updateVerticalJoystickPosition(e.touches[0].clientY);
+                    e.preventDefault();
+                }
+            });
+            
+            // Common release function for mouse and touch
+            function releaseJoystick() {
+                if (window[activeStateRef]) {
+                    window[activeStateRef] = false;
+                    knob.style.transform = 'translate(-50%, -50%)';
+                    armData[property] = 0;
+                    valueDisplay.textContent = '0.00';
+                    sendArmData();
+                }
+            }
+            
+            document.addEventListener('mouseup', releaseJoystick);
+            document.addEventListener('touchend', releaseJoystick);
+        }
+
+        // Initialize command buttons
+        function initButtons() {
+            document.getElementById('pic-btn').addEventListener('click', () => sendCommand('PIC'));
+            document.getElementById('start-stream-btn').addEventListener('click', () => sendCommand('START-STREAM'));
+            document.getElementById('stop-stream-btn').addEventListener('click', () => sendCommand('STOP-STREAM'));
+            document.getElementById('lights-on-btn').addEventListener('click', () => sendCommand('LIGHTS_ON'));
+            document.getElementById('lights-off-btn').addEventListener('click', () => sendCommand('LIGHTS_OFF'));
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            // We'll update joystick rects when they're used next
+        });
+
+        // Initialize everything when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            connectWebSocket();
+            initMainJoystick();
+            
+            // Initialize vertical joysticks for arm control
+            initVerticalJoystick('shoulder', 'shoulder');
+            initVerticalJoystick('axis', 'axis');
+            initVerticalJoystick('claw', 'claw');
+            
+            initButtons();
+        });
+    </script>
+</body>
+</html>

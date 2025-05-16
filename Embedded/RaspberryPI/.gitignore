@@ -33,3 +33,6 @@ Thumbs.db
 *.env
 # Python/
 .vscode/
+
+Embedded/picamera2/
+pictures/*.jpg

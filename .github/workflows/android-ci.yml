@@ -33,6 +33,13 @@ jobs:
       - name: Grant execute permission for gradlew
         working-directory: ./Application
         run: chmod +x gradlew
+
+      - name: Create .env file with mock values
+        working-directory: ./Application
+        run: |
+          echo "API_BASE_URL=mock" >> .env
+          echo "WS_BASE_URL=mock" >> .env
+          echo "STREAM_BASE_URL=mock" >> .env
       
       - name: Run unit tests
         working-directory: ./Application

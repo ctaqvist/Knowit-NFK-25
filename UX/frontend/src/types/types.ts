@@ -57,42 +57,43 @@ export interface ProductPage {
     maxLength: number;
   }[];
   statistics: {
-    sun: {
+    planet0: {
       label: 'Statistic 1';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet1: {
       label: 'Statistic 2';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet2: {
       label: 'Statistic 3';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet3: {
       label: 'Statistic 4';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
     planet4: {
       label: 'Statistic 5';
-      value: string;
+      statistic_heading: string;
+      statistic_detail: string;
       type: 'input:text';
     };
   };
   gallery: {
-    type: 'img' | 'video';
-    width: number;
-    height: number;
-    filePath: string;
+    position: number
+    type: 'img' | 'video',
+    filePath: string,
+    recommended_apsect_ratio: string
   }[];
-  manual: {
-    label: '"TERRA-X9 Instruction Manual"';
-    filepath: string;
-  };
 }
 
 // Type for Support Page Data

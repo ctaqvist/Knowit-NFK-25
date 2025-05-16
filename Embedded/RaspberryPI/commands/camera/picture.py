@@ -9,7 +9,5 @@ async def handle_pic_command(websocket):
 
     if image_b64:
         await websocket.send(json.dumps({
-            "rover_id": ROVER_ID,
-            "response": "picture_data",
-            "image_base64": image_b64
+          "response": "picture_data", "image_base64": image_b64
         }))

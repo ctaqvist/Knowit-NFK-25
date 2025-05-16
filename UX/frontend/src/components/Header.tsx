@@ -17,12 +17,9 @@ function Header() {
           About rover
         </Typography>
       </Link>
-      <Link to={'/support'}>
-        <Typography
-          variant='headerlink'
-          component='div'
-        >
-          Support
+      <Link to={'/#reviews'}>
+        <Typography variant="headerlink" component="div">
+          Reviews
         </Typography>
       </Link>
       <Link
@@ -36,12 +33,9 @@ function Header() {
           style={{ width: 'fit-content', height: 60.891 }}
         />
       </Link>
-      <Link to={'/#reviews'}>
-        <Typography
-          variant='headerlink'
-          component='div'
-        >
-          Reviews
+      <Link to={'/support'}>
+        <Typography variant="headerlink" component="div">
+          Support
         </Typography>
       </Link>
       <Link to={'/contact'}>

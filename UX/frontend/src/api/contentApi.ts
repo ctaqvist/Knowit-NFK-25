@@ -7,7 +7,7 @@ export const contentApi = {
   getPages: (): Promise<ApiResponse<Pages>> => api.get('pages'),
   getPage: (page: string): Promise<ApiResponse<Page>> => api.get(`pages/${page}`),
   getReviews: (): Promise<ApiResponse<Review[]>> => api.get('pages/reviews'),
-  getFile: (file: DownloadableFiles): Promise<Blob> => api.get(`files/${file}`, {
+  getFile: (file: string): Promise<Blob> => api.get(`files/${file}`, {
     responseType: 'blob'
   }),
   getBookedTimes: (date: string): Promise<ApiResponse<Tables<'booked_times_public_view'>[]>> => api.get(`/pages/booked-times/${date}`),

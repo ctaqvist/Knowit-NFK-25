@@ -21,6 +21,8 @@ import { useEffect, useState } from 'react';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { validateContactForm, validateContactInput } from '@/utils/validate';
 import { contentApi } from '@/api/contentApi';
+import alertSign from '../assets/alert_sign.svg'
+import iconPlus from '../assets/Plus.svg'
 
 function Contact() {
   const [wantsToBook, setWantsToBook] = useState(false);
@@ -196,7 +198,7 @@ function Contact() {
                     direction='row'
                   >
                     <Icon
-                      src='/src/assets/alert_sign.svg'
+                      src={alertSign}
                       width='28px'
                     />
                     {formValidity.firstName}
@@ -236,7 +238,7 @@ function Contact() {
                     direction='row'
                   >
                     <Icon
-                      src='/src/assets/alert_sign.svg'
+                      src={alertSign}
                       width='28px'
                     />
                     {formValidity.surName}
@@ -279,7 +281,7 @@ function Contact() {
                     direction='row'
                   >
                     <Icon
-                      src='/src/assets/alert_sign.svg'
+                      src={alertSign}
                       width='28px'
                     />
                     {formValidity.companyName}
@@ -319,7 +321,7 @@ function Contact() {
                     direction='row'
                   >
                     <Icon
-                      src='/src/assets/alert_sign.svg'
+                      src={alertSign}
                       width='28px'
                     />
                     {formValidity.email}
@@ -403,7 +405,7 @@ function Contact() {
                   sx={{ mt: '6px' }}
                 >
                   <Icon
-                    src='/src/assets/alert_sign.svg'
+                    src={alertSign}
                     width='28px'
                   />
                   <FormHelperText
@@ -451,7 +453,7 @@ function Contact() {
                     direction='row'
                   >
                     <Icon
-                      src='/src/assets/alert_sign.svg'
+                      src={alertSign}
                       width='28px'
                     />
                     {formValidity.message}
@@ -489,7 +491,7 @@ function Contact() {
                 }}
               >
                 <Icon
-                  src='/src/assets/Plus.svg'
+                  src={iconPlus}
                   width='48px'
                   height='48px'
                 />

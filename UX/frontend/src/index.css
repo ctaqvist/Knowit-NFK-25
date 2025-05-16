@@ -181,7 +181,7 @@
     display: block;
     width: 26px;
     height: 18px;
-    background-image: url('/src/assets/Icon_checkmark.svg');
+    background-image: url('./assets/Icon_checkmark.svg');
     margin-left: auto;
   }
 }
@@ -238,7 +238,7 @@
     width: 19px;
     height: 19px;
     display: block;
-    background-image: url('/src/assets/Icon_search.svg');
+    background-image: url('./assets/Icon_search.svg');
   }
 }
 
@@ -266,7 +266,7 @@
     display: block;
     width: 26px;
     height: 18px;
-    background-image: url('/src/assets/Icon_checkmark.svg');
+    background-image: url('./assets/Icon_checkmark.svg');
     margin-left: auto;
   }
 }
@@ -326,7 +326,21 @@
     width: 19px;
     height: 19px;
     display: block;
-    background-image: url('/src/assets/Icon_search.svg');
+    background-image: url('./assets/Icon_search.svg');
+  }
+}
+
+.planet-wrapper {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgb(32 7 127 / 40%); /* Purple with 40% opacity */
+    mix-blend-mode: normal; /* or overlay, soft-light, etc. */
+    pointer-events: none;
+    z-index: 2;
+    clip-path: circle(49% at center);
   }
 }
 

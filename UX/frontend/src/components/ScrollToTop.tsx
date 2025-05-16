@@ -12,19 +12,24 @@ export default function ScrollToHash() {
       const id = hash.replace('#', '');
       const el = document.getElementById(id);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        el.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'nearest'
+        });
       }
     } else {
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     }
 
-    let title = `TerraX9 `;
-    if (pathname === '/') title += ''
-    if (hash) {
-      title += `| ${hash?.[1]?.toUpperCase()}${hash?.slice(2)}`
-    } else if (!hash && pathname !== '/') {
-      title += `| ${pathname?.[1]?.toUpperCase()}${pathname?.slice(2)}`
+    let title = 'TerraX9';
+    const isHome = pathname === '/';
+
+    if (!isHome) {
+      const suffix = `${pathname[1]?.toUpperCase()}${pathname.slice(2)}`;
+      title += ` | ${suffix}`;
     }
+
     document.title = title;
 
   }, [hash, pathname]);
