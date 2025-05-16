@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">13.60.235.253</domain>
         <domain includeSubdomains="true">terrax9.se</domain>
+        <domain includeSubdomains="true">v2.terrax9.se</domain>
     </domain-config>
 </network-security-config>
