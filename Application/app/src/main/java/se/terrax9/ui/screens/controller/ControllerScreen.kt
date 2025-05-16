@@ -10,6 +10,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.runBlocking
@@ -29,6 +32,7 @@ import se.terrax9.services.Commands
 import se.terrax9.services.DataService
 import se.terrax9.services.UserData
 import se.terrax9.ui.shared.AppButton
+import se.terrax9.ui.shared.PopupView
 import se.terrax9.ui.theme.LexendExa
 
 @Composable
@@ -37,6 +41,9 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
 
     val serverStatus = viewModel.serverStatus.collectAsState()
     val roverStatus = viewModel.roverStatus.collectAsState()
+
+    var showErrorPopup by remember { mutableStateOf(false) }
+    var currentErrorMessage by remember { mutableStateOf<String?>(null) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -53,6 +60,25 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
             UpperDashboard(viewModel, navController)
             BottomDashboard(viewModel)
         }
+
+        if (showErrorPopup && currentErrorMessage != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.32f)),
+                contentAlignment = Alignment.Center
+            ) {
+                PopupView(
+                    iconRes = R.drawable.warning,
+                    title = "Failed",
+                    description = currentErrorMessage!!,
+                    onDismiss = { showErrorPopup = false },
+                    buttonOneText = "OK",
+                    onButtonOneClick = { showErrorPopup = false }
+                )
+            }
+        }
+
     }
 
 //    Column {
@@ -65,7 +91,9 @@ fun ControllerScreen(viewModel: ControllerViewModel, navController: NavControlle
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         errorFlow.collect { msg ->
-            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            currentErrorMessage = msg
+            showErrorPopup = true
         }
     }
 }
