@@ -44,13 +44,17 @@ if LOCAL_TEST == False:
                     while True:
                         try:
                             message = await websocket.recv()
-
                             data = json.loads(message)
+                            #print(f"Received message: {message}")
                             
                             # If not a steer command, always process immediately
-                            if ("steer" not in message):
+                            if (True):
                                 print(f"Forceful command: {message}") 
                                 await process_command(websocket, data)
+                                await websocket.send(json.dumps({
+                                    "status": "ok",
+                                    "rover_id": "rover-001"
+                                }))
                                 continue
                             
                             # If no active steer is running, start a new active steer. Otherwise skip steer and do next message.                                
