@@ -1,6 +1,6 @@
 import { Tables } from '@/types/supabase.types';
 import { api } from './axios';
-import { Page, Review, ApiResponse, Pages, DownloadableFiles } from '@/types/types';
+import { Page, Review, ApiResponse, Pages, ContactForm } from '@/types/types';
 
 // Api gets content from the backend
 export const contentApi = {
@@ -12,6 +12,5 @@ export const contentApi = {
   }),
   getBookedTimes: (date: string): Promise<ApiResponse<Tables<'booked_times_public_view'>[]>> => api.get(`/pages/booked-times/${date}`),
   sendSupportForm: () => {},
-  createBooking: () => {},
-
+  createBooking: (formData: ContactForm) => api.post(`/pages/booked-times`, formData)
 }

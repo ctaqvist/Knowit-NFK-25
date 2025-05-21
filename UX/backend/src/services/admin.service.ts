@@ -82,7 +82,6 @@ export class AdminService {
 
       await this.updateLastUpdated('pages');
 
-      console.log('Successfully updated file!')
       return {
         message: 'Successfully updated file!',
         data: null,

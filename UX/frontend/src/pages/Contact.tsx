@@ -113,7 +113,7 @@ function Contact() {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const VALIDITY = validateContactForm(formData);
     setFormValidity(VALIDITY);
 
@@ -121,7 +121,9 @@ function Contact() {
     for (const value of Object.values(VALIDITY)) {
       if (value.length > 0) return;
     }
+    const result = await contentApi.createBooking(formData);
     resetContactForm();
+    if (result.data.error) return showAlert(`Something went wrong when creating your booking, please try again later!`, 'error')
     showAlert('Your request has been successfully sent!', 'success');
   };
 

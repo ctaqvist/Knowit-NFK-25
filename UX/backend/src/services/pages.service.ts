@@ -8,6 +8,7 @@ import { Cache } from 'cache-manager';
 import { isCacheFresh } from 'src/utils/calc';
 import { Tables } from 'src/types/supabase.types';
 import { File } from 'node:buffer';
+import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class PageService {
@@ -18,6 +19,7 @@ export class PageService {
 
   async getPages(): Promise<ApiResponse<Pages>> {
     try {
+      console.log('Received request for PAGES')
       const PAGES = ['hero', 'product', 'support'];
       const CACHED_PAGES = await this.cacheManager.get('pages');
 
@@ -185,9 +187,55 @@ export class PageService {
 
   async createBooking(formData: ContactForm) {
     try {
-      const CLIENT = this.supabaseService.supabase;
+      if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) return
+      const CLIENT = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
+      const {companyName, firstName, surName, businessField, email, message, booking, telephone} = formData
+
+      const { data: clientData, error: clientError } =
+        await CLIENT.from('clients')
+        .insert({company_name: companyName, })
+        .select()
+        .single()
+
+      if (clientError || !clientData) {
+        console.error(clientError)
+        throw new Error(`Unable to create new client`)}
+
+      const {data: contactData, error: contactError} = 
+      await CLIENT.from('client_contacts').insert({
+        name: `${firstName} ${surName}`,
+        phone_number: telephone.number ? `${telephone.phone}${telephone.number}` : 'No number given',
+        client_id: clientData.id
+      })
+      .select()
+      .single()
+
+      if (contactError || !contactData) {
+                console.error(contactError)
+        throw new Error(`Unable to create new contact`)
+      }
+
+      
+      if (booking) {
+        const {data: bookingData, error: bookingError} =
+        await CLIENT.from('booked_times').insert({
+          date: booking.date,
+          time_slot: booking.time,
+          company_id: clientData.id,
+          contact_person: contactData.id
+        })
+        .select()
+        .single();
+
+        if (bookingError) throw new Error(`Unable to create booking`)
+        return {
+          message: 'Successfully created new booking!',
+          data: bookingData.id
+        }
+      }
+
     } catch (error) {
-      console.error(`Error when retrieving booked times: `, error);
+      console.error(`Error when creating booking: `, error);
       return {
         data: null,
         error: error,

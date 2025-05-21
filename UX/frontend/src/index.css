@@ -367,13 +367,52 @@
   &::before {
     content: '';
     display: inline-block;
-    width: ;
+    width: 49px;
+    height: 48px;
+    background-image: url(./assets/Icon_circle_checkmark.svg);
+    position: absolute;
+    z-index: 3;
+    background-size: cover;
+    top: 50%;
+    transform: translateY(-50%);
+    left: calc(209px - 28px);
+    animation-name: savedFAQFadeOut;
+    animation-delay: 1500ms;
+    animation-timing-function: ease-out;
+    animation-duration: 2000ms;
+    animation-fill-mode: forwards;
   }
 
   &::after {
-    content: '';
+    content: 'Saved!';
     width: 100%;
     height: 100%;
     background-color: rgba(24, 7, 87, 1);
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    padding-left: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-family: 'Lexend Exa';
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    opacity: 1;
+    animation-name: savedFAQFadeOut;
+    animation-delay: 1500ms;
+    animation-timing-function: ease-out;
+    animation-duration: 2000ms;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes savedFAQFadeOut {
+  to {
+    opacity: 0;
   }
 }

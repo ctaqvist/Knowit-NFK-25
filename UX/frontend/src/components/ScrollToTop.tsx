@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom';
 // This component listens for changes to the URL hash and scrolls to the matching element
 export default function ScrollToHash() {
   const { hash, pathname } = useLocation();
-  console.log(hash)
 
   useEffect(() => {
     if (hash) {

@@ -17,10 +17,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 function Support() {
-  const { pages, updateContent } = useContent();
+  const { pages, getContent } = useContent();
   const [alert, setAlert] = useState<{
     show: boolean;
     timeout: NodeJS.Timeout | null;
@@ -61,6 +61,8 @@ function Support() {
     }
   };
 
+
+
   const handleFAQChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (FAQ) {
@@ -70,7 +72,6 @@ function Support() {
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files, name } = e.target;
-    console.log(name);
 
     if (!files) return;
     const FILE_VALIDITY = validateNewFile(files);
@@ -82,7 +83,6 @@ function Support() {
       lastModified: files[0].lastModified,
     });
 
-
     const result = await adminApi.updateFile(
       name as DownloadableFiles,
       newFile
@@ -91,7 +91,7 @@ function Support() {
       return showAlert('Something went wrong when updating file', 'error');
     showAlert(
       `${name.includes('_') ? name.split('_').join(' ') : name
-      } has been updated!`,
+      } has been updated! Note that it takes a minute to view the updated version`,
       'success'
     );
   };
@@ -114,40 +114,29 @@ function Support() {
     });
   };
 
-  const handleAddFAQ = async () => {
-    if (!FAQ || !pages) return;
-    const { isNew, ...rest } = FAQ;
-    if (!rest.question || !rest.answer)
-      return showAlert('Missing question or answer input', 'error');
-
-    const updatedPage = {
-      ...pages?.support,
-      ['FAQ']: [...pages.support.FAQ, rest],
-    };
-    console.log(updatedPage);
-    const result = await adminApi.updatePage('support', updatedPage);
-    if (!result.error) {
-      updateContent(result.data.page, result.data.content);
-      setTimeout(() => triggerAnimation(FAQ.id), 10);
-      setFAQ(null);
-    }
-  };
-
   const handleUpdateFAQ = async () => {
     if (!FAQ || !pages) return;
     const { isNew, ...rest } = FAQ;
-
     if (!rest.question || !rest.answer)
       return showAlert('Missing question or answer input', 'error');
-    const updatedPage = {
-      ...pages?.support,
-      ['FAQ']: [...pages.support.FAQ, rest],
-    };
-    console.log(updatedPage);
-    const result = await adminApi.updatePage('support', updatedPage);
 
+    // Add if new, replace if not
+    if (isNew) {
+      pages.support.FAQ.push(rest)
+    } else {
+      const index = pages.support.FAQ.findIndex(q => q.id === rest.id)
+      pages.support.FAQ.splice(index, 1, rest)
+    }
+
+    const updatedPage = {
+      ...pages.support,
+      FAQ: pages.support.FAQ,
+    };
+
+    const result = await adminApi.updatePage('support', updatedPage);
+    console.log(result)
     if (!result.error) {
-      updateContent(result.data.page, result.data.content);
+      getContent();
       setTimeout(() => triggerAnimation(FAQ.id), 10);
       setFAQ(null);
     }
@@ -274,7 +263,7 @@ function Support() {
               size={'xsmall'}
               disabled={FAQ === null ? true : false}
               sx={{ mr: '20px' }}
-              onClick={FAQ && FAQ.isNew ? handleAddFAQ : handleUpdateFAQ}
+              onClick={handleUpdateFAQ}
             >
               {(!FAQ || FAQ.isNew) && 'Add Question'}
               {FAQ && !FAQ.isNew && 'Save Changes'}

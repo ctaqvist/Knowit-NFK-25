@@ -1,10 +1,10 @@
 import { createContext } from 'react';
-import { Review, Pages, Page } from '@/types/types';
+import { Review, Pages } from '@/types/types';
 
 export interface ContentContextType {
   pages: Pages | null,
   reviews: Review[] | null,
-  updateContent: (page: string, content: Page) => void
+  getContent: () => void
 }
 
 export const ContentContext = createContext<ContentContextType | undefined>(undefined);
