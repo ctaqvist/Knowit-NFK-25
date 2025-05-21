@@ -52,7 +52,6 @@ servo1 = None
 servo2 = None
 servo3 = None
 
-
 def setup_pins():
     global servo1, servo2, servo3
 
@@ -73,7 +72,6 @@ def setup_pins():
     start_movement_loops()
     return servos
 
-
 def set_servo_angle(servo, angle, hold=0.02):
 
     # Map a desired angle (in degrees) to PWM duty cycle and pulse it.
@@ -87,11 +85,11 @@ def move_arm(shoulder, axis, dt):
 
     # Continuous velocity-based control (inversion built-in if desired)
     if abs(shoulder) > DEAD_ZONE:
+
         # Clamp between -90 and 0
         arm_angle = max(-90.0, min(0.0, arm_angle - shoulder * ARM_MAX_SPEED * dt))
     if abs(axis) > DEAD_ZONE:
         axis_angle = max(0, min(90.0, axis_angle + axis * ARM_MAX_SPEED * dt))
-
     if abs(arm_angle  - last_arm[0]) > 0.5:
         set_servo_angle(servo1, arm_angle)
         last_arm[0] = arm_angle
