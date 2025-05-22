@@ -43,9 +43,9 @@ axis_angle   = 0.0
 last_arm   = [0.0, 0.0]
 
 # Input buffers for continuous control
-input_shoulder = 0.0
-input_axis     = 0.0
-input_claw     = 0.0
+_input_shoulder = 0.0
+_input_axis     = 0.0
+_input_claw     = 0.0
 
 # Servo objects (will be set in setup_pins)
 servo1 = None
@@ -89,6 +89,8 @@ def move_arm(shoulder, axis, dt):
         # Clamp between -90 and 0
         arm_angle = max(-90.0, min(0.0, arm_angle - shoulder * ARM_MAX_SPEED * dt))
     if abs(axis) > DEAD_ZONE:
+
+        # Clamp between 0 and 90
         axis_angle = max(0, min(90.0, axis_angle + axis * ARM_MAX_SPEED * dt))
     if abs(arm_angle  - last_arm[0]) > 0.5:
         set_servo_angle(servo1, arm_angle)
@@ -106,7 +108,6 @@ def move_claw(claw_value):
     elif claw_value < -DEAD_ZONE:
         # Open the claw fully
         set_servo_angle(servo3, MAX_CLAW_ANGLE, hold=0.2)
-    # If claw_value is near zero, do nothing (hold position)
 
 def arm_loop():
     last_time = time.time()
@@ -114,7 +115,7 @@ def arm_loop():
         now = time.time()
         dt = now - last_time
         last_time = now
-        move_arm(input_shoulder, input_axis, dt)
+        move_arm(_input_shoulder, _input_axis, dt)
         time.sleep(0.02)
 
 def claw_loop():
@@ -123,7 +124,7 @@ def claw_loop():
     # claw_value < -DEAD_ZONE, keep pulsing open-duty   (servo tries to open fully)
     # Otherwise, zero PWM (servo holds)
     while True:
-        claw_value = input_claw
+        claw_value = _input_claw
         if claw_value > DEAD_ZONE:
             servo3.ChangeDutyCycle(CLAW_CLOSED_DC)
         elif claw_value < -DEAD_ZONE:
