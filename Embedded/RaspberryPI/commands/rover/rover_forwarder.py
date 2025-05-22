@@ -22,3 +22,5 @@ async def forward_joystick_to_arduino(steer_data):
         "x": round(x, 2),
         "y": round(y, 2)
     }))
+
+    await arduino.read_received_data()

@@ -22,7 +22,7 @@ void CommandHandler::init()
 
 void CommandHandler::listen()
 {
-    while (Serial.available())
+    while (Serial.available() && !stringComplete)
     {
         char inChar = (char)Serial.read();
         inputString += inChar;
@@ -82,10 +82,10 @@ void handleCommand(const String &cmd)
 
 void sendAck(const String &cmd)
 {
-    Serial.println("{\"ack\":\"" + cmd + "\"}");
+    Serial.print("{\"ack\":\"" + cmd + "\"}\n");
 }
 
 void sendError(const String &msg)
 {
-    Serial.println("{\"error\":\"" + msg + "\"}");
+    Serial.print("{\"error\":\"" + msg + "\"}\n");
 }

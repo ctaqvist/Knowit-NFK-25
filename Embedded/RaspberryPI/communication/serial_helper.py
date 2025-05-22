@@ -81,17 +81,18 @@ class ArduinoConnection:
     async def send(self, message: str) -> bool:
         return await asyncio.to_thread(self._send_sync, message)
 
-    def read_received_data(self) -> str:
-        if not self.serial:
-            return ""
-        try:
-            with self.lock:
-                return self.serial.readline().decode("utf-8").strip()
-        except (serial.SerialException, OSError) as e:
-            print(f"[Arduino] Read error: {e}")
-            with self.lock:
-                self.serial = None
-            return ""
+    async def read_received_data(self):
+        while True:
+            if self.serial.in_waiting:
+                try:
+                    with self.lock:
+                        self.serial.readline().decode("utf-8").strip()
+                    break
+                except (serial.SerialException, OSError) as e:
+                    print(f"[Arduino] Read error: {e}")
+                    with self.lock:
+                        self.serial = None
+                    break
 
     def stop(self):
         self.keep_alive = False
