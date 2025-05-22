@@ -43,9 +43,9 @@ axis_angle   = 0.0
 last_arm   = [0.0, 0.0]
 
 # Input buffers for continuous control
-_input_shoulder = 0.0
-_input_axis     = 0.0
-_input_claw     = 0.0
+input_shoulder = 0.0
+input_axis     = 0.0
+input_claw     = 0.0
 
 # Servo objects (will be set in setup_pins)
 servo1 = None
@@ -115,7 +115,7 @@ def arm_loop():
         now = time.time()
         dt = now - last_time
         last_time = now
-        move_arm(_input_shoulder, _input_axis, dt)
+        move_arm(input_shoulder, input_axis, dt)
         time.sleep(0.02)
 
 def claw_loop():
@@ -125,6 +125,7 @@ def claw_loop():
     # Otherwise, zero PWM (servo holds)
     while True:
         claw_value = _input_claw
+
         if claw_value > DEAD_ZONE:
             servo3.ChangeDutyCycle(CLAW_CLOSED_DC)
         elif claw_value < -DEAD_ZONE:
